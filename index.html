@@ -2,128 +2,234 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>我的科學教學網站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光明國中數資班 AI 科學實驗室</title>
+
   <style>
     body {
-      font-family: "Microsoft JhengHei", Arial, sans-serif;
       margin: 0;
-      background: #f5f7fb;
+      font-family: "Microsoft JhengHei", Arial, sans-serif;
+      background: #f4f7fb;
       color: #222;
+      line-height: 1.7;
     }
 
     header {
-      background: linear-gradient(135deg, #1e88e5, #43a047);
+      background: linear-gradient(135deg, #1565c0, #43a047);
       color: white;
-      padding: 50px 30px;
       text-align: center;
+      padding: 60px 20px;
     }
 
     header h1 {
       font-size: 42px;
-      margin-bottom: 10px;
+      margin: 0 0 12px;
     }
 
     header p {
       font-size: 20px;
+      margin: 0;
     }
 
     main {
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
 
-    .section {
+    .intro {
       background: white;
-      padding: 25px;
-      margin-bottom: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
     }
 
-    h2 {
+    .intro h2 {
+      margin-top: 0;
       color: #1565c0;
+    }
+
+    .area {
+      margin-bottom: 35px;
+    }
+
+    .area-title {
+      font-size: 28px;
+      color: #1565c0;
+      margin-bottom: 18px;
+      border-left: 8px solid #43a047;
+      padding-left: 14px;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 20px;
     }
 
     .card {
-      background: #eef5ff;
-      padding: 20px;
-      border-radius: 14px;
-      border-left: 6px solid #1e88e5;
+      background: white;
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 6px solid #1e88e5;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 22px;
+      color: #0d47a1;
+    }
+
+    .card p {
+      color: #555;
+      margin-bottom: 0;
+    }
+
+    .student .card {
+      border-top-color: #1e88e5;
+    }
+
+    .teacher .card {
+      border-top-color: #43a047;
+    }
+
+    .works .card {
+      border-top-color: #fb8c00;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      color: #666;
+      padding: 30px 20px;
+      background: #e8edf5;
+      color: #555;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 30px;
+      }
+
+      header p {
+        font-size: 16px;
+      }
+
+      .area-title {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 
 <body>
+
   <header>
-    <h1>我的科學教學網站</h1>
-    <p>科學 × 數學 × AI × 互動學習</p>
+    <h1>光明國中數資班 AI 科學實驗室</h1>
+    <p>數學 × 自然 × AI × 專題研究 × 互動學習</p>
   </header>
 
   <main>
-    <section class="section">
+
+    <section class="intro">
       <h2>網站介紹</h2>
       <p>
-        歡迎來到我的科學教學網站。這裡可以放課程資料、互動模擬、
-        Arduino 專題、科展研究與 AI 教學工具。
+        歡迎來到光明國中數資班 AI 科學實驗室。這裡將整理課程資料、
+        互動模擬、科展範例、Arduino 專題、教師教學工具與學生作品展示。
+        期待透過 AI 與數位工具，讓學生在探究、實作與發表中培養科學思考能力。
       </p>
     </section>
 
-    <section class="section">
-      <h2>學生專區</h2>
+    <section class="area student">
+      <h2 class="area-title">學生專區</h2>
+
       <div class="cards">
         <div class="card">
-          <h3>自然科互動模擬</h3>
-          <p>用動畫和操作參數理解物理、化學與生物概念。</p>
+          <h3>課程資料</h3>
+          <p>整理數資班課程講義、補充資料、學習重點與延伸閱讀。</p>
+        </div>
+
+        <div class="card">
+          <h3>互動模擬</h3>
+          <p>透過動畫、參數調整與視覺化工具，理解抽象的數學與自然概念。</p>
+        </div>
+
+        <div class="card">
+          <h3>科展範例</h3>
+          <p>提供科展題目發想、研究流程、變因控制、數據分析與報告架構參考。</p>
         </div>
 
         <div class="card">
           <h3>Arduino 專題</h3>
-          <p>整理感測器、程式設計與動手實作專題。</p>
-        </div>
-
-        <div class="card">
-          <h3>科展研究資料</h3>
-          <p>提供研究流程、變因控制、數據分析與報告撰寫參考。</p>
+          <p>收錄感測器、程式設計、互動裝置與科學量測相關專題。</p>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <h2>教師專區</h2>
+    <section class="area teacher">
+      <h2 class="area-title">教師專區</h2>
+
       <div class="cards">
         <div class="card">
           <h3>學習單</h3>
-          <p>放置課程學習單、活動紀錄表與反思單。</p>
+          <p>放置課堂活動學習單、實驗紀錄表、反思單與探究任務單。</p>
         </div>
 
         <div class="card">
           <h3>評分規準</h3>
-          <p>整理報告、專題、實作活動的評分標準。</p>
+          <p>整理專題研究、口頭發表、實驗實作與作品展示的評量標準。</p>
         </div>
 
         <div class="card">
           <h3>AI 教學工具</h3>
-          <p>放置 AI 助教、文字整理、題目生成與教學輔助工具。</p>
+          <p>建立 AI 助教、題目生成、文字整理、報告回饋與學習輔助工具。</p>
+        </div>
+
+        <div class="card">
+          <h3>課程成果</h3>
+          <p>記錄數資班課程活動、專題研究歷程、學生學習表現與成果回顧。</p>
         </div>
       </div>
     </section>
+
+    <section class="area works">
+      <h2 class="area-title">作品展示</h2>
+
+      <div class="cards">
+        <div class="card">
+          <h3>數學組</h3>
+          <p>展示數學探究、解謎素養、幾何建模與資料分析相關作品。</p>
+        </div>
+
+        <div class="card">
+          <h3>物理組</h3>
+          <p>展示力學、聲音、光學、熱學、電學與工程設計相關研究。</p>
+        </div>
+
+        <div class="card">
+          <h3>化學組</h3>
+          <p>展示物質變化、綠色化學、反應速率與生活化學相關作品。</p>
+        </div>
+
+        <div class="card">
+          <h3>生物組</h3>
+          <p>展示植物觀察、生態探究、環境因子與生命科學相關研究。</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
-    © 2026 我的科學教學網站
+    © 2026 光明國中數資班 AI 科學實驗室
   </footer>
+
 </body>
 </html>
