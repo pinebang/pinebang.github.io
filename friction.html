@@ -486,8 +486,9 @@
     const simCtx = els.simCanvas.getContext("2d");
     const graphCtx = els.graphCanvas.getContext("2d");
 
+    const startX = 45;
     let playing = false;
-    let x = 130;
+    let x = startX;
     let v = 0;
     let lastTime = null;
     let records = [];
@@ -843,7 +844,7 @@
     }
 
     function resetPosition() {
-      x = 130;
+      x = startX;
       v = 0;
       lastTime = null;
       updateLabels();
