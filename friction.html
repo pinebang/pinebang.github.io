@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>摩擦力測量互動模擬（含外力－摩擦力關係圖）</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --blue: #1565c0;
+      --green: #2e7d32;
+      --orange: #ef6c00;
+      --red: #c62828;
+      --line: #d7dee8;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1565c0, #43a047);
+      color: white;
+      padding: 44px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+    }
+
+    header p {
+      margin: 0;
+      font-size: clamp(15px, 2vw, 19px);
+      opacity: 0.95;
+    }
+
+    main {
+      max-width: 1260px;
+      margin: 28px auto;
+      padding: 0 18px 40px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      border: 1px solid rgba(215, 222, 232, 0.8);
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-size: 22px;
+    }
+
+    .control {
+      margin: 16px 0;
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .value {
+      color: var(--blue);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      background: #e8f1ff;
+      color: #0d47a1;
+      transition: transform 0.12s, filter 0.12s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+    }
+
+    button.primary {
+      background: #1565c0;
+      color: white;
+    }
+
+    button.warn {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .sim-and-graph {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .sim-panel, .graph-panel {
+      background: #fbfdff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .panel-title {
+      font-weight: 800;
+      color: #0d47a1;
+      margin: 4px 0 10px;
+    }
+
+    canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: linear-gradient(#ffffff, #f8fbff);
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .readouts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .readout {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 86px;
+    }
+
+    .readout .name {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .readout .number {
+      font-size: 24px;
+      font-weight: 900;
+      color: #111827;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .readout .unit {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 14px;
+      background: #eef7ee;
+      color: #1b5e20;
+      border-left: 6px solid #43a047;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .formula {
+      background: #f8fafc;
+      border: 1px dashed #b7c5d8;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .formula code {
+      font-family: Consolas, monospace;
+      font-size: 16px;
+    }
+
+    .explain {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .tips {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .tips ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      margin-top: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 620px;
+      background: white;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th {
+      background: #eef5ff;
+      color: #0d47a1;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 16px 40px;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sim-and-graph {
+        grid-template-columns: 1fr;
+      }
+      .readouts {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tips {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .readouts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>摩擦力測量互動模擬</h1>
+    <p>加入「外力－摩擦力關係圖」，同步觀察摩擦力如何隨拉力改變</p>
+  </header>
+
+  <main>
+    <div class="layout">
+      <section class="card">
+        <h2>實驗參數</h2>
+
+        <div class="control">
+          <label>
+            <span>物體質量 m</span>
+            <span class="value" id="massValue">2.0 kg</span>
+          </label>
+          <input id="mass" type="range" min="0.5" max="10" step="0.1" value="2" />
+        </div>
+
+        <div class="control">
+          <label>
+            <span>靜摩擦係數 μs</span>
+            <span class="value" id="muSValue">0.50</span>
+          </label>
+          <input id="muS" type="range" min="0.05" max="1.20" step="0.01" value="0.50" />
+        </div>
+
+        <div class="control">
+          <label>
+            <span>動摩擦係數 μk</span>
+            <span class="value" id="muKValue">0.30</span>
+          </label>
+          <input id="muK" type="range" min="0.02" max="1.00" step="0.01" value="0.30" />
+        </div>
+
+        <div class="control">
+          <label>
+            <span>外加拉力 F</span>
+            <span class="value" id="pullValue">0.0 N</span>
+          </label>
+          <input id="pull" type="range" min="0" max="100" step="0.1" value="0" />
+        </div>
+
+        <div class="button-row">
+          <button class="primary" id="playBtn">開始模擬</button>
+          <button id="pauseBtn">暫停</button>
+          <button class="warn" id="resetBtn">重設位置</button>
+          <button id="recordBtn">記錄數據</button>
+        </div>
+
+        <div class="formula">
+          <div><code>N = mg</code></div>
+          <div><code>最大靜摩擦力 fs,max = μsN</code></div>
+          <div><code>動摩擦力 fk = μkN</code></div>
+          <div><code>若 F ≤ fs,max，物體不動，fs = F</code></div>
+          <div><code>若 F &gt; fs,max，物體運動，a = (F - fk) / m</code></div>
+        </div>
+
+        <div class="explain">
+          圖上藍點會跟著目前的外力值移動。當外力尚未超過最大靜摩擦力時，摩擦力會和外力一樣大；
+          一旦超過臨界點，摩擦力會改成動摩擦力，圖形會從斜線轉成水平線。
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="sim-and-graph">
+          <div class="sim-panel">
+            <div class="panel-title">模擬場景</div>
+            <canvas id="simCanvas" width="620" height="420"></canvas>
+          </div>
+
+          <div class="graph-panel">
+            <div class="panel-title">外力 F 與摩擦力 f 的關係圖</div>
+            <canvas id="graphCanvas" width="470" height="420"></canvas>
+          </div>
+        </div>
+
+        <div class="readouts">
+          <div class="readout">
+            <div class="name">正向力 N</div>
+            <div class="number" id="normalOut">19.6</div>
+            <div class="unit">牛頓 N</div>
+          </div>
+
+          <div class="readout">
+            <div class="name">最大靜摩擦力</div>
+            <div class="number" id="staticMaxOut">9.8</div>
+            <div class="unit">牛頓 N</div>
+          </div>
+
+          <div class="readout">
+            <div class="name">目前摩擦力</div>
+            <div class="number" id="frictionOut">0.0</div>
+            <div class="unit">牛頓 N</div>
+          </div>
+
+          <div class="readout">
+            <div class="name">加速度 a</div>
+            <div class="number" id="accelOut">0.00</div>
+            <div class="unit">m/s²</div>
+          </div>
+        </div>
+
+        <div class="status" id="statusBox">
+          狀態：拉力尚未超過最大靜摩擦力，物體保持靜止。
+        </div>
+      </section>
+    </div>
+
+    <section class="tips">
+      <div class="card">
+        <h2>觀察任務</h2>
+        <ul>
+          <li>拖曳「外加拉力 F」，觀察圖上的藍點如何沿著折線移動。</li>
+          <li>找出折線轉折點，它代表什麼物理意義？</li>
+          <li>調大質量或 μs，圖上的轉折點會往哪裡移動？</li>
+          <li>調大 μk，水平線會上升還是下降？為什麼？</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>數據紀錄表</h2>
+        <p class="small">按「記錄數據」可留下目前設定與結果，方便學生比較不同變因。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>次數</th>
+                <th>m(kg)</th>
+                <th>μs</th>
+                <th>μk</th>
+                <th>F(N)</th>
+                <th>fs,max(N)</th>
+                <th>目前摩擦力(N)</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody id="dataBody">
+              <tr>
+                <td colspan="8" class="small">尚未記錄數據</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="button-row">
+          <button id="clearBtn">清除紀錄</button>
+          <button id="copyBtn">複製表格資料</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 光明國中數資班 AI 科學實驗室｜摩擦力測量互動模擬（含關係圖）
+  </footer>
+
+  <script>
+    const g = 9.8;
+
+    const els = {
+      mass: document.getElementById("mass"),
+      muS: document.getElementById("muS"),
+      muK: document.getElementById("muK"),
+      pull: document.getElementById("pull"),
+      massValue: document.getElementById("massValue"),
+      muSValue: document.getElementById("muSValue"),
+      muKValue: document.getElementById("muKValue"),
+      pullValue: document.getElementById("pullValue"),
+      normalOut: document.getElementById("normalOut"),
+      staticMaxOut: document.getElementById("staticMaxOut"),
+      frictionOut: document.getElementById("frictionOut"),
+      accelOut: document.getElementById("accelOut"),
+      statusBox: document.getElementById("statusBox"),
+      simCanvas: document.getElementById("simCanvas"),
+      graphCanvas: document.getElementById("graphCanvas"),
+      playBtn: document.getElementById("playBtn"),
+      pauseBtn: document.getElementById("pauseBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      recordBtn: document.getElementById("recordBtn"),
+      clearBtn: document.getElementById("clearBtn"),
+      copyBtn: document.getElementById("copyBtn"),
+      dataBody: document.getElementById("dataBody")
+    };
+
+    const simCtx = els.simCanvas.getContext("2d");
+    const graphCtx = els.graphCanvas.getContext("2d");
+
+    let playing = false;
+    let x = 130;
+    let v = 0;
+    let lastTime = null;
+    let records = [];
+
+    function getState() {
+      let m = Number(els.mass.value);
+      let muS = Number(els.muS.value);
+      let muK = Number(els.muK.value);
+
+      if (muK > muS) {
+        muK = muS;
+        els.muK.value = muS.toFixed(2);
+      }
+
+      let F = Number(els.pull.value);
+      let N = m * g;
+      let fsMax = muS * N;
+      let fk = muK * N;
+      let moving = Math.abs(v) > 0.02 || F > fsMax;
+
+      let friction;
+      let a;
+
+      if (!moving) {
+        friction = F;
+        a = 0;
+      } else {
+        friction = fk;
+        a = (F - fk) / m;
+        if (a < 0 && v <= 0) {
+          a = 0;
+          v = 0;
+        }
+      }
+
+      let status = "";
+      if (F <= fsMax && Math.abs(v) < 0.02) {
+        status = "靜止：外力尚未超過最大靜摩擦力，因此靜摩擦力會跟著外力一起增加。";
+      } else if (F > fsMax && F > fk) {
+        status = "滑動：外力已超過最大靜摩擦力，物體開始運動，此時摩擦力為較小的動摩擦力。";
+      } else {
+        status = "邊界狀態：觀察外力、最大靜摩擦力與動摩擦力之間的大小關係。";
+      }
+
+      return { m, muS, muK, F, N, fsMax, fk, moving, friction, a, status };
+    }
+
+    function updateLabels() {
+      const s = getState();
+      els.massValue.textContent = s.m.toFixed(1) + " kg";
+      els.muSValue.textContent = s.muS.toFixed(2);
+      els.muKValue.textContent = s.muK.toFixed(2);
+      els.pullValue.textContent = s.F.toFixed(1) + " N";
+      els.normalOut.textContent = s.N.toFixed(1);
+      els.staticMaxOut.textContent = s.fsMax.toFixed(1);
+      els.frictionOut.textContent = s.friction.toFixed(1);
+      els.accelOut.textContent = s.a.toFixed(2);
+      els.statusBox.textContent = "狀態：" + s.status;
+      els.statusBox.style.background = s.moving ? "#fff3e0" : "#eef7ee";
+      els.statusBox.style.color = s.moving ? "#e65100" : "#1b5e20";
+      els.statusBox.style.borderLeftColor = s.moving ? "#ef6c00" : "#43a047";
+    }
+
+    function arrow(ctx, x1, y1, x2, y2, color, label) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      const head = 12;
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - head * Math.cos(angle - Math.PI / 6), y2 - head * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x2 - head * Math.cos(angle + Math.PI / 6), y2 - head * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.font = "bold 18px Microsoft JhengHei";
+      ctx.fillText(label, (x1 + x2) / 2 - 18, (y1 + y2) / 2 - 12);
+      ctx.restore();
+    }
+
+    function drawSim() {
+      const s = getState();
+      const ctx = simCtx;
+      const W = els.simCanvas.width;
+      const H = els.simCanvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.fillStyle = "#334155";
+      ctx.font = "bold 22px Microsoft JhengHei";
+      ctx.fillText("水平拉動木塊", 20, 34);
+
+      ctx.font = "14px Microsoft JhengHei";
+      ctx.fillStyle = "#64748b";
+      ctx.fillText("藍：外力 F　橘：摩擦力 f　綠：正向力 N　紅：重量 mg", 20, 58);
+
+      ctx.fillStyle = "#dbeafe";
+      ctx.fillRect(30, 295, W - 60, 24);
+      ctx.fillStyle = "#93c5fd";
+      for (let gx = 40; gx < W - 40; gx += 32) {
+        ctx.fillRect(gx, 317, 16, 4);
+      }
+
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(45, 350);
+      ctx.lineTo(W - 45, 350);
+      ctx.stroke();
+
+      ctx.font = "13px Microsoft JhengHei";
+      ctx.fillStyle = "#64748b";
+      for (let i = 0; i <= 8; i++) {
+        let sx = 45 + i * ((W - 90) / 8);
+        ctx.beginPath();
+        ctx.moveTo(sx, 345);
+        ctx.lineTo(sx, 355);
+        ctx.stroke();
+        ctx.fillText(i + " m", sx - 10, 375);
+      }
+
+      const blockW = 118;
+      const blockH = 82;
+      const y = 295 - blockH;
+
+      if (x > W - blockW - 70) {
+        x = W - blockW - 70;
+        v = 0;
+      }
+
+      ctx.fillStyle = "#b45309";
+      ctx.fillRect(x, y, blockW, blockH);
+      ctx.fillStyle = "#f59e0b";
+      ctx.fillRect(x + 10, y + 10, blockW - 20, blockH - 20);
+      ctx.strokeStyle = "#78350f";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(x, y, blockW, blockH);
+
+      ctx.fillStyle = "#78350f";
+      ctx.font = "bold 18px Microsoft JhengHei";
+      ctx.fillText("木塊", x + 37, y + 48);
+
+      const centerX = x + blockW / 2;
+      const centerY = y + blockH / 2;
+
+      const pullLen = Math.min(150, 18 + s.F * 1.6);
+      const frictionLen = Math.min(140, 18 + s.friction * 1.5);
+      const normalLen = Math.min(120, 26 + s.N * 0.7);
+      const weightLen = normalLen;
+
+      if (s.F > 0) arrow(ctx, x + blockW, centerY, x + blockW + pullLen, centerY, "#1565c0", "F");
+      if (s.friction > 0) arrow(ctx, x, centerY + 10, x - frictionLen, centerY + 10, "#ef6c00", "f");
+      arrow(ctx, centerX, y, centerX, y - normalLen, "#2e7d32", "N");
+      arrow(ctx, centerX + 24, y + blockH, centerX + 24, y + blockH + weightLen, "#c62828", "mg");
+
+      ctx.strokeStyle = "#1565c0";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(x + blockW + pullLen, centerY);
+      ctx.lineTo(x + blockW + pullLen + 32, centerY);
+      ctx.stroke();
+
+      ctx.fillStyle = "#e0f2fe";
+      ctx.strokeStyle = "#1565c0";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(x + blockW + pullLen + 32, centerY - 24, 82, 48, 12);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#0d47a1";
+      ctx.font = "bold 16px Microsoft JhengHei";
+      ctx.fillText(s.F.toFixed(1) + " N", x + blockW + pullLen + 42, centerY + 5);
+
+      ctx.fillStyle = s.moving ? "#fff3e0" : "#eef7ee";
+      ctx.strokeStyle = s.moving ? "#ef6c00" : "#43a047";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(20, 86, 250, 58, 14);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = s.moving ? "#e65100" : "#1b5e20";
+      ctx.font = "bold 18px Microsoft JhengHei";
+      ctx.fillText(s.moving ? "物體正在滑動" : "物體保持靜止", 34, 110);
+      ctx.font = "14px Microsoft JhengHei";
+      ctx.fillText("速度 v = " + v.toFixed(2) + " m/s", 34, 132);
+    }
+
+    function drawGraph() {
+      const s = getState();
+      const ctx = graphCtx;
+      const W = els.graphCanvas.width;
+      const H = els.graphCanvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, W, H);
+
+      const left = 58, right = 28, top = 24, bottom = 52;
+      const plotW = W - left - right;
+      const plotH = H - top - bottom;
+
+      const xMax = Math.max(20, s.fsMax * 1.6, s.F * 1.2 + 5, s.fk * 1.4);
+      const yMax = Math.max(20, s.fsMax * 1.4, s.fk * 1.4);
+
+      function pxX(val) { return left + (val / xMax) * plotW; }
+      function pxY(val) { return H - bottom - (val / yMax) * plotH; }
+
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 5; i++) {
+        const gy = top + i * plotH / 5;
+        ctx.beginPath();
+        ctx.moveTo(left, gy);
+        ctx.lineTo(W - right, gy);
+        ctx.stroke();
+      }
+      for (let i = 0; i <= 5; i++) {
+        const gx = left + i * plotW / 5;
+        ctx.beginPath();
+        ctx.moveTo(gx, top);
+        ctx.lineTo(gx, H - bottom);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(left, top);
+      ctx.lineTo(left, H - bottom);
+      ctx.lineTo(W - right, H - bottom);
+      ctx.stroke();
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "13px Microsoft JhengHei";
+      for (let i = 0; i <= 5; i++) {
+        const xv = xMax * i / 5;
+        const x = pxX(xv);
+        ctx.beginPath();
+        ctx.moveTo(x, H - bottom);
+        ctx.lineTo(x, H - bottom + 6);
+        ctx.stroke();
+        ctx.fillText(xv.toFixed(0), x - 8, H - bottom + 22);
+      }
+      for (let i = 0; i <= 5; i++) {
+        const yv = yMax * i / 5;
+        const y = pxY(yv);
+        ctx.beginPath();
+        ctx.moveTo(left - 6, y);
+        ctx.lineTo(left, y);
+        ctx.stroke();
+        if (i > 0) ctx.fillText(yv.toFixed(0), 18, y + 4);
+      }
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 15px Microsoft JhengHei";
+      ctx.fillText("外力 F (N)", W / 2 - 34, H - 12);
+      ctx.save();
+      ctx.translate(18, H / 2 + 24);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText("摩擦力 f (N)", 0, 0);
+      ctx.restore();
+
+      ctx.strokeStyle = "#1565c0";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(pxX(0), pxY(0));
+      ctx.lineTo(pxX(s.fsMax), pxY(s.fsMax));
+      ctx.lineTo(pxX(s.fsMax), pxY(s.fk));
+      ctx.lineTo(pxX(xMax), pxY(s.fk));
+      ctx.stroke();
+
+      ctx.setLineDash([6, 5]);
+      ctx.strokeStyle = "#43a047";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(pxX(s.fsMax), top);
+      ctx.lineTo(pxX(s.fsMax), H - bottom);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#ef6c00";
+      ctx.beginPath();
+      ctx.moveTo(left, pxY(s.fk));
+      ctx.lineTo(W - right, pxY(s.fk));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "#1e40af";
+      ctx.font = "bold 14px Microsoft JhengHei";
+      ctx.fillText("靜摩擦區：f = F", pxX(s.fsMax * 0.38) - 26, pxY(s.fsMax * 0.38) - 12);
+      ctx.fillText("動摩擦區：f = fk", pxX(s.fsMax + (xMax - s.fsMax) * 0.36) - 30, pxY(s.fk) - 12);
+
+      ctx.fillStyle = "#2e7d32";
+      ctx.fillText("臨界點 F = fs,max", pxX(s.fsMax) - 40, top + 18);
+
+      ctx.fillStyle = "#ef6c00";
+      ctx.fillText("fk = " + s.fk.toFixed(1) + " N", W - right - 112, pxY(s.fk) - 8);
+
+      const currentX = pxX(s.F);
+      const currentY = pxY(s.friction);
+
+      ctx.fillStyle = "#e53935";
+      ctx.beginPath();
+      ctx.arc(currentX, currentY, 6.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#e53935";
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(currentX, currentY);
+      ctx.lineTo(currentX, H - bottom);
+      ctx.moveTo(currentX, currentY);
+      ctx.lineTo(left, currentY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "#b91c1c";
+      ctx.font = "bold 14px Microsoft JhengHei";
+      ctx.fillText("目前點", currentX + 8, currentY - 10);
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "13px Microsoft JhengHei";
+      ctx.fillText("目前：F = " + s.F.toFixed(1) + " N，f = " + s.friction.toFixed(1) + " N", left, H - 22);
+    }
+
+    function step(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      const dt = Math.min((timestamp - lastTime) / 1000, 0.03);
+      lastTime = timestamp;
+
+      const s = getState();
+
+      if (playing) {
+        v += s.a * dt;
+        if (v < 0) v = 0;
+        x += v * dt * 40;
+      }
+
+      updateLabels();
+      drawSim();
+      drawGraph();
+      requestAnimationFrame(step);
+    }
+
+    function resetPosition() {
+      x = 130;
+      v = 0;
+      lastTime = null;
+      updateLabels();
+      drawSim();
+      drawGraph();
+    }
+
+    function renderRecords() {
+      if (records.length === 0) {
+        els.dataBody.innerHTML = '<tr><td colspan="8" class="small">尚未記錄數據</td></tr>';
+        return;
+      }
+
+      els.dataBody.innerHTML = records.map((r, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${r.m.toFixed(1)}</td>
+          <td>${r.muS.toFixed(2)}</td>
+          <td>${r.muK.toFixed(2)}</td>
+          <td>${r.F.toFixed(1)}</td>
+          <td>${r.fsMax.toFixed(1)}</td>
+          <td>${r.friction.toFixed(1)}</td>
+          <td>${r.moving ? "滑動" : "靜止"}</td>
+        </tr>
+      `).join("");
+    }
+
+    function recordData() {
+      const s = getState();
+      records.push({ ...s });
+      renderRecords();
+    }
+
+    function copyTable() {
+      if (records.length === 0) {
+        alert("目前沒有資料可以複製。");
+        return;
+      }
+
+      const header = "次數\tm(kg)\tμs\tμk\tF(N)\tfs,max(N)\t目前摩擦力(N)\t狀態";
+      const rows = records.map((r, i) => [
+        i + 1,
+        r.m.toFixed(1),
+        r.muS.toFixed(2),
+        r.muK.toFixed(2),
+        r.F.toFixed(1),
+        r.fsMax.toFixed(1),
+        r.friction.toFixed(1),
+        r.moving ? "滑動" : "靜止"
+      ].join("\t"));
+      const text = [header, ...rows].join("\n");
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert("已複製，可貼到 Excel、Google 試算表或學習單。");
+      }).catch(() => {
+        alert("瀏覽器不支援自動複製，請手動選取表格內容。");
+      });
+    }
+
+    [els.mass, els.muS, els.muK, els.pull].forEach(input => {
+      input.addEventListener("input", () => {
+        if (Number(els.muK.value) > Number(els.muS.value)) {
+          els.muK.value = Number(els.muS.value).toFixed(2);
+        }
+        updateLabels();
+        drawSim();
+        drawGraph();
+      });
+    });
+
+    els.playBtn.addEventListener("click", () => {
+      playing = true;
+      lastTime = null;
+    });
+
+    els.pauseBtn.addEventListener("click", () => {
+      playing = false;
+      v = 0;
+    });
+
+    els.resetBtn.addEventListener("click", resetPosition);
+    els.recordBtn.addEventListener("click", recordData);
+    els.clearBtn.addEventListener("click", () => {
+      records = [];
+      renderRecords();
+    });
+    els.copyBtn.addEventListener("click", copyTable);
+
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+      };
+    }
+
+    updateLabels();
+    drawSim();
+    drawGraph();
+    requestAnimationFrame(step);
+  </script>
+</body>
+</html>
