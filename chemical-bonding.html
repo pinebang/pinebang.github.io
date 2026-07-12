@@ -84,6 +84,7 @@
       }
 
       .toolbar,
+      .lesson-video,
       .question-card,
       .result,
       .participants,
@@ -99,6 +100,37 @@
         gap: 12px;
         padding: 16px;
         margin-bottom: 18px;
+      }
+
+      .lesson-video {
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+
+      .lesson-video h2 {
+        margin-bottom: 6px;
+      }
+
+      .lesson-video p {
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+
+      .video-frame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #d8e0e7;
+      }
+
+      .video-frame iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
       }
 
       label span {
@@ -371,6 +403,18 @@
     </header>
 
     <main class="wrap">
+      <section class="lesson-video" aria-label="影片解說">
+        <h2>先看影片解說</h2>
+        <p>看完化學鍵重點整理後，再完成下面的互動練習。</p>
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/ZyPhAY4E698"
+            title="化學鍵影片解說"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+      </section>
+
       <form id="practiceForm" novalidate>
         <section class="toolbar" aria-label="學生資料">
           <label>

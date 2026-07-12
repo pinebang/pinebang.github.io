@@ -7,6 +7,7 @@ import {
   gradeAnswers,
   maskStudentName,
   normalizeStudentInfo,
+  youtubeEmbedUrl,
   questions,
 } from "./chemical-bonding-app.js";
 
@@ -89,4 +90,8 @@ test("normalizes new and cached old student fields into class seat", () => {
   assert.deepEqual(normalizeStudentInfo({ className: "101", seatNumber: "12" }), {
     classSeat: "10112",
   });
+});
+
+test("converts a short YouTube link to an embed URL", () => {
+  assert.equal(youtubeEmbedUrl("https://youtu.be/ZyPhAY4E698"), "https://www.youtube.com/embed/ZyPhAY4E698");
 });

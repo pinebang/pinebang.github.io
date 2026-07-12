@@ -1,5 +1,10 @@
 import { GOOGLE_APPS_SCRIPT_URL } from "./chemical-bonding-config.js";
 
+export function youtubeEmbedUrl(url) {
+  const match = String(url).match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([A-Za-z0-9_-]{6,})/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : "";
+}
+
 export const questions = [
   {
     id: "q01",
