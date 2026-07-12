@@ -147,8 +147,19 @@ export function gradeAnswers(answers, questionList = questions) {
   };
 }
 
+export function normalizeStudentInfo(student) {
+  const directClassSeat = String(student.classSeat || "").trim();
+  if (directClassSeat) {
+    return { classSeat: directClassSeat };
+  }
+
+  const className = String(student.className || "").trim();
+  const seatNumber = String(student.seatNumber || "").trim();
+  return { classSeat: `${className}${seatNumber}`.trim() };
+}
+
 export function buildSubmissionPayload(student, answers, graded, questionList = questions) {
-  const classSeat = String(student.classSeat || student.className || "").trim();
+  const { classSeat } = normalizeStudentInfo(student);
   return {
     completedAt: new Date().toISOString(),
     classSeat,
@@ -205,8 +216,14 @@ function optionId(question, optionIndex) {
 }
 
 function collectStudentInfo() {
+  const classSeatInput = document.querySelector("#classSeat");
+  if (classSeatInput) {
+    return { classSeat: classSeatInput.value };
+  }
+
   return {
-    classSeat: document.querySelector("#classSeat").value,
+    className: document.querySelector("#className")?.value || "",
+    seatNumber: document.querySelector("#seatNumber")?.value || "",
   };
 }
 
@@ -250,7 +267,7 @@ function renderQuestions() {
 }
 
 function validateForm(student, answers) {
-  const missingProfile = !student.classSeat;
+  const missingProfile = !normalizeStudentInfo(student).classSeat;
   const unanswered = questions.filter((question) => !answers[question.id]);
   return { missingProfile, unanswered };
 }

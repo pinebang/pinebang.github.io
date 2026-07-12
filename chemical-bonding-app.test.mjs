@@ -6,6 +6,7 @@ import {
   getQuestionStats,
   gradeAnswers,
   maskStudentName,
+  normalizeStudentInfo,
   questions,
 } from "./chemical-bonding-app.js";
 
@@ -79,4 +80,13 @@ test("formats public participant rows without exposing scores", () => {
     },
   ]);
   assert.equal("score" in participants[0], false);
+});
+
+test("normalizes new and cached old student fields into class seat", () => {
+  assert.deepEqual(normalizeStudentInfo({ classSeat: "101-12" }), {
+    classSeat: "101-12",
+  });
+  assert.deepEqual(normalizeStudentInfo({ className: "101", seatNumber: "12" }), {
+    classSeat: "10112",
+  });
 });
