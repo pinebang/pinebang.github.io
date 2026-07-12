@@ -86,6 +86,7 @@
       .toolbar,
       .question-card,
       .result,
+      .participants,
       .notice {
         background: var(--panel);
         border: 1px solid var(--line);
@@ -274,6 +275,57 @@
         border-color: #edd399;
       }
 
+      .participants {
+        margin-top: 16px;
+        padding: 18px;
+      }
+
+      .participants-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: start;
+        margin-bottom: 12px;
+      }
+
+      .participants-head p {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .participant-count {
+        white-space: nowrap;
+        color: var(--blue);
+        font-weight: 800;
+      }
+
+      .participant-list {
+        display: grid;
+        gap: 8px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .participant-row {
+        display: grid;
+        grid-template-columns: 0.9fr 0.8fr 1fr 1.4fr;
+        gap: 10px;
+        align-items: center;
+        min-height: 40px;
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fbfdff;
+      }
+
+      .participant-row span,
+      .participant-row time,
+      .participant-empty,
+      .participant-status {
+        color: var(--muted);
+      }
+
       footer {
         padding: 28px 0;
         color: var(--muted);
@@ -284,8 +336,13 @@
         .hero,
         .toolbar,
         .options,
-        .result {
+        .result,
+        .participant-row {
           grid-template-columns: 1fr;
+        }
+
+        .participants-head {
+          display: block;
         }
 
         header {
@@ -341,6 +398,18 @@
       </form>
 
       <section id="result" class="result" hidden aria-live="polite"></section>
+
+      <section class="participants" aria-label="已完成練習名單">
+        <div class="participants-head">
+          <div>
+            <h2>已完成練習名單</h2>
+            <p>只顯示完成狀態，不公開分數。姓名會自動遮罩。</p>
+          </div>
+          <span id="participantCount" class="participant-count">-- 人完成</span>
+        </div>
+        <ul id="participantList" class="participant-list"></ul>
+        <p id="participantStatus" class="participant-status" role="status"></p>
+      </section>
 
       <section class="notice">
         老師提醒：若尚未設定 Google Apps Script，網頁仍可計分，但不會寫入試算表。設定完成後，學生交卷資料會自動送到 Google Sheets。

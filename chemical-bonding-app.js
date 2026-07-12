@@ -180,6 +180,26 @@ export function getQuestionStats(questionList = questions) {
   );
 }
 
+export function maskStudentName(name) {
+  const cleanName = String(name || "").trim();
+  if (cleanName.length <= 1) {
+    return cleanName;
+  }
+  if (cleanName.length === 2) {
+    return `${cleanName[0]}○`;
+  }
+  return `${cleanName[0]}${"○".repeat(cleanName.length - 2)}${cleanName[cleanName.length - 1]}`;
+}
+
+export function formatParticipantRows(rows) {
+  return rows.map((row) => ({
+    completedAt: row.completedAt,
+    className: String(row.className || "").trim(),
+    seatNumber: String(row.seatNumber || "").trim(),
+    displayName: maskStudentName(row.studentName),
+  }));
+}
+
 function optionId(question, optionIndex) {
   return `${question.id}-${optionIndex}`;
 }
@@ -270,6 +290,75 @@ function renderResult(graded) {
   `;
 }
 
+function renderParticipants(participants) {
+  const list = document.querySelector("#participantList");
+  const count = document.querySelector("#participantCount");
+  if (!list || !count) {
+    return;
+  }
+
+  count.textContent = `${participants.length} 人完成`;
+  if (participants.length === 0) {
+    list.innerHTML = `<li class="participant-empty">目前還沒有學生完成練習。</li>`;
+    return;
+  }
+
+  list.innerHTML = participants
+    .slice(0, 30)
+    .map((student) => {
+      const time = student.completedAt ? new Date(student.completedAt).toLocaleString("zh-TW", { hour12: false }) : "時間未記錄";
+      return `
+        <li class="participant-row">
+          <span>${student.className || "未填班級"}</span>
+          <span>${student.seatNumber || "--"} 號</span>
+          <strong>${student.displayName || "未填姓名"}</strong>
+          <time>${time}</time>
+        </li>
+      `;
+    })
+    .join("");
+}
+
+function loadJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `chemicalBondingParticipants_${Date.now()}_${Math.round(Math.random() * 10000)}`;
+    const script = document.createElement("script");
+    const separator = url.includes("?") ? "&" : "?";
+
+    window[callbackName] = (data) => {
+      delete window[callbackName];
+      script.remove();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      delete window[callbackName];
+      script.remove();
+      reject(new Error("participants jsonp failed"));
+    };
+
+    script.src = `${url}${separator}action=participants&callback=${callbackName}`;
+    document.body.appendChild(script);
+  });
+}
+
+async function loadParticipants() {
+  const status = document.querySelector("#participantStatus");
+  if (!GOOGLE_APPS_SCRIPT_URL) {
+    status.textContent = "尚未設定作答紀錄來源。";
+    return;
+  }
+
+  status.textContent = "正在讀取已完成名單...";
+  try {
+    const data = await loadJsonp(GOOGLE_APPS_SCRIPT_URL);
+    renderParticipants(formatParticipantRows(data.participants || []));
+    status.textContent = "名單會顯示最近 30 筆完成紀錄，不公開分數。";
+  } catch (error) {
+    status.textContent = "目前無法讀取已完成名單，稍後再試。";
+  }
+}
+
 async function submitToSheet(payload) {
   if (!GOOGLE_APPS_SCRIPT_URL) {
     return { skipped: true, message: "尚未設定 Google Apps Script 收件網址，這次只在本機顯示分數。" };
@@ -327,6 +416,9 @@ function bindEvents() {
     try {
       const submission = await submitToSheet(latestPayload);
       submitStatus.textContent = submission.skipped ? submission.message : "作答紀錄已送出。";
+      if (!submission.skipped) {
+        setTimeout(loadParticipants, 1200);
+      }
     } catch (error) {
       submitStatus.textContent = "分數已計算，但送出紀錄失敗。請通知老師或下載備份。";
     }
@@ -346,7 +438,9 @@ export function initPracticePage() {
   const stats = getQuestionStats();
   document.querySelector("#questionCount").textContent = `${stats.total} 題`;
   renderQuestions();
+  renderParticipants([]);
   bindEvents();
+  loadParticipants();
 }
 
 if (typeof document !== "undefined") {

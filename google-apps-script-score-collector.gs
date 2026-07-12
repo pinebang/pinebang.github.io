@@ -34,6 +34,31 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function doGet(e) {
+  if (e.parameter.action !== "participants") {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("作答紀錄");
+  var participants = sheet ? readParticipants_(sheet) : [];
+  var payload = {
+    ok: true,
+    participants: participants,
+  };
+
+  if (e.parameter.callback) {
+    return ContentService
+      .createTextOutput(e.parameter.callback + "(" + JSON.stringify(payload) + ");")
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 function ensureHeader_(sheet) {
   if (sheet.getLastRow() > 0) {
     return;
@@ -51,4 +76,28 @@ function ensureHeader_(sheet) {
     "錯題摘要",
     "完整作答明細",
   ]);
+}
+
+function readParticipants_(sheet) {
+  ensureHeader_(sheet);
+  var lastRow = sheet.getLastRow();
+  if (lastRow <= 1) {
+    return [];
+  }
+
+  var rowCount = Math.min(lastRow - 1, 30);
+  var startRow = Math.max(2, lastRow - rowCount + 1);
+  var values = sheet.getRange(startRow, 1, rowCount, 5).getValues();
+
+  return values
+    .map(function (row) {
+      return {
+        receivedAt: row[0],
+        completedAt: row[1],
+        className: row[2],
+        seatNumber: row[3],
+        studentName: row[4],
+      };
+    })
+    .reverse();
 }

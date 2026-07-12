@@ -2,8 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildSubmissionPayload,
+  formatParticipantRows,
   getQuestionStats,
   gradeAnswers,
+  maskStudentName,
   questions,
 } from "./chemical-bonding-app.js";
 
@@ -47,4 +49,34 @@ test("reports question type statistics for the practice dashboard", () => {
   assert.ok(stats.byType.choice >= 1);
   assert.ok(stats.byType.trueFalse >= 1);
   assert.ok(stats.byType.scenario >= 1);
+});
+
+test("masks student names before showing them publicly", () => {
+  assert.equal(maskStudentName("王小明"), "王○明");
+  assert.equal(maskStudentName("林可"), "林○");
+  assert.equal(maskStudentName("A"), "A");
+});
+
+test("formats public participant rows without exposing scores", () => {
+  const rows = [
+    {
+      completedAt: "2026-07-12T01:20:00.000Z",
+      className: "101",
+      seatNumber: "12",
+      studentName: "王小明",
+      score: 100,
+    },
+  ];
+
+  const participants = formatParticipantRows(rows);
+
+  assert.deepEqual(participants, [
+    {
+      completedAt: "2026-07-12T01:20:00.000Z",
+      className: "101",
+      seatNumber: "12",
+      displayName: "王○明",
+    },
+  ]);
+  assert.equal("score" in participants[0], false);
 });
