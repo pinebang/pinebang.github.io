@@ -26,15 +26,16 @@ test("builds a spreadsheet-ready submission payload", () => {
   const answers = Object.fromEntries(questions.map((question) => [question.id, question.answer]));
   const graded = gradeAnswers(answers, questions);
   const payload = buildSubmissionPayload(
-    { className: "101", seatNumber: "12", studentName: "王小明" },
+    { classSeat: "10112" },
     answers,
     graded,
     questions,
   );
 
-  assert.equal(payload.className, "101");
-  assert.equal(payload.seatNumber, "12");
-  assert.equal(payload.studentName, "王小明");
+  assert.equal(payload.classSeat, "10112");
+  assert.equal(payload.className, "10112");
+  assert.equal(payload.seatNumber, "");
+  assert.equal(payload.studentName, "");
   assert.equal(payload.score, 100);
   assert.equal(payload.correct, questions.length);
   assert.equal(payload.total, questions.length);
@@ -61,9 +62,10 @@ test("formats public participant rows without exposing scores", () => {
   const rows = [
     {
       completedAt: "2026-07-12T01:20:00.000Z",
-      className: "101",
-      seatNumber: "12",
-      studentName: "王小明",
+      classSeat: "10112",
+      className: "10112",
+      seatNumber: "",
+      studentName: "",
       score: 100,
     },
   ];
@@ -73,9 +75,7 @@ test("formats public participant rows without exposing scores", () => {
   assert.deepEqual(participants, [
     {
       completedAt: "2026-07-12T01:20:00.000Z",
-      className: "101",
-      seatNumber: "12",
-      displayName: "王○明",
+      classSeat: "10112",
     },
   ]);
   assert.equal("score" in participants[0], false);

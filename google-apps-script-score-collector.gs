@@ -19,9 +19,9 @@ function doPost(e) {
   sheet.appendRow([
     new Date(),
     payload.completedAt,
-    payload.className,
-    payload.seatNumber,
-    payload.studentName,
+    payload.classSeat || payload.className,
+    "",
+    "",
     payload.score,
     payload.correct,
     payload.total,
@@ -67,7 +67,7 @@ function ensureHeader_(sheet) {
   sheet.appendRow([
     "收到時間",
     "學生完成時間",
-    "班級",
+    "班級座號",
     "座號",
     "姓名",
     "分數",
@@ -94,6 +94,7 @@ function readParticipants_(sheet) {
       return {
         receivedAt: row[0],
         completedAt: row[1],
+        classSeat: row[2],
         className: row[2],
         seatNumber: row[3],
         studentName: row[4],

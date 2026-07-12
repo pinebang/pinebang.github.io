@@ -148,11 +148,13 @@ export function gradeAnswers(answers, questionList = questions) {
 }
 
 export function buildSubmissionPayload(student, answers, graded, questionList = questions) {
+  const classSeat = String(student.classSeat || student.className || "").trim();
   return {
     completedAt: new Date().toISOString(),
-    className: String(student.className || "").trim(),
-    seatNumber: String(student.seatNumber || "").trim(),
-    studentName: String(student.studentName || "").trim(),
+    classSeat,
+    className: classSeat,
+    seatNumber: "",
+    studentName: "",
     score: graded.score,
     correct: graded.correct,
     total: graded.total,
@@ -194,9 +196,7 @@ export function maskStudentName(name) {
 export function formatParticipantRows(rows) {
   return rows.map((row) => ({
     completedAt: row.completedAt,
-    className: String(row.className || "").trim(),
-    seatNumber: String(row.seatNumber || "").trim(),
-    displayName: maskStudentName(row.studentName),
+    classSeat: String(row.classSeat || row.className || "").trim(),
   }));
 }
 
@@ -206,9 +206,7 @@ function optionId(question, optionIndex) {
 
 function collectStudentInfo() {
   return {
-    className: document.querySelector("#className").value,
-    seatNumber: document.querySelector("#seatNumber").value,
-    studentName: document.querySelector("#studentName").value,
+    classSeat: document.querySelector("#classSeat").value,
   };
 }
 
@@ -252,7 +250,7 @@ function renderQuestions() {
 }
 
 function validateForm(student, answers) {
-  const missingProfile = !student.className || !student.seatNumber || !student.studentName;
+  const missingProfile = !student.classSeat;
   const unanswered = questions.filter((question) => !answers[question.id]);
   return { missingProfile, unanswered };
 }
@@ -309,9 +307,7 @@ function renderParticipants(participants) {
       const time = student.completedAt ? new Date(student.completedAt).toLocaleString("zh-TW", { hour12: false }) : "時間未記錄";
       return `
         <li class="participant-row">
-          <span>${student.className || "未填班級"}</span>
-          <span>${student.seatNumber || "--"} 號</span>
-          <strong>${student.displayName || "未填姓名"}</strong>
+          <strong>${student.classSeat || "未填班級座號"}</strong>
           <time>${time}</time>
         </li>
       `;
@@ -379,7 +375,7 @@ function downloadPayload(payload) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `chemical-bonding-${payload.className}-${payload.seatNumber}.json`;
+  link.download = `chemical-bonding-${payload.classSeat}.json`;
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -397,7 +393,7 @@ function bindEvents() {
     const validation = validateForm(student, answers);
 
     if (validation.missingProfile) {
-      submitStatus.textContent = "請先填寫班級、座號與姓名。";
+      submitStatus.textContent = "請先填寫班級座號。";
       return;
     }
 

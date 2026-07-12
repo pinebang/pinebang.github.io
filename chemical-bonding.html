@@ -95,7 +95,7 @@
 
       .toolbar {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: minmax(220px, 420px);
         gap: 12px;
         padding: 16px;
         margin-bottom: 18px;
@@ -309,7 +309,7 @@
 
       .participant-row {
         display: grid;
-        grid-template-columns: 0.9fr 0.8fr 1fr 1.4fr;
+        grid-template-columns: 1fr 1.4fr;
         gap: 10px;
         align-items: center;
         min-height: 40px;
@@ -319,7 +319,6 @@
         background: #fbfdff;
       }
 
-      .participant-row span,
       .participant-row time,
       .participant-empty,
       .participant-status {
@@ -375,16 +374,8 @@
       <form id="practiceForm">
         <section class="toolbar" aria-label="學生資料">
           <label>
-            <span>班級</span>
-            <input id="className" type="text" autocomplete="off" required placeholder="例如 101">
-          </label>
-          <label>
-            <span>座號</span>
-            <input id="seatNumber" type="number" inputmode="numeric" required placeholder="例如 12">
-          </label>
-          <label>
-            <span>姓名</span>
-            <input id="studentName" type="text" autocomplete="name" required placeholder="請輸入姓名">
+            <span>班級座號</span>
+            <input id="classSeat" type="text" autocomplete="off" required placeholder="例如 10112 或 101-12">
           </label>
         </section>
 
@@ -403,7 +394,7 @@
         <div class="participants-head">
           <div>
             <h2>已完成練習名單</h2>
-            <p>只顯示完成狀態，不公開分數。姓名會自動遮罩。</p>
+            <p>只顯示完成狀態，不公開分數。</p>
           </div>
           <span id="participantCount" class="participant-count">-- 人完成</span>
         </div>
