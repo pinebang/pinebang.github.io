@@ -94,4 +94,5 @@ test("normalizes new and cached old student fields into class seat", () => {
 
 test("converts a short YouTube link to an embed URL", () => {
   assert.equal(youtubeEmbedUrl("https://youtu.be/ZyPhAY4E698"), "https://www.youtube.com/embed/ZyPhAY4E698");
+  assert.equal(youtubeEmbedUrl("https://youtu.be/Gfi8360uL70"), "https://www.youtube.com/embed/Gfi8360uL70");
 });
