@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import {
   buildSubmissionPayload,
   formatParticipantRows,
@@ -95,4 +96,13 @@ test("normalizes new and cached old student fields into class seat", () => {
 test("converts a short YouTube link to an embed URL", () => {
   assert.equal(youtubeEmbedUrl("https://youtu.be/ZyPhAY4E698"), "https://www.youtube.com/embed/ZyPhAY4E698");
   assert.equal(youtubeEmbedUrl("https://youtu.be/Gfi8360uL70"), "https://www.youtube.com/embed/Gfi8360uL70");
+});
+
+test("Apps Script emails the teacher after a submission", () => {
+  const appsScript = fs.readFileSync("google-apps-script-score-collector.gs", "utf8");
+
+  assert.match(appsScript, /pine\.bang@gmail\.com/);
+  assert.match(appsScript, /MailApp\.sendEmail/);
+  assert.match(appsScript, /分數/);
+  assert.match(appsScript, /錯題摘要/);
 });

@@ -1,3 +1,5 @@
+var TEACHER_EMAIL = "pine.bang@gmail.com";
+
 function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("作答紀錄");
   if (!sheet) {
@@ -28,6 +30,8 @@ function doPost(e) {
     wrongItems,
     JSON.stringify(payload.answers),
   ]);
+
+  sendTeacherEmail_(payload, wrongItems);
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
@@ -101,4 +105,28 @@ function readParticipants_(sheet) {
       };
     })
     .reverse();
+}
+
+function sendTeacherEmail_(payload, wrongItems) {
+  var classSeat = payload.classSeat || payload.className || "未填班級座號";
+  var subject = "化學鍵練習作答通知：" + classSeat + "，" + payload.score + " 分";
+  var body = [
+    "有學生完成化學鍵互動練習。",
+    "",
+    "班級座號：" + classSeat,
+    "分數：" + payload.score,
+    "答對題數：" + payload.correct + " / " + payload.total,
+    "學生完成時間：" + payload.completedAt,
+    "",
+    "錯題摘要：",
+    wrongItems || "沒有錯題。",
+    "",
+    "完整作答明細已寫入 Google 試算表。",
+  ].join("\n");
+
+  MailApp.sendEmail({
+    to: TEACHER_EMAIL,
+    subject: subject,
+    body: body,
+  });
 }
