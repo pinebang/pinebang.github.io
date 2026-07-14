@@ -102,6 +102,7 @@ test("Apps Script emails the teacher after a submission", () => {
   const appsScript = fs.readFileSync("google-apps-script-score-collector.gs", "utf8");
 
   assert.match(appsScript, /pine\.bang@gmail\.com/);
+  assert.match(appsScript, /function authorizeMailOnce/);
   assert.match(appsScript, /MailApp\.sendEmail/);
   assert.match(appsScript, /分數/);
   assert.match(appsScript, /錯題摘要/);

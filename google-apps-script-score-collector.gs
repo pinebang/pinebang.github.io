@@ -1,5 +1,13 @@
 var TEACHER_EMAIL = "pine.bang@gmail.com";
 
+function authorizeMailOnce() {
+  MailApp.sendEmail({
+    to: TEACHER_EMAIL,
+    subject: "化學鍵練習通知系統授權測試",
+    body: "如果你收到這封信，代表 Apps Script 已取得寄信權限。之後學生交卷時就能寄出通知。",
+  });
+}
+
 function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("作答紀錄");
   if (!sheet) {
