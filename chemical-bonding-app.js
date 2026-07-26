@@ -166,6 +166,7 @@ export function normalizeStudentInfo(student) {
 export function buildSubmissionPayload(student, answers, graded, questionList = questions) {
   const { classSeat } = normalizeStudentInfo(student);
   return {
+    lessonTitle: "化學鍵",
     completedAt: new Date().toISOString(),
     classSeat,
     className: classSeat,

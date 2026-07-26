@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>高一化學：化學鍵互動練習</title>
+    <title>高一化學：元素週期表互動練習</title>
     <style>
       :root {
         color-scheme: light;
@@ -122,10 +122,78 @@
       .question-card,
       .result,
       .participants,
-      .notice {
+      .notice,
+      .periodic-snapshot {
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: 8px;
+      }
+
+      .lesson-video,
+      .periodic-snapshot {
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+
+      .lesson-video p,
+      .periodic-snapshot p {
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+
+      .video-grid,
+      .element-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .video-placeholder {
+        min-height: 180px;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        border: 1px dashed #b7c4ce;
+        border-radius: 8px;
+        background: #f2f6fa;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .element-grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+      }
+
+      .element-tile {
+        min-height: 76px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: #fbfdff;
+      }
+
+      .element-tile strong {
+        display: block;
+        font-size: 1.35rem;
+        line-height: 1.1;
+      }
+
+      .element-tile span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .metal {
+        border-top: 5px solid #1f6feb;
+      }
+
+      .nonmetal {
+        border-top: 5px solid #16833a;
+      }
+
+      .metalloid {
+        border-top: 5px solid #b7791f;
       }
 
       .toolbar {
@@ -136,53 +204,6 @@
         margin-bottom: 18px;
       }
 
-      .lesson-video {
-        padding: 18px;
-        margin-bottom: 18px;
-      }
-
-      .lesson-video h2 {
-        margin-bottom: 6px;
-      }
-
-      .lesson-video p {
-        color: var(--muted);
-        margin-bottom: 14px;
-      }
-
-      .video-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .video-card {
-        display: grid;
-        gap: 8px;
-      }
-
-      .video-card h3 {
-        margin-bottom: 0;
-        font-size: 1rem;
-      }
-
-      .video-frame {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        border-radius: 8px;
-        background: #d8e0e7;
-      }
-
-      .video-frame iframe {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-      }
-
       label span {
         display: block;
         margin-bottom: 6px;
@@ -190,8 +211,7 @@
         font-size: 0.92rem;
       }
 
-      input[type="text"],
-      input[type="number"] {
+      input[type="text"] {
         width: 100%;
         min-height: 44px;
         padding: 10px 12px;
@@ -447,6 +467,10 @@
           grid-template-columns: 1fr;
         }
 
+        .element-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
         .participants-head {
           display: block;
         }
@@ -466,20 +490,20 @@
     <nav class="course-sidebar" aria-label="課程目錄">
       <h2>課程目錄</h2>
       <a href="index.html">首頁</a>
-      <a href="chemical-bonding.html" aria-current="page">化學鍵</a>
-      <a href="periodic-table.html">元素週期表</a>
+      <a href="chemical-bonding.html">化學鍵</a>
+      <a href="periodic-table.html" aria-current="page">元素週期表</a>
     </nav>
 
     <header>
       <div class="wrap hero">
         <div>
-          <h1>化學鍵互動練習</h1>
-          <p>從價電子、八隅體、離子鍵、共價鍵到金屬鍵，完成練習後會看到分數與錯題解析。</p>
+          <h1>元素週期表互動練習</h1>
+          <p>認識元素符號、原子序、週期、族、金屬與非金屬分類，完成練習後會看到分數與錯題解析。</p>
         </div>
         <div class="status-panel">
           <span>本次練習</span>
           <strong id="questionCount">-- 題</strong>
-          <small>高一化學 Chemical Bonding</small>
+          <small>高一化學 Periodic Table</small>
         </div>
       </div>
     </header>
@@ -487,28 +511,25 @@
     <main class="wrap">
       <section class="lesson-video" aria-label="影片解說">
         <h2>先看影片解說</h2>
-        <p>看完化學鍵重點整理後，再完成下面的互動練習。</p>
+        <p>影片位置先保留，之後可放入 NotebookLM 或 YouTube 的元素週期表解說。</p>
         <div class="video-grid">
-          <article class="video-card">
-            <h3>影片一</h3>
-            <div class="video-frame">
-              <iframe
-                src="https://www.youtube.com/embed/ZyPhAY4E698"
-                title="化學鍵影片解說一"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-          </article>
-          <article class="video-card">
-            <h3>影片二</h3>
-            <div class="video-frame">
-              <iframe
-                src="https://www.youtube.com/embed/Gfi8360uL70"
-                title="化學鍵影片解說二"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-          </article>
+          <div class="video-placeholder">影片一待補</div>
+          <div class="video-placeholder">影片二待補</div>
+        </div>
+      </section>
+
+      <section class="periodic-snapshot" aria-label="元素分類速覽">
+        <h2>元素分類速覽</h2>
+        <p>用幾個常見元素先建立週期表的分類感，再完成下面的題目。</p>
+        <div class="element-grid">
+          <div class="element-tile nonmetal"><strong>H</strong><span>氫 1</span><span>非金屬</span></div>
+          <div class="element-tile metal"><strong>Li</strong><span>鋰 3</span><span>鹼金屬</span></div>
+          <div class="element-tile metal"><strong>Na</strong><span>鈉 11</span><span>鹼金屬</span></div>
+          <div class="element-tile metalloid"><strong>Si</strong><span>矽 14</span><span>類金屬</span></div>
+          <div class="element-tile nonmetal"><strong>O</strong><span>氧 8</span><span>非金屬</span></div>
+          <div class="element-tile nonmetal"><strong>Cl</strong><span>氯 17</span><span>鹵素</span></div>
+          <div class="element-tile nonmetal"><strong>Ne</strong><span>氖 10</span><span>鈍氣</span></div>
+          <div class="element-tile metal"><strong>Fe</strong><span>鐵 26</span><span>金屬</span></div>
         </div>
       </section>
 
@@ -544,14 +565,14 @@
       </section>
 
       <section class="notice">
-        老師提醒：若尚未設定 Google Apps Script，網頁仍可計分，但不會寫入試算表。設定完成後，學生交卷資料會自動送到 Google Sheets。
+        老師提醒：本頁沿用同一份 Google Apps Script 與 Google Sheets 作答收集設定。
       </section>
     </main>
 
     <footer>
-      <div class="wrap">資料來源：高一化學化學鍵講義與 108 課綱自然科學領域。</div>
+      <div class="wrap">資料來源：高一化學元素週期表學習內容與 108 課綱自然科學領域。</div>
     </footer>
 
-    <script type="module" src="./chemical-bonding-app.js"></script>
+    <script type="module" src="./periodic-table-app.js"></script>
   </body>
 </html>

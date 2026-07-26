@@ -1,22 +1,24 @@
 var TEACHER_EMAIL = "pine.bang@gmail.com";
+var SHEET_NAME = "作答紀錄";
 
 function authorizeMailOnce() {
   MailApp.sendEmail({
     to: TEACHER_EMAIL,
-    subject: "化學鍵練習通知系統授權測試",
+    subject: "互動練習通知系統授權測試",
     body: "如果你收到這封信，代表 Apps Script 已取得寄信權限。之後學生交卷時就能寄出通知。",
   });
 }
 
 function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("作答紀錄");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
   if (!sheet) {
-    sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("作答紀錄");
+    sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet(SHEET_NAME);
   }
 
   ensureHeader_(sheet);
 
   var payload = JSON.parse(e.postData.contents);
+  var lessonTitle = payload.lessonTitle || "化學鍵";
   var wrongItems = payload.answers
     .filter(function (item) {
       return !item.isCorrect;
@@ -37,9 +39,10 @@ function doPost(e) {
     payload.total,
     wrongItems,
     JSON.stringify(payload.answers),
+    lessonTitle,
   ]);
 
-  sendTeacherEmail_(payload, wrongItems);
+  sendTeacherEmail_(payload, lessonTitle, wrongItems);
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
@@ -53,7 +56,7 @@ function doGet(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("作答紀錄");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
   var participants = sheet ? readParticipants_(sheet) : [];
   var payload = {
     ok: true,
@@ -87,6 +90,7 @@ function ensureHeader_(sheet) {
     "總題數",
     "錯題摘要",
     "完整作答明細",
+    "單元",
   ]);
 }
 
@@ -99,7 +103,7 @@ function readParticipants_(sheet) {
 
   var rowCount = Math.min(lastRow - 1, 30);
   var startRow = Math.max(2, lastRow - rowCount + 1);
-  var values = sheet.getRange(startRow, 1, rowCount, 5).getValues();
+  var values = sheet.getRange(startRow, 1, rowCount, 11).getValues();
 
   return values
     .map(function (row) {
@@ -110,17 +114,19 @@ function readParticipants_(sheet) {
         className: row[2],
         seatNumber: row[3],
         studentName: row[4],
+        lessonTitle: row[10],
       };
     })
     .reverse();
 }
 
-function sendTeacherEmail_(payload, wrongItems) {
+function sendTeacherEmail_(payload, lessonTitle, wrongItems) {
   var classSeat = payload.classSeat || payload.className || "未填班級座號";
-  var subject = "化學鍵練習作答通知：" + classSeat + "，" + payload.score + " 分";
+  var subject = lessonTitle + "練習作答通知：" + classSeat + "，" + payload.score + " 分";
   var body = [
-    "有學生完成化學鍵互動練習。",
+    "有學生完成互動練習。",
     "",
+    "單元：" + lessonTitle,
     "班級座號：" + classSeat,
     "分數：" + payload.score,
     "答對題數：" + payload.correct + " / " + payload.total,
