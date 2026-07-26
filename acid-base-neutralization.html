@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>高一化學：化學鍵互動練習</title>
+    <title>高一化學：酸鹼中和互動練習</title>
     <style>
       :root {
         color-scheme: light;
@@ -122,10 +122,88 @@
       .question-card,
       .result,
       .participants,
-      .notice {
+      .notice,
+      .concept-panel {
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: 8px;
+      }
+
+      .lesson-video,
+      .concept-panel {
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+
+      .lesson-video p,
+      .concept-panel p {
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+
+      .video-grid,
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .video-placeholder,
+      .concept-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fbfdff;
+      }
+
+      .video-placeholder {
+        min-height: 180px;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        border-style: dashed;
+        background: #f2f6fa;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .concept-card {
+        padding: 14px;
+      }
+
+      .concept-card strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--blue);
+      }
+
+      .ph-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        overflow: hidden;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        margin-top: 12px;
+      }
+
+      .ph-strip span {
+        padding: 10px;
+        text-align: center;
+        font-weight: 800;
+      }
+
+      .acid {
+        background: #fff0ee;
+        color: #85231d;
+      }
+
+      .neutral {
+        background: #eef7f0;
+        color: #125c2d;
+      }
+
+      .base {
+        background: #edf6ff;
+        color: #174a8b;
       }
 
       .toolbar {
@@ -136,53 +214,6 @@
         margin-bottom: 18px;
       }
 
-      .lesson-video {
-        padding: 18px;
-        margin-bottom: 18px;
-      }
-
-      .lesson-video h2 {
-        margin-bottom: 6px;
-      }
-
-      .lesson-video p {
-        color: var(--muted);
-        margin-bottom: 14px;
-      }
-
-      .video-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .video-card {
-        display: grid;
-        gap: 8px;
-      }
-
-      .video-card h3 {
-        margin-bottom: 0;
-        font-size: 1rem;
-      }
-
-      .video-frame {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        border-radius: 8px;
-        background: #d8e0e7;
-      }
-
-      .video-frame iframe {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-      }
-
       label span {
         display: block;
         margin-bottom: 6px;
@@ -190,8 +221,7 @@
         font-size: 0.92rem;
       }
 
-      input[type="text"],
-      input[type="number"] {
+      input[type="text"] {
         width: 100%;
         min-height: 44px;
         padding: 10px 12px;
@@ -442,6 +472,7 @@
         .toolbar,
         .options,
         .video-grid,
+        .concept-grid,
         .result,
         .participant-row {
           grid-template-columns: 1fr;
@@ -466,21 +497,21 @@
     <nav class="course-sidebar" aria-label="課程目錄">
       <h2>課程目錄</h2>
       <a href="index.html">首頁</a>
-      <a href="chemical-bonding.html" aria-current="page">化學鍵</a>
+      <a href="chemical-bonding.html">化學鍵</a>
       <a href="periodic-table.html">元素週期表</a>
-      <a href="acid-base-neutralization.html">酸鹼中和</a>
+      <a href="acid-base-neutralization.html" aria-current="page">酸鹼中和</a>
     </nav>
 
     <header>
       <div class="wrap hero">
         <div>
-          <h1>化學鍵互動練習</h1>
-          <p>從價電子、八隅體、離子鍵、共價鍵到金屬鍵，完成練習後會看到分數與錯題解析。</p>
+          <h1>酸鹼中和互動練習</h1>
+          <p>認識酸、鹼、pH 值與中和反應，完成練習後會看到分數與錯題解析。</p>
         </div>
         <div class="status-panel">
           <span>本次練習</span>
           <strong id="questionCount">-- 題</strong>
-          <small>高一化學 Chemical Bonding</small>
+          <small>高一化學 Acid-Base Neutralization</small>
         </div>
       </div>
     </header>
@@ -488,28 +519,26 @@
     <main class="wrap">
       <section class="lesson-video" aria-label="影片解說">
         <h2>先看影片解說</h2>
-        <p>看完化學鍵重點整理後，再完成下面的互動練習。</p>
+        <p>影片位置先保留，之後可放入 NotebookLM 或 YouTube 的酸鹼中和解說。</p>
         <div class="video-grid">
-          <article class="video-card">
-            <h3>影片一</h3>
-            <div class="video-frame">
-              <iframe
-                src="https://www.youtube.com/embed/ZyPhAY4E698"
-                title="化學鍵影片解說一"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-          </article>
-          <article class="video-card">
-            <h3>影片二</h3>
-            <div class="video-frame">
-              <iframe
-                src="https://www.youtube.com/embed/Gfi8360uL70"
-                title="化學鍵影片解說二"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-          </article>
+          <div class="video-placeholder">影片一待補</div>
+          <div class="video-placeholder">影片二待補</div>
+        </div>
+      </section>
+
+      <section class="concept-panel" aria-label="酸鹼速覽">
+        <h2>酸鹼速覽</h2>
+        <p>先抓住 pH 與中和反應的核心，再完成下面的互動練習。</p>
+        <div class="concept-grid">
+          <div class="concept-card"><strong>酸</strong><span>pH 小於 7，例如檸檬汁、醋、胃酸。</span></div>
+          <div class="concept-card"><strong>鹼</strong><span>pH 大於 7，例如小蘇打水、部分清潔劑。</span></div>
+          <div class="concept-card"><strong>中性</strong><span>pH 約等於 7，純水在常溫下接近中性。</span></div>
+          <div class="concept-card"><strong>中和</strong><span>酸和鹼反應，常生成鹽和水。</span></div>
+        </div>
+        <div class="ph-strip" aria-label="pH 範圍">
+          <span class="acid">酸性 pH &lt; 7</span>
+          <span class="neutral">中性 pH = 7</span>
+          <span class="base">鹼性 pH &gt; 7</span>
         </div>
       </section>
 
@@ -536,7 +565,7 @@
         <div class="participants-head">
           <div>
             <h2>已完成練習名單</h2>
-            <p>只顯示完成狀態，不公開分數。</p>
+            <p>只顯示本單元完成狀態，不公開分數。</p>
           </div>
           <span id="participantCount" class="participant-count">-- 人完成</span>
         </div>
@@ -545,14 +574,14 @@
       </section>
 
       <section class="notice">
-        老師提醒：若尚未設定 Google Apps Script，網頁仍可計分，但不會寫入試算表。設定完成後，學生交卷資料會自動送到 Google Sheets。
+        老師提醒：本頁沿用同一份 Google Apps Script 與 Google Sheets 作答收集設定，後台會以「酸鹼中和」辨認本單元。
       </section>
     </main>
 
     <footer>
-      <div class="wrap">資料來源：高一化學化學鍵講義與 108 課綱自然科學領域。</div>
+      <div class="wrap">資料來源：高一化學酸鹼中和學習內容與 108 課綱自然科學領域。</div>
     </footer>
 
-    <script type="module" src="./chemical-bonding-app.js"></script>
+    <script type="module" src="./acid-base-app.js"></script>
   </body>
 </html>
