@@ -119,3 +119,9 @@ test("main pages include the course sidebar navigation", () => {
     assert.match(html, /化學鍵/);
   }
 });
+
+test("home page does not show the school name", () => {
+  const html = fs.readFileSync("index.html", "utf8");
+
+  assert.doesNotMatch(html, /光明國中/);
+});
