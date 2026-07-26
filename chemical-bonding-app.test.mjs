@@ -107,3 +107,15 @@ test("Apps Script emails the teacher after a submission", () => {
   assert.match(appsScript, /分數/);
   assert.match(appsScript, /錯題摘要/);
 });
+test("main pages include the course sidebar navigation", () => {
+  for (const file of ["index.html", "chemical-bonding.html"]) {
+    const html = fs.readFileSync(file, "utf8");
+
+    assert.match(html, /class="course-sidebar"/);
+    assert.match(html, /課程目錄/);
+    assert.match(html, /href="index\.html"/);
+    assert.match(html, /首頁/);
+    assert.match(html, /href="chemical-bonding\.html"/);
+    assert.match(html, /化學鍵/);
+  }
+});
