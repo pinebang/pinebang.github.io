@@ -1,5 +1,7 @@
 import { GOOGLE_APPS_SCRIPT_URL } from "./chemical-bonding-config.js";
 
+const LESSON_TITLE = "化學鍵";
+
 export function youtubeEmbedUrl(url) {
   const match = String(url).match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([A-Za-z0-9_-]{6,})/);
   return match ? `https://www.youtube.com/embed/${match[1]}` : "";
@@ -166,7 +168,7 @@ export function normalizeStudentInfo(student) {
 export function buildSubmissionPayload(student, answers, graded, questionList = questions) {
   const { classSeat } = normalizeStudentInfo(student);
   return {
-    lessonTitle: "化學鍵",
+    lessonTitle: LESSON_TITLE,
     completedAt: new Date().toISOString(),
     classSeat,
     className: classSeat,
@@ -356,7 +358,7 @@ function loadJsonp(url) {
       reject(new Error("participants jsonp failed"));
     };
 
-    script.src = `${url}${separator}action=participants&callback=${callbackName}`;
+    script.src = `${url}${separator}action=participants&lessonTitle=${encodeURIComponent(LESSON_TITLE)}&callback=${callbackName}`;
     document.body.appendChild(script);
   });
 }

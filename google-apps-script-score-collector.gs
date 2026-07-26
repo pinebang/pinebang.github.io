@@ -57,7 +57,8 @@ function doGet(e) {
   }
 
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-  var participants = sheet ? readParticipants_(sheet) : [];
+  var lessonTitleFilter = e.parameter.lessonTitle || "";
+  var participants = sheet ? readParticipants_(sheet, lessonTitleFilter) : [];
   var payload = {
     ok: true,
     participants: participants,
@@ -94,18 +95,20 @@ function ensureHeader_(sheet) {
   ]);
 }
 
-function readParticipants_(sheet) {
+function readParticipants_(sheet, lessonTitleFilter) {
   ensureHeader_(sheet);
   var lastRow = sheet.getLastRow();
   if (lastRow <= 1) {
     return [];
   }
 
-  var rowCount = Math.min(lastRow - 1, 30);
-  var startRow = Math.max(2, lastRow - rowCount + 1);
-  var values = sheet.getRange(startRow, 1, rowCount, 11).getValues();
+  var rowCount = lastRow - 1;
+  var values = sheet.getRange(2, 1, rowCount, 11).getValues();
 
   return values
+    .filter(function (row) {
+      return !lessonTitleFilter || row[10] === lessonTitleFilter;
+    })
     .map(function (row) {
       return {
         receivedAt: row[0],
@@ -117,6 +120,7 @@ function readParticipants_(sheet) {
         lessonTitle: row[10],
       };
     })
+    .slice(-30)
     .reverse();
 }
 

@@ -1,5 +1,7 @@
 import { GOOGLE_APPS_SCRIPT_URL } from "./chemical-bonding-config.js";
 
+const LESSON_TITLE = "元素週期表";
+
 export const periodicQuestions = [
   {
     id: "p01",
@@ -150,7 +152,7 @@ export function gradeAnswers(answers, questionList = periodicQuestions) {
 export function buildSubmissionPayload(student, answers, graded, questionList = periodicQuestions) {
   const classSeat = String(student.classSeat || "").trim();
   return {
-    lessonTitle: "元素週期表",
+    lessonTitle: LESSON_TITLE,
     completedAt: new Date().toISOString(),
     classSeat,
     className: classSeat,
@@ -311,7 +313,7 @@ function loadJsonp(url) {
       reject(new Error("participants jsonp failed"));
     };
 
-    script.src = `${url}${separator}action=participants&callback=${callbackName}`;
+    script.src = `${url}${separator}action=participants&lessonTitle=${encodeURIComponent(LESSON_TITLE)}&callback=${callbackName}`;
     document.body.appendChild(script);
   });
 }

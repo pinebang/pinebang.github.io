@@ -57,3 +57,16 @@ test("periodic table page follows the chemical bonding practice layout", () => {
   assert.match(html, /id="participantList"/);
   assert.match(html, /periodic-table-app\.js/);
 });
+
+test("participant lists are filtered by lesson", () => {
+  const chemicalApp = fs.readFileSync("chemical-bonding-app.js", "utf8");
+  const periodicApp = fs.readFileSync("periodic-table-app.js", "utf8");
+  const appsScript = fs.readFileSync("google-apps-script-score-collector.gs", "utf8");
+
+  assert.match(chemicalApp, /lessonTitle=/);
+  assert.match(chemicalApp, /encodeURIComponent\(LESSON_TITLE\)/);
+  assert.match(periodicApp, /lessonTitle=/);
+  assert.match(periodicApp, /encodeURIComponent\(LESSON_TITLE\)/);
+  assert.match(appsScript, /lessonTitleFilter/);
+  assert.match(appsScript, /row\[10\] === lessonTitleFilter/);
+});
