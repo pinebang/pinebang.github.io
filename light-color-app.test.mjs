@@ -26,6 +26,14 @@ test("光的色彩頁面在教材前提供 Cosci 視覺化解說連結", () => {
   assert.ok(linkIndex < lessonIndex);
 });
 
+test("光的色彩頁面提供第二個 Cosci 連結與操作後提示", () => {
+  const html = readFileSync(new URL("./light-color.html", import.meta.url), "utf8");
+  const secondLink = "https://cosci.tw/run/?name=S6ZM2I1673939403413";
+
+  assert.ok(html.includes(secondLink));
+  assert.equal((html.match(/操作完之後，再回到本頁練習。/g) || []).length, 2);
+});
+
 test("光的色彩單元包含教材圖片判讀題", () => {
   assert.equal(lightColorQuestions.length, 10);
   assert.ok(lightColorQuestions.some((question) => question.image));
