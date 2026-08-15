@@ -1,10 +1,21 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   lightColorQuestions,
   gradeAnswers,
   buildSubmissionPayload,
 } from "./light-color-app.js";
+
+test("光的色彩頁面在教材前提供 PhET 色彩視覺模擬連結", () => {
+  const html = readFileSync(new URL("./light-color.html", import.meta.url), "utf8");
+  const linkIndex = html.indexOf("https://phet.colorado.edu/sims/html/color-vision/latest/color-vision_all.html?locale=zh_TW");
+  const lessonIndex = html.indexOf('<section class="lesson-video"');
+
+  assert.ok(linkIndex >= 0);
+  assert.ok(linkIndex < lessonIndex);
+  assert.match(html, /target="_blank"/);
+});
 
 test("光的色彩單元包含教材圖片判讀題", () => {
   assert.equal(lightColorQuestions.length, 10);
