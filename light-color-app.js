@@ -98,14 +98,72 @@ export const lightColorQuestions = [
   },
 ];
 
-export function gradeAnswers(answers, questionList = lightColorQuestions) {
+export const lightColorTables = [
+  {
+    id: "single-yellow",
+    title: "單一頻率的黃光",
+    subtitle: "只有黃光",
+    rows: [
+      { object: "紅色", reflected: "無", seen: "黑" },
+      { object: "藍色", reflected: "無", seen: "黑" },
+      { object: "白色", reflected: "黃光", seen: "黃" },
+      { object: "綠色", reflected: "無", seen: "黑" },
+      { object: "黃色", reflected: "黃光", seen: "黃" },
+    ],
+  },
+  {
+    id: "composite-yellow",
+    title: "複合黃光（紅光＋綠光）",
+    subtitle: "由紅光和綠光組成",
+    rows: [
+      { object: "紅色", reflected: "紅光", seen: "紅" },
+      { object: "藍色", reflected: "無", seen: "黑" },
+      { object: "白色", reflected: "紅光＋綠光", seen: "黃" },
+      { object: "綠色", reflected: "綠光", seen: "綠" },
+      { object: "黃色", reflected: "紅光＋綠光", seen: "黃" },
+    ],
+  },
+];
+
+export const lightColorTableCells = lightColorTables.flatMap((table) =>
+  table.rows.flatMap((row, rowIndex) => [
+    {
+      id: `${table.id}-${rowIndex + 1}-reflected`,
+      tableId: table.id,
+      rowIndex,
+      object: row.object,
+      field: "反射的光",
+      topic: table.title,
+      prompt: `${table.title}下，${row.object}物體反射的光`,
+      answer: row.reflected,
+    },
+    {
+      id: `${table.id}-${rowIndex + 1}-seen`,
+      tableId: table.id,
+      rowIndex,
+      object: row.object,
+      field: "看到的顏色",
+      topic: table.title,
+      prompt: `${table.title}下，${row.object}物體看到的顏色`,
+      answer: row.seen,
+    },
+  ]),
+);
+
+export function gradeAnswers(answers, questionList = lightColorQuestions, tableCells = lightColorTableCells) {
   const details = questionList.map((question) => {
     const selected = answers[question.id] ?? "";
     const isCorrect = selected === question.answer;
     return { ...question, selected, isCorrect };
   });
+  details.push(
+    ...tableCells.map((cell) => {
+      const selected = answers[cell.id] ?? "";
+      return { ...cell, selected, isCorrect: selected === cell.answer };
+    }),
+  );
   const correct = details.filter((item) => item.isCorrect).length;
-  const total = questionList.length;
+  const total = details.length;
   return {
     correct,
     total,
@@ -115,7 +173,13 @@ export function gradeAnswers(answers, questionList = lightColorQuestions) {
   };
 }
 
-export function buildSubmissionPayload(student, answers, graded, questionList = lightColorQuestions) {
+export function buildSubmissionPayload(
+  student,
+  answers,
+  graded,
+  questionList = lightColorQuestions,
+  tableCells = lightColorTableCells,
+) {
   const classSeat = String(student.classSeat || "").trim();
   return {
     lessonTitle: LESSON_TITLE,
@@ -127,15 +191,26 @@ export function buildSubmissionPayload(student, answers, graded, questionList = 
     score: graded.score,
     correct: graded.correct,
     total: graded.total,
-    answers: questionList.map((question) => ({
-      id: question.id,
-      topic: question.topic,
-      type: question.type,
-      prompt: question.prompt,
-      selected: answers[question.id] || "",
-      correctAnswer: question.answer,
-      isCorrect: answers[question.id] === question.answer,
-    })),
+    answers: [
+      ...questionList.map((question) => ({
+        id: question.id,
+        topic: question.topic,
+        type: question.type,
+        prompt: question.prompt,
+        selected: answers[question.id] || "",
+        correctAnswer: question.answer,
+        isCorrect: answers[question.id] === question.answer,
+      })),
+      ...tableCells.map((cell) => ({
+        id: cell.id,
+        topic: cell.tableId,
+        type: "tableSelect",
+        prompt: cell.prompt,
+        selected: answers[cell.id] || "",
+        correctAnswer: cell.answer,
+        isCorrect: answers[cell.id] === cell.answer,
+      })),
+    ],
   };
 }
 
@@ -156,12 +231,52 @@ function optionId(question, optionIndex) {
 }
 
 function collectAnswers() {
-  return Object.fromEntries(
+  const questionAnswers = Object.fromEntries(
     lightColorQuestions.map((question) => {
       const checked = document.querySelector(`input[name="${question.id}"]:checked`);
       return [question.id, checked ? checked.value : ""];
     }),
   );
+  const tableAnswers = Object.fromEntries(
+    lightColorTableCells.map((cell) => [cell.id, document.querySelector(`select[data-cell-id="${cell.id}"]`)?.value || ""]),
+  );
+  return { ...questionAnswers, ...tableAnswers };
+}
+
+function tableOptions(cell) {
+  return cell.field === "反射的光"
+    ? ["無", "紅光", "綠光", "黃光", "紅光＋綠光"]
+    : ["黑", "紅", "綠", "黃"];
+}
+
+function renderColorTables() {
+  const container = document.querySelector("#colorTableList");
+  container.innerHTML = lightColorTables
+    .map(
+      (table) => `
+        <section class="color-table-card" aria-label="${table.title}">
+          <h3>${table.title}</h3>
+          <p>${table.subtitle}</p>
+          <table class="color-table">
+            <thead><tr><th scope="col">物體的顏色</th><th scope="col">反射的光</th><th scope="col">看到的顏色</th></tr></thead>
+            <tbody>
+              ${table.rows.map((row, rowIndex) => {
+                const reflected = lightColorTableCells.find((cell) => cell.tableId === table.id && cell.rowIndex === rowIndex && cell.field === "反射的光");
+                const seen = lightColorTableCells.find((cell) => cell.tableId === table.id && cell.rowIndex === rowIndex && cell.field === "看到的顏色");
+                return `
+                  <tr>
+                    <th scope="row">${row.object}</th>
+                    <td><select data-cell-id="${reflected.id}" aria-label="${reflected.prompt}"><option value="">請選擇</option>${tableOptions(reflected).map((option) => `<option value="${option}">${option}</option>`).join("")}</select><small data-feedback-id="${reflected.id}"></small></td>
+                    <td><select data-cell-id="${seen.id}" aria-label="${seen.prompt}"><option value="">請選擇</option>${tableOptions(seen).map((option) => `<option value="${option}">${option}</option>`).join("")}</select><small data-feedback-id="${seen.id}"></small></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </section>
+      `,
+    )
+    .join("");
 }
 
 function renderQuestions() {
@@ -186,10 +301,21 @@ function renderQuestions() {
 function renderFeedback(graded) {
   graded.details.forEach((detail) => {
     const card = document.querySelector(`[data-question-id="${detail.id}"]`);
-    const feedback = card.querySelector(".feedback");
-    card.classList.toggle("is-correct", detail.isCorrect);
-    card.classList.toggle("is-wrong", !detail.isCorrect);
-    feedback.textContent = detail.isCorrect ? `答對了。${detail.explanation}` : `再想想。正確答案是「${detail.answer}」。${detail.explanation}`;
+    if (card) {
+      const feedback = card.querySelector(".feedback");
+      card.classList.toggle("is-correct", detail.isCorrect);
+      card.classList.toggle("is-wrong", !detail.isCorrect);
+      feedback.textContent = detail.isCorrect ? `答對了。${detail.explanation}` : `再想想。正確答案是「${detail.answer}」。${detail.explanation}`;
+      return;
+    }
+
+    const select = document.querySelector(`select[data-cell-id="${detail.id}"]`);
+    const feedback = document.querySelector(`[data-feedback-id="${detail.id}"]`);
+    if (select && feedback) {
+      select.classList.toggle("is-correct", detail.isCorrect);
+      select.classList.toggle("is-wrong", !detail.isCorrect);
+      feedback.textContent = detail.isCorrect ? "正確" : `正確答案：${detail.answer}`;
+    }
   });
 }
 
@@ -256,7 +382,18 @@ function bindEvents() {
   const form = document.querySelector("#practiceForm");
   const submitStatus = document.querySelector("#submitStatus");
   const downloadButton = document.querySelector("#downloadResult");
+  const tableCheckButton = document.querySelector("#checkColorTables");
+  const tableStatus = document.querySelector("#colorTableStatus");
   let latestPayload = null;
+
+  tableCheckButton.addEventListener("click", () => {
+    const answers = collectAnswers();
+    const tableDetails = gradeAnswers(answers).details.filter((detail) => detail.type === undefined);
+    const correct = tableDetails.filter((detail) => detail.isCorrect).length;
+    renderFeedback({ details: tableDetails });
+    tableStatus.textContent = `表格目前答對 ${correct} / ${lightColorTableCells.length} 格。`;
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const classSeat = document.querySelector("#classSeat")?.value.trim() || "";
@@ -281,7 +418,8 @@ function bindEvents() {
 
 export function initLightColorPage() {
   if (!document.querySelector("#questionList")) return;
-  document.querySelector("#questionCount").textContent = `${getQuestionStats().total} 題`;
+  document.querySelector("#questionCount").textContent = `${getQuestionStats().total} 題＋表格 ${lightColorTableCells.length} 格`;
+  renderColorTables();
   renderQuestions();
   renderParticipants([]);
   bindEvents();

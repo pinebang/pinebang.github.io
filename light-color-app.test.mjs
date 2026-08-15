@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   lightColorQuestions,
+  lightColorTableCells,
   gradeAnswers,
   buildSubmissionPayload,
 } from "./light-color-app.js";
@@ -34,6 +35,13 @@ test("光的色彩頁面提供第二個 Cosci 連結與操作後提示", () => {
   assert.equal((html.match(/操作完之後，再回到本頁練習。/g) || []).length, 2);
 });
 
+test("光的色彩頁面包含兩組下拉式表格", () => {
+  const html = readFileSync(new URL("./light-color.html", import.meta.url), "utf8");
+
+  assert.match(html, /id="colorTableList"/);
+  assert.match(html, /檢查表格答案/);
+});
+
 test("光的色彩單元包含教材圖片判讀題", () => {
   assert.equal(lightColorQuestions.length, 10);
   assert.ok(lightColorQuestions.some((question) => question.image));
@@ -41,24 +49,28 @@ test("光的色彩單元包含教材圖片判讀題", () => {
 });
 
 test("光的色彩單元可以計算分數與錯題", () => {
-  const answers = Object.fromEntries(lightColorQuestions.map((question) => [question.id, question.answer]));
+  const answers = Object.fromEntries(
+    [...lightColorQuestions, ...lightColorTableCells].map((item) => [item.id, item.answer]),
+  );
   answers.l04 = "紅";
 
   const graded = gradeAnswers(answers);
 
-  assert.equal(graded.correct, 9);
-  assert.equal(graded.total, 10);
-  assert.equal(graded.score, 90);
+  assert.equal(graded.correct, 29);
+  assert.equal(graded.total, 30);
+  assert.equal(graded.score, 97);
   assert.deepEqual(graded.missed.map((question) => question.id), ["l04"]);
 });
 
 test("光的色彩單元送出的資料會標記正確單元", () => {
-  const answers = Object.fromEntries(lightColorQuestions.map((question) => [question.id, question.answer]));
+  const answers = Object.fromEntries(
+    [...lightColorQuestions, ...lightColorTableCells].map((item) => [item.id, item.answer]),
+  );
   const graded = gradeAnswers(answers);
   const payload = buildSubmissionPayload({ classSeat: "10112" }, answers, graded);
 
   assert.equal(payload.lessonTitle, "光的色彩與物體顏色");
   assert.equal(payload.classSeat, "10112");
   assert.equal(payload.score, 100);
-  assert.equal(payload.answers.length, 10);
+  assert.equal(payload.answers.length, 30);
 });

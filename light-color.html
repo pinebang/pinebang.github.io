@@ -165,6 +165,98 @@
         color: var(--muted);
       }
 
+      .color-tables {
+        padding: 18px;
+        margin-bottom: 18px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .color-tables > p {
+        color: var(--muted);
+      }
+
+      .color-table-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .color-table-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fbfdff;
+      }
+
+      .color-table-card h3,
+      .color-table-card > p {
+        margin: 0;
+        padding: 12px 14px 0;
+      }
+
+      .color-table-card > p {
+        padding-top: 2px;
+        padding-bottom: 10px;
+        color: var(--muted);
+      }
+
+      .color-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+      }
+
+      .color-table th,
+      .color-table td {
+        padding: 8px;
+        border: 1px solid var(--line);
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .color-table thead th {
+        background: #eef6ff;
+        color: #174a8b;
+      }
+
+      .color-table select {
+        width: 100%;
+        min-height: 38px;
+        padding: 6px 8px;
+        border: 1px solid #b7c4ce;
+        border-radius: 6px;
+        background: white;
+        font: inherit;
+      }
+
+      .color-table select.is-correct {
+        border: 2px solid var(--green);
+        background: #eaf7ee;
+      }
+
+      .color-table select.is-wrong {
+        border: 2px solid var(--red);
+        background: #fff0ee;
+      }
+
+      .color-table small {
+        display: block;
+        min-height: 20px;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .table-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-top: 16px;
+      }
+
       .lesson-video p,
       .concept-panel p {
         color: var(--muted);
@@ -507,12 +599,13 @@
           margin-bottom: 0;
         }
 
-        .hero,
-        .toolbar,
-        .options,
-        .video-grid,
-        .concept-grid,
-        .result,
+                    .hero,
+                    .toolbar,
+                    .options,
+                    .video-grid,
+                    .concept-grid,
+                    .color-table-list,
+                    .result,
         .participant-row {
           grid-template-columns: 1fr;
         }
@@ -591,6 +684,16 @@
           <span class="acid">光源照射</span>
           <span class="neutral">物體反射</span>
           <span class="base">光進入眼睛</span>
+        </div>
+      </section>
+
+      <section class="color-tables" aria-label="光源與物體顏色互動表格">
+        <h2>完成色彩判讀表格</h2>
+        <p>請依照上方教材圖，選出每種物體反射的光，以及我們看到的顏色。</p>
+        <div id="colorTableList" class="color-table-list"></div>
+        <div class="table-actions">
+          <button id="checkColorTables" class="secondary" type="button">檢查表格答案</button>
+          <span id="colorTableStatus" class="submit-status" role="status"></span>
         </div>
       </section>
 
