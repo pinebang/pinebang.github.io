@@ -43,6 +43,12 @@ test("光的色彩頁面包含兩組下拉式表格", () => {
   assert.doesNotMatch(html, /id="questionList"/);
 });
 
+test("光的色彩頁面會強制載入最新表格程式", () => {
+  const html = readFileSync(new URL("./light-color.html", import.meta.url), "utf8");
+
+  assert.match(html, /src="\.\/light-color-app\.js\?v=20260815-20cells"/);
+});
+
 test("光的色彩單元包含教材圖片判讀題", () => {
   assert.equal(lightColorQuestions.length, 0);
   assert.equal(lightColorTableCells.length, 20);
