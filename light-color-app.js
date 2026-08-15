@@ -2,7 +2,7 @@ import { GOOGLE_APPS_SCRIPT_URL } from "./chemical-bonding-config.js";
 
 const LESSON_TITLE = "光的色彩與物體顏色";
 
-export const lightColorQuestions = [
+const legacyLightColorQuestions = [
   {
     id: "l01",
     type: "choice",
@@ -97,6 +97,9 @@ export const lightColorQuestions = [
     explanation: "看見的顏色不是只由物體決定，也和照明光源及物體反射進入眼睛的光有關。",
   },
 ];
+
+// 本單元目前只使用下方的互動表格，保留舊題目資料以便日後需要時重新整理。
+export const lightColorQuestions = [];
 
 export const lightColorTables = [
   {
@@ -325,7 +328,7 @@ function renderResult(graded) {
     ? "<li>全部答對，可以進一步比較不同光源下的物體顏色。</li>"
     : graded.missed.map((item) => `<li>${item.topic}：${item.prompt}<br>你的答案：${item.selected || "未作答"}；正確答案：${item.answer}</li>`).join("");
   result.hidden = false;
-  result.innerHTML = `<div class="score-ring" aria-label="分數 ${graded.score} 分">${graded.score}<span>分</span></div><div><h2>練習結果</h2><p>答對 ${graded.correct} / ${graded.total} 題。請對照解析，理解光源、反射光與看到的顏色之間的關係。</p><h3>錯題整理</h3><ul>${missedList}</ul></div>`;
+  result.innerHTML = `<div class="score-ring" aria-label="分數 ${graded.score} 分">${graded.score}<span>分</span></div><div><h2>練習結果</h2><p>答對 ${graded.correct} / ${graded.total} 個評分項目。請對照解析，理解光源、反射光與看到的顏色之間的關係。</p><h3>錯題整理</h3><ul>${missedList}</ul></div>`;
 }
 
 function renderParticipants(participants) {
@@ -417,10 +420,9 @@ function bindEvents() {
 }
 
 export function initLightColorPage() {
-  if (!document.querySelector("#questionList")) return;
-  document.querySelector("#questionCount").textContent = `${getQuestionStats().total} 題＋表格 ${lightColorTableCells.length} 格`;
+  if (!document.querySelector("#colorTableList")) return;
+  document.querySelector("#questionCount").textContent = `表格 ${lightColorTableCells.length} 格`;
   renderColorTables();
-  renderQuestions();
   renderParticipants([]);
   bindEvents();
   loadParticipants();
