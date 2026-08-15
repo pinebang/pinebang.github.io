@@ -17,6 +17,15 @@ test("光的色彩頁面在教材前提供 PhET 色彩視覺模擬連結", () =>
   assert.match(html, /target="_blank"/);
 });
 
+test("光的色彩頁面在教材前提供 Cosci 視覺化解說連結", () => {
+  const html = readFileSync(new URL("./light-color.html", import.meta.url), "utf8");
+  const linkIndex = html.indexOf("https://cosci.tw/run/?name=1CW3ld1683252577531");
+  const lessonIndex = html.indexOf('<section class="lesson-video"');
+
+  assert.ok(linkIndex >= 0);
+  assert.ok(linkIndex < lessonIndex);
+});
+
 test("光的色彩單元包含教材圖片判讀題", () => {
   assert.equal(lightColorQuestions.length, 10);
   assert.ok(lightColorQuestions.some((question) => question.image));
