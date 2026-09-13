@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="四小時 Arduino 實作講座學習路徑、任務檢核與作品紀錄工具。">
+  <meta name="theme-color" content="#087f8c">
+  <title>Arduino 實作任務地圖</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23087f8c'/%3E%3Ccircle cx='19' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='45' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M27 32h10M15 32h8M19 28v8M41 32h8' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#workspace" aria-label="回到任務地圖頂端">
+      <span class="brand-mark" aria-hidden="true"><span>+</span><span>−</span></span>
+      <span><strong>Arduino 實作任務地圖</strong><small>4 小時科技講座</small></span>
+    </a>
+    <div class="topbar-actions">
+      <label class="switch-control">
+        <input id="teacher-toggle" type="checkbox">
+        <span>教師總覽</span>
+      </label>
+      <button id="export-button" class="button button-secondary" type="button">匯出紀錄</button>
+      <button id="reset-button" class="button button-danger" type="button">清除本機紀錄</button>
+    </div>
+  </header>
+
+  <main id="workspace">
+    <section class="dashboard-band" aria-labelledby="page-title">
+      <div class="dashboard-copy">
+        <p class="eyebrow">WORKSHOP CONTROL PANEL</p>
+        <h1 id="page-title">從板子健檢出發，完成你的 Arduino 作品</h1>
+        <p>先把連線與上傳測試做好，再選一條最想玩的路線。每完成一項就勾選，卡關時照著排查。</p>
+      </div>
+      <div class="board-visual" aria-label="Arduino 開發板示意圖" role="img">
+        <div class="usb-port"></div>
+        <div class="board-chip">UNO</div>
+        <span class="pin-row pin-row-top"></span>
+        <span class="pin-row pin-row-bottom"></span>
+        <i class="led led-one"></i><i class="led led-two"></i><i class="led led-three"></i>
+      </div>
+    </section>
+
+    <section class="identity-progress" aria-label="學生資料與學習進度">
+      <div class="profile-fields">
+        <label>姓名<input id="student-name" data-profile="name" type="text" maxlength="30" placeholder="請輸入姓名"></label>
+        <label>組別<input id="student-group" data-profile="group" type="text" maxlength="10" placeholder="例如：第 3 組"></label>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 22</strong></div>
+        <div class="progress-track" role="progressbar" aria-label="總學習進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span id="progress-bar"></span>
+        </div>
+        <p id="next-action">先完成共同健檢，才能開啟興趣路線。</p>
+      </div>
+    </section>
+
+    <nav class="timeline" aria-label="四小時課程時間軸">
+      <ol>
+        <li class="is-current"><time>0:00</time><span>器材與安全</span></li>
+        <li><time>0:20</time><span>共同健檢</span></li>
+        <li><time>0:50</time><span>興趣任務 I</span></li>
+        <li><time>2:00</time><span>休息換站</span></li>
+        <li><time>2:10</time><span>興趣任務 II</span></li>
+        <li><time>3:20</time><span>作品整理</span></li>
+        <li><time>3:50</time><span>展示收拾</span></li>
+      </ol>
+    </nav>
+
+    <section id="shared-check" class="section-block" aria-labelledby="shared-title">
+      <div class="section-heading">
+        <div><p class="step-number">STEP 01 · 全員必做</p><h2 id="shared-title">開發板共同健檢</h2></div>
+        <span id="gate-status" class="status-badge status-warning">尚未完成</span>
+      </div>
+      <p class="section-intro">目標是確認「板子、線材、電腦與程式」能一起工作。每一步成功後再勾選。</p>
+
+      <div class="check-grid">
+        <label class="task-card">
+          <input type="checkbox" data-task-id="check-board">
+          <span class="task-check" aria-hidden="true"></span>
+          <span class="task-content"><strong>1. 外觀與安全</strong><small>5 分鐘 · 開發板、USB 線</small><span>確認板子沒有彎腳、燒焦或金屬物壓在背面；拔插元件前先斷電。</span><em>完成條件：器材清點無缺件，電源安全。</em></span>
+        </label>
+        <label class="task-card">
+          <input type="checkbox" data-task-id="check-ide">
+          <span class="task-check" aria-hidden="true"></span>
+          <span class="task-content"><strong>2. 開啟開發環境</strong><small>5 分鐘 · Arduino IDE</small><span>開啟 IDE，找到「工具」選單，先不要急著接複雜電路。</span><em>完成條件：能新增空白草稿並看到驗證、上傳按鈕。</em></span>
+        </label>
+        <label class="task-card">
+          <input type="checkbox" data-task-id="check-port">
+          <span class="task-check" aria-hidden="true"></span>
+          <span class="task-content"><strong>3. 選對板子與連接埠</strong><small>10 分鐘 · 電腦、資料線</small><span>接上 USB，選擇正確的 Arduino 型號與新出現的 COM 連接埠。</span><em>完成條件：IDE 顯示板型與 COM 編號。</em></span>
+        </label>
+        <label class="task-card">
+          <input type="checkbox" data-task-id="check-blink">
+          <span class="task-check" aria-hidden="true"></span>
+          <span class="task-content"><strong>4. 上傳 Blink</strong><small>10 分鐘 · 內建 LED</small><span>開啟範例 Blink，按上傳，觀察板上的 L 燈約每秒亮滅一次。</span><em>完成條件：出現「上傳完成」且 L 燈持續閃爍。</em></span>
+        </label>
+        <label class="task-card">
+          <input type="checkbox" data-task-id="check-serial">
+          <span class="task-check" aria-hidden="true"></span>
+          <span class="task-content"><strong>5. 序列埠通訊</strong><small>10 分鐘 · Serial Monitor</small><span>上傳每秒輸出一次文字的程式，開啟序列監控視窗並選相同鮑率。</span><em>完成條件：畫面穩定出現可讀文字，沒有亂碼。</em></span>
+        </label>
+        <label class="task-card">
+          <input type="checkbox" data-task-id="check-diagnose">
+          <span class="task-check" aria-hidden="true"></span>
+          <span class="task-content"><strong>6. 會做初步判斷</strong><small>5 分鐘 · 排錯卡</small><span>說得出無法上傳時，應依序檢查線材、板型、連接埠與占用中的序列監控。</span><em>完成條件：能向同組同學說明至少兩項排查方法。</em></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="section-block routes-section" aria-labelledby="routes-title">
+      <div class="section-heading">
+        <div><p class="step-number">STEP 02 · 興趣分流</p><h2 id="routes-title">選一條主線，再自由跨線挑戰</h2></div>
+        <span id="route-lock-label" class="status-badge status-locked">健檢後解鎖</span>
+      </div>
+      <p class="section-intro">每條路線都有基礎、應用、整合與延伸任務。先完成一條主線，再挑另一條最有興趣的任務。</p>
+
+      <div class="route-picker" role="radiogroup" aria-label="選擇主路線">
+        <label><input type="radio" name="route" value="light-sound"><span>燈光與聲音</span></label>
+        <label><input type="radio" name="route" value="reaction-game"><span>反應遊戲</span></label>
+        <label><input type="radio" name="route" value="sensor-mission"><span>感測任務</span></label>
+        <label><input type="radio" name="route" value="creative-build"><span>自由創作</span></label>
+      </div>
+
+      <div class="routes-grid">
+        <article class="route-card accent-coral" data-route="light-sound">
+          <header><span class="route-code">A</span><div><h3>燈光與聲音</h3><p>最適合第一次接電路的人</p></div><span class="difficulty">入門</span></header>
+          <div class="materials"><strong>材料</strong><span>LED、220Ω 電阻、按鈕、蜂鳴器、麵包板</span></div>
+          <fieldset class="route-tasks" disabled>
+            <legend class="sr-only">燈光與聲音任務</legend>
+            <label><input type="checkbox" data-task-id="light-led"><span><strong>讓外接 LED 閃爍</strong><small>20 分鐘 · 接對極性與限流電阻</small></span></label>
+            <label><input type="checkbox" data-task-id="light-button"><span><strong>用按鈕控制燈</strong><small>25 分鐘 · 讀懂 HIGH 與 LOW</small></span></label>
+            <label><input type="checkbox" data-task-id="light-melody"><span><strong>加入提示音</strong><small>25 分鐘 · 用 tone() 播放音階</small></span></label>
+            <label><input type="checkbox" data-task-id="light-extension"><span><strong>延伸：做一組交通號誌</strong><small>30 分鐘 · 設計自己的時序</small></span></label>
+          </fieldset>
+        </article>
+
+        <article class="route-card accent-yellow" data-route="reaction-game">
+          <header><span class="route-code">B</span><div><h3>反應遊戲</h3><p>喜歡競賽、按鈕與計分</p></div><span class="difficulty">入門＋</span></header>
+          <div class="materials"><strong>材料</strong><span>LED、按鈕、蜂鳴器、麵包板</span></div>
+          <fieldset class="route-tasks" disabled>
+            <legend class="sr-only">反應遊戲任務</legend>
+            <label><input type="checkbox" data-task-id="game-random"><span><strong>隨機等待後亮燈</strong><small>20 分鐘 · random() 與 delay()</small></span></label>
+            <label><input type="checkbox" data-task-id="game-button"><span><strong>按鍵偵測反應</strong><small>25 分鐘 · 防止偷按</small></span></label>
+            <label><input type="checkbox" data-task-id="game-score"><span><strong>序列埠顯示反應時間</strong><small>25 分鐘 · millis() 計時</small></span></label>
+            <label><input type="checkbox" data-task-id="game-extension"><span><strong>延伸：雙人搶答器</strong><small>35 分鐘 · 判定誰先按</small></span></label>
+          </fieldset>
+        </article>
+
+        <article class="route-card accent-teal" data-route="sensor-mission">
+          <header><span class="route-code">C</span><div><h3>感測任務</h3><p>讓 Arduino 看見環境變化</p></div><span class="difficulty">中階</span></header>
+          <div class="materials"><strong>材料</strong><span>光敏電阻或超音波感測器、LED、電阻</span></div>
+          <fieldset class="route-tasks" disabled>
+            <legend class="sr-only">感測任務路線</legend>
+            <label><input type="checkbox" data-task-id="sensor-read"><span><strong>讀取感測器數值</strong><small>20 分鐘 · Serial Plotter 觀察變化</small></span></label>
+            <label><input type="checkbox" data-task-id="sensor-threshold"><span><strong>找出觸發門檻</strong><small>25 分鐘 · if 判斷與校正</small></span></label>
+            <label><input type="checkbox" data-task-id="sensor-output"><span><strong>讓輸出回應環境</strong><small>25 分鐘 · 暗了亮燈或靠近警示</small></span></label>
+            <label><input type="checkbox" data-task-id="sensor-extension"><span><strong>延伸：三段狀態顯示</strong><small>35 分鐘 · 建立低、中、高範圍</small></span></label>
+          </fieldset>
+        </article>
+
+        <article class="route-card accent-green" data-route="creative-build">
+          <header><span class="route-code">D</span><div><h3>自由創作</h3><p>適合有經驗、想自己定義作品</p></div><span class="difficulty">挑戰</span></header>
+          <div class="materials"><strong>材料</strong><span>任選現場元件，先向老師確認供電與接腳</span></div>
+          <fieldset class="route-tasks" disabled>
+            <legend class="sr-only">自由創作路線</legend>
+            <label><input type="checkbox" data-task-id="creative-plan"><span><strong>畫出輸入與輸出</strong><small>15 分鐘 · 一句話定義作品功能</small></span></label>
+            <label><input type="checkbox" data-task-id="creative-prototype"><span><strong>先做最小可行原型</strong><small>30 分鐘 · 只接一個輸入、一個輸出</small></span></label>
+            <label><input type="checkbox" data-task-id="creative-test"><span><strong>測試三種情境</strong><small>25 分鐘 · 正常、邊界、錯誤</small></span></label>
+            <label><input type="checkbox" data-task-id="creative-extension"><span><strong>延伸：改善互動體驗</strong><small>35 分鐘 · 加入回饋、外殼或規則</small></span></label>
+          </fieldset>
+        </article>
+      </div>
+    </section>
+
+    <section class="support-grid" aria-label="卡關排查與作品紀錄">
+      <article class="troubleshooting section-block">
+        <div class="section-heading compact"><div><p class="step-number">需要救援時</p><h2>60 秒卡關排查</h2></div></div>
+        <ol class="diagnostic-list">
+          <li><span>01</span><div><strong>電源有亮嗎？</strong><p>沒有：先換 USB 孔或確認線材是否插緊。</p></div></li>
+          <li><span>02</span><div><strong>COM 連接埠有出現嗎？</strong><p>沒有：拔插一次，比較清單前後差異；有些 USB 線只能充電。</p></div></li>
+          <li><span>03</span><div><strong>板型與連接埠選對嗎？</strong><p>上傳錯誤時，重新確認「工具」中的板型與 Port。</p></div></li>
+          <li><span>04</span><div><strong>序列監控是否占用中？</strong><p>先關閉序列監控，再上傳；仍失敗才請老師協助。</p></div></li>
+        </ol>
+        <details><summary>接線後功能不如預期</summary><p>先回到最小電路，一次只測一個元件。檢查 LED 正負極、按鈕跨過麵包板中溝、GND 是否共地，以及程式腳位和實際接線是否一致。</p></details>
+        <details><summary>序列監控出現亂碼</summary><p>讓 Serial Monitor 的鮑率與程式中的 <code>Serial.begin(...)</code> 相同，例如兩邊都設為 9600。</p></details>
+      </article>
+
+      <article class="submission section-block">
+        <div class="section-heading compact"><div><p class="step-number">STEP 03 · 留下證據</p><h2>作品紀錄與本機預覽</h2></div></div>
+        <label>作品名稱<input data-profile="projectTitle" type="text" maxlength="60" placeholder="例如：怕黑的小夜燈"></label>
+        <label>我今天學會了<textarea data-reflection="learning" rows="3" maxlength="300" placeholder="寫下一個你真的會做的動作或理解的概念"></textarea></label>
+        <label>我遇到的困難與解法<textarea data-reflection="challenge" rows="3" maxlength="300" placeholder="哪裡卡住？你怎麼排查或向誰求助？"></textarea></label>
+
+        <div class="upload-zone">
+          <input id="artifact-input" type="file" accept="image/*,video/*">
+          <label for="artifact-input"><strong>選擇作品照片或短影片</strong><span>先在這裡確認檔案內容，支援圖片與影片，單檔上限 30 MB</span></label>
+        </div>
+        <div id="artifact-preview" class="artifact-preview" hidden></div>
+        <button id="remove-artifact" class="button button-secondary" type="button" hidden>移除作品檔案</button>
+        <p class="storage-note"><strong>本機預覽不代表已繳交。</strong>資料只保存在這台裝置的瀏覽器中；確認檔案正確後，還要到下方 Google 表單正式送出。</p>
+        <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+      </article>
+    </section>
+
+    <section class="formal-submission section-block" aria-labelledby="form-title">
+      <div class="section-heading">
+        <div><p class="step-number">STEP 04 · 老師正式收件</p><h2 id="form-title">正式繳交到 Google 表單</h2></div>
+        <span class="status-badge status-warning">需要學校帳號</span>
+      </div>
+      <div class="form-guidance">
+        <div>
+          <strong>請使用 @ms.gmjh.tyc.edu.tw 帳號</strong>
+          <p>在表單中填寫資料，並再次選擇剛才預覽過的圖片或影片。建議檔案小於 30 MB。</p>
+        </div>
+        <a id="google-form-link" class="button button-primary" href="#" target="_blank" rel="noopener" aria-disabled="true">在新分頁開啟表單</a>
+      </div>
+      <div id="form-unavailable" class="form-unavailable" role="status">
+        正式表單尚未連結，老師完成表單設定後即可在此填寫。
+      </div>
+      <iframe id="google-form-frame" class="google-form-frame" title="Arduino 實作講座作品繳交" loading="lazy" hidden></iframe>
+      <p class="submission-proof"><strong>只有表單內出現「上傳成功」才代表老師已收到作品。</strong>若嵌入表單無法登入，請改用上方按鈕在新分頁開啟；沒有看到成功訊息時，請勿勾選完成。</p>
+    </section>
+
+    <section id="teacher-overview" class="teacher-overview section-block" hidden aria-labelledby="teacher-title">
+      <div class="section-heading"><div><p class="step-number">教師總覽</p><h2 id="teacher-title">20 人工作坊巡堂提示</h2></div></div>
+      <div class="teacher-grid">
+        <div><strong>開場 0:00-0:20</strong><p>兩人一組但每人都要完成健檢。先統一 USB 插拔與斷電接線規則。</p></div>
+        <div><strong>健檢 0:20-0:50</strong><p>把「無 COM」、「上傳錯誤」、「亂碼」學生分區處理，避免全班同時等待。</p></div>
+        <div><strong>分流 0:50-3:20</strong><p>每組先選一條主線。進度快者擔任技術支援，但要用提問協助，不直接代接。</p></div>
+        <div><strong>收束 3:20-4:00</strong><p>先拍攝成功狀態，再拆線。展示時每組說明輸入、處理、輸出與一次失敗經驗。</p></div>
+      </div>
+      <div class="teacher-alert"><strong>現場備品建議</strong><span>多準備 3 塊板、5 條可傳資料的 USB 線、LED 與 220Ω 電阻各 30 顆，以及已確認可用的測試電腦。</span></div>
+    </section>
+  </main>
+
+  <footer><p>Arduino 實作任務地圖 · 本機預覽留在此裝置，正式作品由學校 Google 表單收件</p></footer>
+
+  <dialog id="reset-dialog">
+    <form method="dialog">
+      <h2>確定清除本機紀錄？</h2>
+      <p>勾選、文字與作品檔案都會從這台裝置移除，無法復原。</p>
+      <div class="dialog-actions"><button class="button button-secondary" value="cancel">取消</button><button id="confirm-reset" class="button button-danger" value="confirm">清除全部</button></div>
+    </form>
+  </dialog>
+
+  <script src="app-core.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
