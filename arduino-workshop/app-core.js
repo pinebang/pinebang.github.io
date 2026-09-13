@@ -35,6 +35,30 @@
     return typeof value === 'string' ? value.trim() : '';
   }
 
+  function normalizeClassSeat(value) {
+    return cleanText(value).replace(/\s+/g, ' ');
+  }
+
+  function buildCompletionRows(roster, completed) {
+    const completedSet = new Set((Array.isArray(completed) ? completed : []).map(normalizeClassSeat).filter(Boolean));
+    const uniqueRoster = [...new Set((Array.isArray(roster) ? roster : []).map(normalizeClassSeat).filter(Boolean))];
+    return uniqueRoster
+      .sort((left, right) => left.localeCompare(right, 'zh-Hant', { numeric: true }))
+      .map((classSeat) => ({ classSeat, completed: completedSet.has(classSeat) }));
+  }
+
+  function validateCompletionPayload(payload) {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false;
+    const payloadKeys = Object.keys(payload).sort();
+    if (payloadKeys.join(',') !== 'students,updatedAt') return false;
+    if (!Array.isArray(payload.students) || typeof payload.updatedAt !== 'string') return false;
+    return payload.students.every((student) => {
+      if (!student || typeof student !== 'object' || Array.isArray(student)) return false;
+      if (Object.keys(student).sort().join(',') !== 'classSeat,completed') return false;
+      return normalizeClassSeat(student.classSeat) !== '' && typeof student.completed === 'boolean';
+    });
+  }
+
   function createExportRecord(profile, completedIds, reflections, exportedAt = new Date().toISOString()) {
     return {
       version: 1,
@@ -57,6 +81,9 @@
     isGateComplete,
     toggleTask,
     createExportRecord,
+    normalizeClassSeat,
+    buildCompletionRows,
+    validateCompletionPayload,
   };
 
   if (typeof module !== 'undefined' && module.exports) {

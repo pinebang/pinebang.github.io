@@ -312,8 +312,58 @@
     unavailable.hidden = true;
   }
 
+  function renderCompletionRows(rows) {
+    const list = document.querySelector('#completion-list');
+    const empty = document.querySelector('#completion-empty');
+    const fragment = document.createDocumentFragment();
+    rows.forEach((row) => {
+      const tableRow = document.createElement('tr');
+      const classSeat = document.createElement('td');
+      const resultCell = document.createElement('td');
+      const result = document.createElement('span');
+      classSeat.textContent = row.classSeat;
+      result.textContent = row.completed ? '完成' : '未完成';
+      result.className = `completion-result ${row.completed ? 'is-complete' : 'is-incomplete'}`;
+      resultCell.append(result);
+      tableRow.append(classSeat, resultCell);
+      fragment.append(tableRow);
+    });
+    list.replaceChildren(fragment);
+    empty.hidden = rows.length !== 0;
+  }
+
+  async function refreshCompletionBoard() {
+    const status = document.querySelector('#completion-status');
+    const endpoint = siteConfig.completionApiUrl || '';
+    if (!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpoint)) {
+      status.textContent = '完成狀況總表尚未啟用。';
+      return;
+    }
+    status.textContent = '正在更新完成狀況...';
+    status.classList.remove('is-error');
+    try {
+      const response = await fetch(endpoint, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Request failed');
+      const payload = await response.json();
+      if (!core.validateCompletionPayload(payload)) throw new Error('Invalid payload');
+      renderCompletionRows(payload.students);
+      const updatedAt = new Date(payload.updatedAt);
+      status.textContent = Number.isNaN(updatedAt.getTime())
+        ? '完成狀況已更新。'
+        : `最後更新：${updatedAt.toLocaleString('zh-TW')}`;
+    } catch {
+      status.textContent = '暫時無法更新，請稍後重試。';
+      status.classList.add('is-error');
+    }
+  }
+
   render();
   void loadArtifact();
   configureGoogleForm();
+  document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
+  void refreshCompletionBoard();
+  if (/^https:\/\/script\.google\.com\/macros\/s\//.test(siteConfig.completionApiUrl || '')) {
+    window.setInterval(refreshCompletionBoard, 30000);
+  }
   registerWebMcpTools();
 })();

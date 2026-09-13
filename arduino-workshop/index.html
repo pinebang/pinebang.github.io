@@ -44,7 +44,7 @@
     <section class="identity-progress" aria-label="學生資料與學習進度">
       <div class="profile-fields">
         <label>姓名<input id="student-name" data-profile="name" type="text" maxlength="30" placeholder="請輸入姓名"></label>
-        <label>組別<input id="student-group" data-profile="group" type="text" maxlength="10" placeholder="例如：第 3 組"></label>
+        <label>班級座號<input id="student-group" data-profile="group" type="text" maxlength="20" placeholder="例如：701 班 08 號"></label>
       </div>
       <div class="progress-panel">
         <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 22</strong></div>
@@ -220,6 +220,22 @@
       </div>
       <iframe id="google-form-frame" class="google-form-frame" title="Arduino 實作講座作品繳交" loading="lazy" hidden></iframe>
       <p class="submission-proof"><strong>只有表單內出現「上傳成功」才代表老師已收到作品。</strong>若嵌入表單無法登入，請改用上方按鈕在新分頁開啟；沒有看到成功訊息時，請勿勾選完成。</p>
+    </section>
+
+    <section id="completion-board" class="completion-board section-block" aria-labelledby="completion-title">
+      <div class="section-heading">
+        <div><p class="step-number">公開進度</p><h2 id="completion-title">學生完成狀況總表</h2></div>
+        <button id="completion-refresh" class="button button-secondary" type="button" title="重新讀取完成狀況">重新整理</button>
+      </div>
+      <p class="section-intro">只顯示班級座號，不公開姓名、Email 或作品內容。</p>
+      <div class="completion-table-wrap">
+        <table class="completion-table">
+          <thead><tr><th scope="col">班級座號</th><th scope="col">作品繳交</th></tr></thead>
+          <tbody id="completion-list"></tbody>
+        </table>
+      </div>
+      <p id="completion-empty" class="completion-empty" hidden>目前尚未建立學生名單。</p>
+      <p id="completion-status" class="completion-status" role="status" aria-live="polite">正在讀取完成狀況...</p>
     </section>
 
     <section id="teacher-overview" class="teacher-overview section-block" hidden aria-labelledby="teacher-title">

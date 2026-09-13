@@ -150,6 +150,17 @@ details { margin-top: 9px; border: 1px solid var(--line); padding: 10px 12px; } 
 .form-unavailable { padding: 28px 18px; color: #654607; background: #fff4d4; border: 1px solid #e7c365; text-align: center; font-weight: 700; }
 .google-form-frame { display: block; width: 100%; min-height: 920px; border: 1px solid var(--line); background: #fff; }
 .submission-proof { margin: 14px 0 0; padding: 13px 15px; color: var(--ink); background: #eaf4f4; border-left: 5px solid var(--teal); }
+.completion-board { border-top: 6px solid var(--teal); }
+.completion-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--line); }
+.completion-table { width: 100%; min-width: 360px; border-collapse: collapse; }
+.completion-table th, .completion-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: left; }
+.completion-table th { color: #fff; background: #314b60; }
+.completion-table tbody tr:last-child td { border-bottom: 0; }
+.completion-result { display: inline-block; min-width: 84px; padding: 4px 10px; border-radius: 5px; text-align: center; font-weight: 800; }
+.completion-result.is-complete { color: #fff; background: #28bd70; }
+.completion-result.is-incomplete { color: #fff; background: #91a0a1; }
+.completion-empty, .completion-status { margin: 12px 0 0; color: var(--muted); }
+.completion-status.is-error { color: var(--danger); font-weight: 700; }
 .teacher-overview { border-left: 7px solid var(--coral); }
 .teacher-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 20px; background: var(--line); border: 1px solid var(--line); }
 .teacher-grid > div { padding: 16px; background: #fff; }.teacher-grid p { margin: 5px 0 0; color: var(--muted); font-size: .86rem; }
