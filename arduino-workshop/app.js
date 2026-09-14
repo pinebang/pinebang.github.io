@@ -56,6 +56,7 @@
   }
 
   function render() {
+    state.completedIds = core.normalizeProgressForGate(sharedTaskIds, state.completedIds);
     const unlocked = gateComplete();
     taskInputs.forEach((input) => {
       input.checked = state.completedIds.includes(input.dataset.taskId);

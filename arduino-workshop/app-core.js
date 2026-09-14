@@ -39,6 +39,13 @@
     return cleanText(value).replace(/\s+/g, ' ');
   }
 
+  function normalizeProgressForGate(requiredIds, completedIds) {
+    const knownCompleted = uniqueKnownIds(workshopTaskIds, completedIds);
+    return isGateComplete(requiredIds, knownCompleted)
+      ? knownCompleted
+      : knownCompleted.filter((id) => requiredIds.includes(id));
+  }
+
   const workshopTaskIds = [
     'check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose',
     'light-led', 'light-button', 'light-melody', 'light-extension',
@@ -89,6 +96,7 @@
   const api = {
     calculateProgress,
     isGateComplete,
+    normalizeProgressForGate,
     toggleTask,
     createExportRecord,
     normalizeClassSeat,
