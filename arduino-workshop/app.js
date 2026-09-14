@@ -2,6 +2,7 @@
   'use strict';
 
   const STORAGE_KEY = 'arduino-workshop-state-v1';
+  const AUTH_SESSION_KEY = 'arduino-workshop-school-auth-v1';
   const DB_NAME = 'arduino-workshop-files';
   const DB_STORE = 'artifacts';
   const ARTIFACT_KEY = 'current-artifact';
@@ -102,6 +103,43 @@
   let artifactUrl = null;
   let authCredential = '';
   let authEmail = '';
+
+  function clearSchoolAuth() {
+    authCredential = '';
+    authEmail = '';
+    try {
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+    } catch {
+      // sessionStorage 不可用時，仍保留目前頁面的登入功能。
+    }
+  }
+
+  function restoreSchoolAuth() {
+    try {
+      const stored = JSON.parse(sessionStorage.getItem(AUTH_SESSION_KEY) || 'null');
+      if (!stored || typeof stored.credential !== 'string' || typeof stored.email !== 'string') return false;
+      const email = stored.email.toLowerCase();
+      if (!email.endsWith('@ms.gmjh.tyc.edu.tw')) {
+        sessionStorage.removeItem(AUTH_SESSION_KEY);
+        return false;
+      }
+      authCredential = stored.credential;
+      authEmail = email;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function persistSchoolAuth(credential, email) {
+    authCredential = credential;
+    authEmail = email;
+    try {
+      sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ credential, email }));
+    } catch {
+      // sessionStorage 不可用時，仍保留目前頁面的登入功能。
+    }
+  }
 
   const defaultState = {
     completedIds: [],
@@ -507,14 +545,12 @@
   function handleGoogleCredential(response) {
     const email = decodeCredentialEmail(response.credential).toLowerCase();
     if (!email.endsWith('@ms.gmjh.tyc.edu.tw')) {
-      authCredential = '';
-      authEmail = '';
+      clearSchoolAuth();
       setLoginStatus('請使用學校 @ms.gmjh.tyc.edu.tw 帳號登入。', true);
       updateSyncControl();
       return;
     }
-    authCredential = response.credential;
-    authEmail = email;
+    persistSchoolAuth(response.credential, email);
     setLoginStatus(`已登入：${email}。請確認班級座號後同步。`);
     updateSyncControl();
   }
@@ -524,6 +560,10 @@
     if (!clientId) {
       setLoginStatus('學校 Google 登入尚未完成設定。', true);
       return;
+    }
+    if (restoreSchoolAuth()) {
+      setLoginStatus(`已登入：${authEmail}。請確認班級座號後同步。`);
+      updateSyncControl();
     }
     let attempts = 0;
     const initialize = () => {
