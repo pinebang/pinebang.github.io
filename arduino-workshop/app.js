@@ -60,6 +60,7 @@
     const unlocked = gateComplete();
     taskInputs.forEach((input) => {
       input.checked = state.completedIds.includes(input.dataset.taskId);
+      input.disabled = core.isSharedTaskLocked(sharedTaskIds, state.completedIds, input.dataset.taskId);
     });
 
     document.querySelectorAll('.route-tasks').forEach((fieldset) => { fieldset.disabled = !unlocked; });
@@ -72,7 +73,7 @@
     });
 
     const gateStatus = document.querySelector('#gate-status');
-    gateStatus.textContent = unlocked ? '健檢完成' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
+    gateStatus.textContent = unlocked ? '健檢完成 · 已鎖定' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
     gateStatus.className = `status-badge ${unlocked ? 'status-complete' : 'status-warning'}`;
     const lockLabel = document.querySelector('#route-lock-label');
     lockLabel.textContent = unlocked ? '路線已解鎖' : '健檢後解鎖';

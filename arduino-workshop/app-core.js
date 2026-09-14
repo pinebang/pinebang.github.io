@@ -39,6 +39,10 @@
     return cleanText(value).replace(/\s+/g, ' ');
   }
 
+  function isSharedTaskLocked(requiredIds, completedIds, taskId) {
+    return requiredIds.includes(taskId) && isGateComplete(requiredIds, completedIds);
+  }
+
   function normalizeProgressForGate(requiredIds, completedIds) {
     const knownCompleted = uniqueKnownIds(workshopTaskIds, completedIds);
     return isGateComplete(requiredIds, knownCompleted)
@@ -96,6 +100,7 @@
   const api = {
     calculateProgress,
     isGateComplete,
+    isSharedTaskLocked,
     normalizeProgressForGate,
     toggleTask,
     createExportRecord,
