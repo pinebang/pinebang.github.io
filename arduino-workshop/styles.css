@@ -164,8 +164,9 @@ details { margin-top: 9px; border: 1px solid var(--line); padding: 10px 12px; } 
 .completion-table { width: 100%; min-width: 1900px; border-collapse: collapse; }
 .completion-table th, .completion-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: left; }
 .completion-table th { min-width: 106px; color: #fff; background: #314b60; white-space: normal; }
-.completion-table th:first-child, .completion-table td:first-child { position: sticky; left: 0; z-index: 1; min-width: 112px; background: var(--surface); font-weight: 800; }
+.completion-table th:first-child, .completion-table td:first-child { position: sticky; left: 0; z-index: 1; min-width: 220px; background: var(--surface); font-weight: 800; }
 .completion-table th:first-child { color: #fff; background: #314b60; }
+.completion-table tbody th:first-child { color: var(--ink); background: var(--surface); text-align: left; }
 .completion-table td:not(:first-child) { text-align: center; }
 .completion-table tbody tr:last-child td { border-bottom: 0; }
 .completion-result { display: inline-block; min-width: 84px; padding: 4px 10px; border-radius: 5px; text-align: center; font-weight: 800; }

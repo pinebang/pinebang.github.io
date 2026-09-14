@@ -430,15 +430,30 @@
   }
 
   function renderCompletionRows(rows) {
+    const table = document.querySelector('[data-task-progress]');
+    const headerRow = table.querySelector('thead tr');
     const list = document.querySelector('#completion-list');
     const empty = document.querySelector('#completion-empty');
     const fragment = document.createDocumentFragment();
+    const taskLabels = taskInputs.map((input) => input.closest('label')?.querySelector('strong')?.textContent || input.dataset.taskId);
+    headerRow.replaceChildren();
+    const corner = document.createElement('th');
+    corner.scope = 'col';
+    corner.textContent = '任務 / 班級座號';
+    headerRow.append(corner);
     rows.forEach((row) => {
+      const header = document.createElement('th');
+      header.scope = 'col';
+      header.textContent = row.classSeat;
+      headerRow.append(header);
+    });
+    taskInputs.forEach((input, taskIndex) => {
       const tableRow = document.createElement('tr');
-      const classSeat = document.createElement('td');
-      classSeat.textContent = row.classSeat;
-      tableRow.append(classSeat);
-      taskInputs.forEach((input) => {
+      const taskName = document.createElement('th');
+      taskName.scope = 'row';
+      taskName.textContent = taskLabels[taskIndex];
+      tableRow.append(taskName);
+      rows.forEach((row) => {
         const cell = document.createElement('td');
         const result = document.createElement('span');
         const completed = Boolean(row.tasks[input.dataset.taskId]);
