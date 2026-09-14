@@ -60,10 +60,11 @@
       links: [{ label: '查看 Arduino IDE 2 Serial Monitor 官方說明', url: 'https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor' }, { label: '瀏覽官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }],
     },
     'check-diagnose': {
-      title: '初步排錯：依順序找出問題',
+      title: '60 秒卡關排查：依順序找出問題',
       goal: '遇到無法上傳或沒有輸出時，能按照固定順序檢查，不靠猜測反覆重試。',
       sections: [
-        { heading: '排錯順序', items: ['1. 電源：板上的 ON 或電源指示燈是否亮起？', '2. 線材：USB 線是否為可傳資料的線？換一條線或 USB 孔測試。', '3. 板型與 Port：IDE 是否選到正確 Board 和 COM？', '4. 其他程式：關閉 Serial Monitor、另一個 IDE 視窗或可能占用 Port 的程式。', '5. 接線：上傳時先移除不必要的跳線，尤其不要把元件接在 0(RX)、1(TX)。', '6. 重置與求助：重新插拔或按 RESET；記下完整錯誤訊息再請老師協助。'] },
+        { heading: '60 秒排錯順序', items: ['1. 電源：板上的 ON 或電源指示燈是否亮起？', '2. COM 連接埠：拔插一次，比較清單前後差異；有些 USB 線只能充電。', '3. 板型與連接埠：IDE 是否選到正確 Board 和 COM？', '4. 序列監控：先關閉 Serial Monitor、另一個 IDE 視窗或可能占用 Port 的程式。'] },
+        { heading: '仍然無法上傳時', items: ['移除不必要的跳線，尤其不要把元件接在 0(RX)、1(TX)。', '重新插拔或按 RESET；記下完整錯誤訊息再請老師協助。'] },
         { heading: '留下證據', items: ['記錄你看到的錯誤訊息，而不是只說「不能上傳」。', '寫下板型、Port、USB 線是否更換，以及你已經嘗試過的步驟。', '一次只改一個條件，才知道哪個方法有效。'] },
         { heading: '自我檢查', items: ['我能說出至少兩個無法上傳時的檢查方法。', '我能把錯誤訊息和已嘗試的步驟清楚告訴同學或老師。'] },
       ],

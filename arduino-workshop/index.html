@@ -179,19 +179,7 @@
       </div>
     </section>
 
-    <section class="support-grid" aria-label="卡關排查與作品紀錄">
-      <article class="troubleshooting section-block">
-        <div class="section-heading compact"><div><p class="step-number">需要救援時</p><h2>60 秒卡關排查</h2></div></div>
-        <ol class="diagnostic-list">
-          <li><span>01</span><div><strong>電源有亮嗎？</strong><p>沒有：先換 USB 孔或確認線材是否插緊。</p></div></li>
-          <li><span>02</span><div><strong>COM 連接埠有出現嗎？</strong><p>沒有：拔插一次，比較清單前後差異；有些 USB 線只能充電。</p></div></li>
-          <li><span>03</span><div><strong>板型與連接埠選對嗎？</strong><p>上傳錯誤時，重新確認「工具」中的板型與 Port。</p></div></li>
-          <li><span>04</span><div><strong>序列監控是否占用中？</strong><p>先關閉序列監控，再上傳；仍失敗才請老師協助。</p></div></li>
-        </ol>
-        <details><summary>接線後功能不如預期</summary><p>先回到最小電路，一次只測一個元件。檢查 LED 正負極、按鈕跨過麵包板中溝、GND 是否共地，以及程式腳位和實際接線是否一致。</p></details>
-        <details><summary>序列監控出現亂碼</summary><p>讓 Serial Monitor 的鮑率與程式中的 <code>Serial.begin(...)</code> 相同，例如兩邊都設為 9600。</p></details>
-      </article>
-
+    <section class="support-grid" aria-label="作品紀錄">
       <article class="submission section-block">
         <div class="section-heading compact"><div><p class="step-number">STEP 03 · 留下證據</p><h2>作品紀錄與本機預覽</h2></div></div>
         <label>作品名稱<input data-profile="projectTitle" type="text" maxlength="60" placeholder="例如：怕黑的小夜燈"></label>
