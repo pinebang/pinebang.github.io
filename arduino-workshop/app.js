@@ -12,11 +12,13 @@
   const core = window.ArduinoCore;
   const siteConfig = window.ArduinoWorkshopConfig || {};
   let artifactUrl = null;
+  let authCredential = '';
+  let authEmail = '';
 
   const defaultState = {
     completedIds: [],
     selectedRoute: '',
-    profile: { name: '', group: '', projectTitle: '' },
+    profile: { group: '', projectTitle: '' },
     reflections: { learning: '', challenge: '' },
     teacherMode: false,
   };
@@ -95,6 +97,14 @@
     });
     document.querySelector('#teacher-toggle').checked = Boolean(state.teacherMode);
     document.querySelector('#teacher-overview').hidden = !state.teacherMode;
+    updateSyncControl();
+  }
+
+  function updateSyncControl() {
+    const button = document.querySelector('#progress-sync');
+    if (!button) return;
+    const classSeat = core.normalizeClassSeat(state.profile.group);
+    button.disabled = !authCredential || !classSeat;
   }
 
   taskInputs.forEach((input) => {
@@ -114,6 +124,7 @@
     input.addEventListener('input', () => {
       state.profile[input.dataset.profile] = input.value;
       saveState();
+      updateSyncControl();
     });
   });
 
@@ -235,7 +246,7 @@
     const blob = new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    const safeName = state.profile.name.trim().replace(/[\\/:*?"<>|\s]+/g, '-') || 'student';
+    const safeName = core.normalizeClassSeat(state.profile.group).replace(/[\\/:*?"<>|\s]+/g, '-') || 'student';
     link.href = url;
     link.download = `arduino-workshop-${safeName}.json`;
     link.click();
@@ -312,6 +323,22 @@
     unavailable.hidden = true;
   }
 
+  function renderCompletionHeaders() {
+    const headerRow = document.querySelector('.completion-table thead tr');
+    const fragment = document.createDocumentFragment();
+    const seatHeader = document.createElement('th');
+    seatHeader.scope = 'col';
+    seatHeader.textContent = '班級座號';
+    fragment.append(seatHeader);
+    taskInputs.forEach((input) => {
+      const header = document.createElement('th');
+      header.scope = 'col';
+      header.textContent = input.closest('label')?.querySelector('strong')?.textContent || input.dataset.taskId;
+      fragment.append(header);
+    });
+    headerRow.replaceChildren(fragment);
+  }
+
   function renderCompletionRows(rows) {
     const list = document.querySelector('#completion-list');
     const empty = document.querySelector('#completion-empty');
@@ -319,17 +346,103 @@
     rows.forEach((row) => {
       const tableRow = document.createElement('tr');
       const classSeat = document.createElement('td');
-      const resultCell = document.createElement('td');
-      const result = document.createElement('span');
       classSeat.textContent = row.classSeat;
-      result.textContent = row.completed ? '完成' : '未完成';
-      result.className = `completion-result ${row.completed ? 'is-complete' : 'is-incomplete'}`;
-      resultCell.append(result);
-      tableRow.append(classSeat, resultCell);
+      tableRow.append(classSeat);
+      taskInputs.forEach((input) => {
+        const cell = document.createElement('td');
+        const result = document.createElement('span');
+        const completed = Boolean(row.tasks[input.dataset.taskId]);
+        result.textContent = completed ? '完成' : '未完成';
+        result.className = `completion-result ${completed ? 'is-complete' : 'is-incomplete'}`;
+        cell.append(result);
+        tableRow.append(cell);
+      });
       fragment.append(tableRow);
     });
     list.replaceChildren(fragment);
     empty.hidden = rows.length !== 0;
+  }
+
+  function decodeCredentialEmail(credential) {
+    try {
+      const payload = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const decoded = decodeURIComponent(atob(payload).split('').map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, '0')}`).join(''));
+      return JSON.parse(decoded).email || '';
+    } catch {
+      return '';
+    }
+  }
+
+  function setLoginStatus(message, isError = false) {
+    const status = document.querySelector('#login-status');
+    status.textContent = message;
+    status.classList.toggle('is-error', isError);
+  }
+
+  function handleGoogleCredential(response) {
+    const email = decodeCredentialEmail(response.credential).toLowerCase();
+    if (!email.endsWith('@ms.gmjh.tyc.edu.tw')) {
+      authCredential = '';
+      authEmail = '';
+      setLoginStatus('請使用學校 @ms.gmjh.tyc.edu.tw 帳號登入。', true);
+      updateSyncControl();
+      return;
+    }
+    authCredential = response.credential;
+    authEmail = email;
+    setLoginStatus(`已登入：${email}。請確認班級座號後同步。`);
+    updateSyncControl();
+  }
+
+  function configureGoogleLogin() {
+    const clientId = siteConfig.googleClientId || '';
+    if (!clientId) {
+      setLoginStatus('學校 Google 登入尚未完成設定。', true);
+      return;
+    }
+    let attempts = 0;
+    const initialize = () => {
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.initialize({ client_id: clientId, callback: handleGoogleCredential });
+        window.google.accounts.id.renderButton(document.querySelector('#google-login'), { theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular' });
+        return;
+      }
+      attempts += 1;
+      if (attempts < 20) window.setTimeout(initialize, 300);
+      else setLoginStatus('Google 登入元件載入失敗，請重新整理頁面。', true);
+    };
+    initialize();
+  }
+
+  async function syncProgress() {
+    const endpoint = siteConfig.completionApiUrl || '';
+    const classSeat = core.normalizeClassSeat(state.profile.group);
+    if (!authCredential || !classSeat) {
+      setLoginStatus('請先登入學校帳號並輸入班級座號。', true);
+      return;
+    }
+    const button = document.querySelector('#progress-sync');
+    button.disabled = true;
+    button.textContent = '同步中...';
+    setLoginStatus(`正在同步 ${authEmail} 的 22 項任務...`);
+    try {
+      const tasks = Object.fromEntries(taskInputs.map((input) => [input.dataset.taskId, state.completedIds.includes(input.dataset.taskId)]));
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ credential: authCredential, classSeat, tasks }),
+      });
+      if (!response.ok) throw new Error('Request failed');
+      const payload = await response.json();
+      if (!payload.ok) throw new Error(payload.error || '同步失敗');
+      setLoginStatus('同步成功，公開總表稍後會更新。');
+      await refreshCompletionBoard();
+    } catch (error) {
+      setLoginStatus(error.message || '同步失敗，請稍後再試。', true);
+    } finally {
+      button.textContent = '同步 22 項任務';
+      updateSyncControl();
+    }
   }
 
   async function refreshCompletionBoard() {
@@ -360,6 +473,9 @@
   render();
   void loadArtifact();
   configureGoogleForm();
+  renderCompletionHeaders();
+  configureGoogleLogin();
+  document.querySelector('#progress-sync').addEventListener('click', syncProgress);
   document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
   void refreshCompletionBoard();
   if (/^https:\/\/script\.google\.com\/macros\/s\//.test(siteConfig.completionApiUrl || '')) {

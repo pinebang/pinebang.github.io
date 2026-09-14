@@ -39,6 +39,14 @@
     return cleanText(value).replace(/\s+/g, ' ');
   }
 
+  const workshopTaskIds = [
+    'check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose',
+    'light-led', 'light-button', 'light-melody', 'light-extension',
+    'game-random', 'game-button', 'game-score', 'game-extension',
+    'sensor-read', 'sensor-threshold', 'sensor-output', 'sensor-extension',
+    'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
+  ];
+
   function buildCompletionRows(roster, completed) {
     const completedSet = new Set((Array.isArray(completed) ? completed : []).map(normalizeClassSeat).filter(Boolean));
     const uniqueRoster = [...new Set((Array.isArray(roster) ? roster : []).map(normalizeClassSeat).filter(Boolean))];
@@ -54,8 +62,11 @@
     if (!Array.isArray(payload.students) || typeof payload.updatedAt !== 'string') return false;
     return payload.students.every((student) => {
       if (!student || typeof student !== 'object' || Array.isArray(student)) return false;
-      if (Object.keys(student).sort().join(',') !== 'classSeat,completed') return false;
-      return normalizeClassSeat(student.classSeat) !== '' && typeof student.completed === 'boolean';
+      if (Object.keys(student).sort().join(',') !== 'classSeat,tasks') return false;
+      if (normalizeClassSeat(student.classSeat) === '' || !student.tasks || typeof student.tasks !== 'object' || Array.isArray(student.tasks)) return false;
+      const taskKeys = Object.keys(student.tasks).sort();
+      if (taskKeys.join(',') !== [...workshopTaskIds].sort().join(',')) return false;
+      return workshopTaskIds.every((taskId) => typeof student.tasks[taskId] === 'boolean');
     });
   }
 
@@ -64,7 +75,6 @@
       version: 1,
       exportedAt,
       student: {
-        name: cleanText(profile.name),
         group: cleanText(profile.group),
         projectTitle: cleanText(profile.projectTitle),
       },
@@ -84,6 +94,7 @@
     normalizeClassSeat,
     buildCompletionRows,
     validateCompletionPayload,
+    workshopTaskIds,
   };
 
   if (typeof module !== 'undefined' && module.exports) {

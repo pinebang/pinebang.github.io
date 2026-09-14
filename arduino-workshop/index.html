@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#087f8c">
   <title>Arduino 實作任務地圖</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23087f8c'/%3E%3Ccircle cx='19' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='45' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M27 32h10M15 32h8M19 28v8M41 32h8' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -41,10 +42,10 @@
       </div>
     </section>
 
-    <section class="identity-progress" aria-label="學生資料與學習進度">
+    <section class="identity-progress" aria-label="班級座號與學習進度">
       <div class="profile-fields">
-        <label>姓名<input id="student-name" data-profile="name" type="text" maxlength="30" placeholder="請輸入姓名"></label>
         <label>班級座號<input id="student-group" data-profile="group" type="text" maxlength="20" placeholder="例如：701 班 08 號"></label>
+        <p class="profile-hint">請先登入學校 Google 帳號，再輸入自己的班級座號。</p>
       </div>
       <div class="progress-panel">
         <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 22</strong></div>
@@ -52,6 +53,11 @@
           <span id="progress-bar"></span>
         </div>
         <p id="next-action">先完成共同健檢，才能開啟興趣路線。</p>
+        <div class="school-login-panel" aria-label="學校帳號登入與進度同步">
+          <div id="google-login"></div>
+          <p id="login-status" class="login-status" role="status" aria-live="polite">尚未登入學校帳號。</p>
+          <button id="progress-sync" class="button button-primary" type="button" disabled>同步 22 項任務</button>
+        </div>
       </div>
     </section>
 
@@ -229,8 +235,8 @@
       </div>
       <p class="section-intro">只顯示班級座號，不公開姓名、Email 或作品內容。</p>
       <div class="completion-table-wrap">
-        <table class="completion-table">
-          <thead><tr><th scope="col">班級座號</th><th scope="col">作品繳交</th></tr></thead>
+            <table class="completion-table" data-task-progress>
+              <thead><tr><th scope="col">班級座號</th></tr></thead>
           <tbody id="completion-list"></tbody>
         </table>
       </div>
