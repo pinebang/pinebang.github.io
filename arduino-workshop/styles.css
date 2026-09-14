@@ -184,6 +184,10 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
 .guide-dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 24px 26px 16px; border-bottom: 1px solid var(--line); }
 .guide-dialog-header h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.9rem); }
 .guide-content { padding: 18px 26px 26px; overflow-y: auto; }
+.guide-figure { margin: 16px 0 4px; padding: 10px; background: #f5f8f7; border: 1px solid var(--line); }
+.guide-figure img { display: block; width: 100%; max-height: 250px; object-fit: contain; background: #fff; }
+.guide-figure figcaption { margin-top: 8px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+.guide-figure a { color: var(--teal-dark); font-weight: 700; }
 .guide-content section { margin-top: 20px; }
 .guide-content h3 { margin: 0 0 7px; color: var(--teal-dark); font-size: 1rem; }
 .guide-content ul { margin: 0; padding-left: 1.3rem; color: var(--muted); }
@@ -208,6 +212,7 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
   h1 { font-size: 2rem; }.identity-progress { padding: 18px; }.profile-fields { grid-template-columns: 1fr; }
   .section-block { padding: 20px 16px; }.section-heading { align-items: flex-start; }.section-heading h2 { font-size: 1.45rem; }
   .task-card { min-height: 0; padding: 15px; }
+  .guide-figure img { max-height: 190px; }
   .route-card header { grid-template-columns: 38px 1fr; }.difficulty { grid-column: 2; justify-self: start; }
   .teacher-grid { grid-template-columns: 1fr; }.teacher-alert { grid-template-columns: 1fr; gap: 4px; }
   .form-guidance { align-items: stretch; flex-direction: column; }.form-guidance .button { width: 100%; }
