@@ -7,6 +7,68 @@
   const ARTIFACT_KEY = 'current-artifact';
   const MAX_FILE_SIZE = 30 * 1024 * 1024;
   const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose'];
+  const sharedGuides = {
+    'check-board': {
+      title: '外觀與安全：認識 Arduino UNO',
+      goal: '能指出板子上的主要區域，知道哪些地方可以接線，以及什麼時候必須先斷電。',
+      sections: [
+        { heading: '先找找看', items: ['USB 連接埠：連接電腦、供電與上傳程式。', 'DC 電源插座與 VIN：外部供電入口；初學時優先使用 USB。', 'RESET 按鈕：讓板子重新開始執行程式。', 'L、TX、RX LED：顯示內建 LED 與序列傳輸活動。', '數位腳位 0–13：可讀取 HIGH/LOW，也可輸出 HIGH/LOW；0、1 是序列通訊腳位。', '類比輸入 A0–A5：讀取感測器的類比電壓變化。', '5V、3.3V、GND：供電與共同參考點，GND 必須和電路共地。'] },
+        { heading: '安全操作', items: ['拔插 LED、按鈕或跳線前先拔除 USB 或外部電源。', '不要讓 5V 與 GND 直接短接，也不要把不同電壓的電源直接相接。', 'LED 通常要串接限流電阻；不確定接法時先問老師。'] },
+        { heading: '自我檢查', items: ['我能指出 USB、RESET、L、數位腳位、類比腳位與 GND。', '我知道拔插元件前要先斷電。'] },
+      ],
+      links: [{ label: '開啟 Arduino UNO Rev3 官方腳位圖', url: 'https://docs.arduino.cc/resources/pinouts/A000073-full-pinout.pdf' }],
+    },
+    'check-ide': {
+      title: '開啟開發環境：熟悉 Arduino IDE 2',
+      goal: '能開啟 Arduino IDE 2、建立草稿，找到驗證與上傳功能。',
+      sections: [
+        { heading: '畫面上要認識的區域', items: ['編輯區：撰寫 Arduino 程式，檔案通常稱為 sketch。', '驗證按鈕：只編譯程式，先檢查語法與函式是否正確。', '上傳按鈕：把編譯後的程式寫入開發板。', '序列監控工具：讀取板子傳回電腦的文字。', '板型與連接埠選擇器：告訴 IDE 要用哪一種板子、哪一個 USB 連接埠。'] },
+        { heading: '第一次操作', items: ['開啟 Arduino IDE 2，建立新的空白草稿。', '先按驗證，觀察下方訊息區是否出現完成或錯誤。', '接上 Arduino 後，再選擇正確板型與 Port。', '看到板型與 Port 後，才進行上傳。'] },
+        { heading: '自我檢查', items: ['我能說出驗證和上傳的差別。', '我能找到編輯區、板型選擇器和下方訊息區。'] },
+      ],
+      links: [{ label: '查看 Arduino IDE 2 官方文件', url: 'https://docs.arduino.cc/software/ide/' }, { label: '查看官方上傳步驟', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
+    },
+    'check-port': {
+      title: '選對板子與連接埠：Board 和 Port',
+      goal: '能分辨 Board 與 Port，找到自己的 Arduino 出現在哪一個 COM 連接埠。',
+      sections: [
+        { heading: '兩個名詞的差別', items: ['Board 是板子的型號，例如 Arduino Uno；它決定程式如何編譯與上傳。', 'Port 是電腦分配給實際 USB 裝置的連接埠，例如 COM3。', '同一塊板子換一個 USB 孔，Port 編號可能改變；Board 通常不會跟著改變。'] },
+        { heading: '辨識步驟', items: ['先拔掉 Arduino，記住目前 Port 清單。', '接上資料傳輸 USB 線，確認板上的電源燈亮起。', '在 IDE 的板型與連接埠選擇器中，找新出現的裝置。', '若看到 Unknown，先選擇其他板子與連接埠，再指定 Arduino Uno。', '若完全沒有 Port，先換 USB 線或 USB 孔；有些線只能充電、不能傳資料。'] },
+        { heading: '自我檢查', items: ['我能說明 Board 和 Port 的差別。', '我能拔插一次 USB，找出哪一個 COM 是自己的板子。'] },
+      ],
+      links: [{ label: '查看官方 Board 與 Port 說明', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
+    },
+    'check-blink': {
+      title: '上傳 Blink：讓內建 LED 閃爍',
+      goal: '能從官方內建範例開啟 Blink，完成驗證、上傳，並觀察板上的 L 燈。',
+      sections: [
+        { heading: '操作步驟', items: ['開啟 Arduino IDE，選擇 File > Examples > 01.Basics > Blink。', '確認板型與 Port 已選好。', '按驗證，確認程式可以編譯。', '按上傳，等待下方訊息顯示上傳完成。', '觀察板上標示 L 的內建 LED，應該大約亮 1 秒、暗 1 秒反覆循環。'] },
+        { heading: '看懂程式', items: ['setup() 只在開機或重置時執行一次。', 'loop() 會不斷重複執行。', 'pinMode(LED_BUILTIN, OUTPUT) 把內建 LED 腳位設定為輸出。', 'digitalWrite() 控制 LED HIGH 或 LOW；delay() 讓程式暫停一段時間。'] },
+        { heading: '自我檢查', items: ['我看到 L 燈穩定閃爍。', '我能指出 setup()、loop() 和 digitalWrite() 各自的用途。'] },
+      ],
+      links: [{ label: '開啟 Arduino 官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }, { label: '查看官方上傳教學', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
+    },
+    'check-serial': {
+      title: '序列埠通訊：讓板子回傳文字',
+      goal: '能使用 Serial Monitor 觀察 Arduino 傳回的文字，並知道鮑率不一致會造成亂碼。',
+      sections: [
+        { heading: '基本概念', items: ['Serial 是 Arduino 和電腦交換文字或數值的通道。', 'Serial.begin(9600) 會在 setup() 啟動通訊；9600 是鮑率。', 'Serial.println() 會送出一行文字，方便觀察程式執行狀況。', 'Serial Monitor 的鮑率必須和程式設定相同，否則常會看到亂碼。'] },
+        { heading: '操作步驟', items: ['開啟 File > Examples > 01.Basics > AnalogReadSerial，或使用會定時 println 的範例。', '上傳程式後開啟 Serial Monitor。', '將右下角鮑率設成和 Serial.begin(...) 相同的數值。', '觀察文字或數值是否持續出現；若要測感測器，可轉動旋鈕或遮住光敏電阻。'] },
+        { heading: '自我檢查', items: ['我能找到 Serial Monitor。', '我能說明鮑率是什麼，並能處理亂碼問題。'] },
+      ],
+      links: [{ label: '查看 Arduino IDE 2 Serial Monitor 官方說明', url: 'https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor' }, { label: '瀏覽官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }],
+    },
+    'check-diagnose': {
+      title: '初步排錯：依順序找出問題',
+      goal: '遇到無法上傳或沒有輸出時，能按照固定順序檢查，不靠猜測反覆重試。',
+      sections: [
+        { heading: '排錯順序', items: ['1. 電源：板上的 ON 或電源指示燈是否亮起？', '2. 線材：USB 線是否為可傳資料的線？換一條線或 USB 孔測試。', '3. 板型與 Port：IDE 是否選到正確 Board 和 COM？', '4. 其他程式：關閉 Serial Monitor、另一個 IDE 視窗或可能占用 Port 的程式。', '5. 接線：上傳時先移除不必要的跳線，尤其不要把元件接在 0(RX)、1(TX)。', '6. 重置與求助：重新插拔或按 RESET；記下完整錯誤訊息再請老師協助。'] },
+        { heading: '留下證據', items: ['記錄你看到的錯誤訊息，而不是只說「不能上傳」。', '寫下板型、Port、USB 線是否更換，以及你已經嘗試過的步驟。', '一次只改一個條件，才知道哪個方法有效。'] },
+        { heading: '自我檢查', items: ['我能說出至少兩個無法上傳時的檢查方法。', '我能把錯誤訊息和已嘗試的步驟清楚告訴同學或老師。'] },
+      ],
+      links: [{ label: '查看 Arduino 官方 avrdude 排錯清單', url: 'https://support.arduino.cc/hc/en-us/articles/4401874331410--Error-avrdude' }, { label: '查看官方無法上傳排錯流程', url: 'https://support.arduino.cc/hc/en-us/articles/4403365313810-If-your-sketch-doesn-t-upload' }],
+    },
+  };
   const taskInputs = [...document.querySelectorAll('[data-task-id]')];
   const allTaskIds = taskInputs.map((input) => input.dataset.taskId);
   const core = window.ArduinoCore;
@@ -365,6 +427,24 @@
     empty.hidden = rows.length !== 0;
   }
 
+  function openGuide(taskId) {
+    const guide = sharedGuides[taskId];
+    const dialog = document.querySelector('#guide-dialog');
+    if (!guide || !dialog) return;
+    document.querySelector('#guide-title').textContent = guide.title;
+    document.querySelector('#guide-content').innerHTML = [
+      `<p class="guide-goal"><strong>學習目標</strong>${guide.goal}</p>`,
+      ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
+      `<section><h3>官方延伸資料</h3><ul class="guide-links">${guide.links.map((link) => `<li><a href="${link.url}" target="_blank" rel="noopener">${link.label}</a></li>`).join('')}</ul></section>`,
+    ].join('');
+    dialog.showModal();
+  }
+
+  function closeGuide() {
+    const dialog = document.querySelector('#guide-dialog');
+    if (dialog?.open) dialog.close();
+  }
+
   function decodeCredentialEmail(credential) {
     try {
       const payload = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -479,6 +559,17 @@
   configureGoogleLogin();
   document.querySelector('#progress-sync').addEventListener('click', syncProgress);
   document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
+  document.querySelectorAll('[data-guide-id]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openGuide(button.dataset.guideId);
+    });
+  });
+  document.querySelector('#guide-close').addEventListener('click', closeGuide);
+  document.querySelector('#guide-dialog').addEventListener('click', (event) => {
+    if (event.target === event.currentTarget) closeGuide();
+  });
   void refreshCompletionBoard();
   if (/^https:\/\/script\.google\.com\/macros\/s\//.test(siteConfig.completionApiUrl || '')) {
     window.setInterval(refreshCompletionBoard, 30000);

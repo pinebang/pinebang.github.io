@@ -84,32 +84,32 @@
         <label class="task-card">
           <input type="checkbox" data-task-id="check-board">
           <span class="task-check" aria-hidden="true"></span>
-          <span class="task-content"><strong>1. 外觀與安全</strong><small>5 分鐘 · 開發板、USB 線</small><span>確認板子沒有彎腳、燒焦或金屬物壓在背面；拔插元件前先斷電。</span><em>完成條件：器材清點無缺件，電源安全。</em></span>
+          <span class="task-content"><strong>1. 外觀與安全</strong><small>5 分鐘 · 開發板、USB 線</small><span>確認板子沒有彎腳、燒焦或金屬物壓在背面；拔插元件前先斷電。</span><em>完成條件：器材清點無缺件，電源安全。</em><button class="guide-button" type="button" data-guide-id="check-board">閱讀詳細教學</button></span>
         </label>
         <label class="task-card">
           <input type="checkbox" data-task-id="check-ide">
           <span class="task-check" aria-hidden="true"></span>
-          <span class="task-content"><strong>2. 開啟開發環境</strong><small>5 分鐘 · Arduino IDE</small><span>開啟 IDE，找到「工具」選單，先不要急著接複雜電路。</span><em>完成條件：能新增空白草稿並看到驗證、上傳按鈕。</em></span>
+          <span class="task-content"><strong>2. 開啟開發環境</strong><small>5 分鐘 · Arduino IDE</small><span>開啟 IDE，找到「工具」選單，先不要急著接複雜電路。</span><em>完成條件：能新增空白草稿並看到驗證、上傳按鈕。</em><button class="guide-button" type="button" data-guide-id="check-ide">閱讀詳細教學</button></span>
         </label>
         <label class="task-card">
           <input type="checkbox" data-task-id="check-port">
           <span class="task-check" aria-hidden="true"></span>
-          <span class="task-content"><strong>3. 選對板子與連接埠</strong><small>10 分鐘 · 電腦、資料線</small><span>接上 USB，選擇正確的 Arduino 型號與新出現的 COM 連接埠。</span><em>完成條件：IDE 顯示板型與 COM 編號。</em></span>
+          <span class="task-content"><strong>3. 選對板子與連接埠</strong><small>10 分鐘 · 電腦、資料線</small><span>接上 USB，選擇正確的 Arduino 型號與新出現的 COM 連接埠。</span><em>完成條件：IDE 顯示板型與 COM 編號。</em><button class="guide-button" type="button" data-guide-id="check-port">閱讀詳細教學</button></span>
         </label>
         <label class="task-card">
           <input type="checkbox" data-task-id="check-blink">
           <span class="task-check" aria-hidden="true"></span>
-          <span class="task-content"><strong>4. 上傳 Blink</strong><small>10 分鐘 · 內建 LED</small><span>開啟範例 Blink，按上傳，觀察板上的 L 燈約每秒亮滅一次。</span><em>完成條件：出現「上傳完成」且 L 燈持續閃爍。</em></span>
+          <span class="task-content"><strong>4. 上傳 Blink</strong><small>10 分鐘 · 內建 LED</small><span>開啟範例 Blink，按上傳，觀察板上的 L 燈約每秒亮滅一次。</span><em>完成條件：出現「上傳完成」且 L 燈持續閃爍。</em><button class="guide-button" type="button" data-guide-id="check-blink">閱讀詳細教學</button></span>
         </label>
         <label class="task-card">
           <input type="checkbox" data-task-id="check-serial">
           <span class="task-check" aria-hidden="true"></span>
-          <span class="task-content"><strong>5. 序列埠通訊</strong><small>10 分鐘 · Serial Monitor</small><span>上傳每秒輸出一次文字的程式，開啟序列監控視窗並選相同鮑率。</span><em>完成條件：畫面穩定出現可讀文字，沒有亂碼。</em></span>
+          <span class="task-content"><strong>5. 序列埠通訊</strong><small>10 分鐘 · Serial Monitor</small><span>上傳每秒輸出一次文字的程式，開啟序列監控視窗並選相同鮑率。</span><em>完成條件：畫面穩定出現可讀文字，沒有亂碼。</em><button class="guide-button" type="button" data-guide-id="check-serial">閱讀詳細教學</button></span>
         </label>
         <label class="task-card">
           <input type="checkbox" data-task-id="check-diagnose">
           <span class="task-check" aria-hidden="true"></span>
-          <span class="task-content"><strong>6. 會做初步判斷</strong><small>5 分鐘 · 排錯卡</small><span>說得出無法上傳時，應依序檢查線材、板型、連接埠與占用中的序列監控。</span><em>完成條件：能向同組同學說明至少兩項排查方法。</em></span>
+          <span class="task-content"><strong>6. 會做初步判斷</strong><small>5 分鐘 · 排錯卡</small><span>說得出無法上傳時，應依序檢查線材、板型、連接埠與占用中的序列監控。</span><em>完成條件：能向同組同學說明至少兩項排查方法。</em><button class="guide-button" type="button" data-guide-id="check-diagnose">閱讀詳細教學</button></span>
         </label>
       </div>
     </section>
@@ -264,6 +264,11 @@
       <p>勾選、文字與作品檔案都會從這台裝置移除，無法復原。</p>
       <div class="dialog-actions"><button class="button button-secondary" value="cancel">取消</button><button id="confirm-reset" class="button button-danger" value="confirm">清除全部</button></div>
     </form>
+  </dialog>
+
+  <dialog id="guide-dialog" aria-labelledby="guide-title">
+    <div class="guide-dialog-header"><div><p class="step-number">共同健檢 · 自學教學</p><h2 id="guide-title"></h2></div><button id="guide-close" class="icon-button" type="button" aria-label="關閉教學">×</button></div>
+    <div id="guide-content" class="guide-content"></div>
   </dialog>
 
   <script src="app-core.js"></script>
