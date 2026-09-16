@@ -127,6 +127,9 @@ textarea { resize: vertical; }
 .materials { display: grid; grid-template-columns: 58px 1fr; gap: 8px; margin: 0 16px 12px; padding: 10px 12px; background: #f2f5f4; font-size: .82rem; }
 .materials span { color: var(--muted); }
 .route-tasks { margin: 0; padding: 0 16px 16px; border: 0; }
+.task-stage { margin-top: 18px; padding: 0 12px 8px; border: 1px solid var(--line); background: #fbfcfc; }
+.task-stage h3 { margin: 0 -12px 0; padding: 12px; color: var(--ink); background: #edf4f3; border-bottom: 3px solid var(--teal); font-size: 1.05rem; }
+.task-stage h3 small { margin-left: 6px; color: var(--muted); font-size: .78rem; font-weight: 600; }
 .route-tasks label { display: grid; grid-template-columns: 22px 1fr; gap: 9px; padding: 11px 0; border-top: 1px solid #e2e8e6; cursor: pointer; }
 .route-tasks input { width: 19px; height: 19px; margin: 3px 0 0; accent-color: var(--green); }
 .route-tasks label span { display: grid; }.route-tasks small { color: var(--muted); font-weight: 500; }
