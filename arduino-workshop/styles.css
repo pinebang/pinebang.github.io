@@ -126,7 +126,7 @@ textarea { resize: vertical; }
 .route-picker input:checked + span { color: #fff; background: var(--teal-dark); }
 .route-picker input:focus-visible + span { outline: 3px solid var(--yellow); outline-offset: 2px; }
 .route-picker input:disabled + span { cursor: not-allowed; opacity: .55; }
-.routes-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.routes-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
 .route-card { border: 1px solid var(--line); border-top: 5px solid var(--route-accent); background: #fff; }
 .route-card header { min-height: 92px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 12px; padding: 16px; }
 .route-code { width: 38px; height: 38px; display: grid; place-items: center; color: #fff; background: var(--route-accent); font-weight: 900; }
