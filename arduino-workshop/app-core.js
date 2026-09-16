@@ -99,6 +99,34 @@
     });
   }
 
+  function normalizeCompletionPayload(payload) {
+    if (!payload || !Array.isArray(payload.students)) return payload;
+    const legacyTaskIds = [
+      'check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose',
+      'light-led', 'light-button', 'light-melody', 'light-extension', 'game-random', 'game-button',
+      'game-score', 'game-extension', 'sensor-read', 'sensor-threshold', 'sensor-output',
+      'sensor-extension', 'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
+    ];
+    return {
+      ...payload,
+      students: payload.students.map((student) => {
+        const sourceTasks = student && student.tasks;
+        if (!sourceTasks || workshopTaskIds.every((taskId) => Object.prototype.hasOwnProperty.call(sourceTasks, taskId))) {
+          return student;
+        }
+        const tasks = workshopTaskIds.reduce((result, taskId) => {
+          result[taskId] = false;
+          return result;
+        }, {});
+        workshopTaskIds.forEach((taskId, index) => {
+          const legacyTaskId = legacyTaskIds[index];
+          tasks[taskId] = sourceTasks[legacyTaskId] === true;
+        });
+        return { ...student, tasks };
+      }),
+    };
+  }
+
   function createExportRecord(profile, completedIds, reflections, exportedAt = new Date().toISOString()) {
     return {
       version: 1,
@@ -125,6 +153,7 @@
     normalizeClassSeat,
     buildCompletionRows,
     summarizeStageProgress,
+    normalizeCompletionPayload,
     validateCompletionPayload,
     workshopTaskIds,
   };
