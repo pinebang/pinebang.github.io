@@ -1,7 +1,6 @@
 (function initTeacherPage() {
   'use strict';
 
-  const AUTH_SESSION_KEY = 'arduino-workshop-teacher-auth-v1';
   const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose'];
   const stageTaskIds = [
     ['myth-light', 'myth-piano', 'myth-reaction', 'myth-whack'],
@@ -9,42 +8,16 @@
     ['myth-memory', 'myth-safe', 'myth-1a2b', 'myth-station'],
     ['myth-dino', 'myth-snake', 'myth-tetris'],
   ];
-  const taskLabels = Object.fromEntries([...document.querySelectorAll('[data-task-id]')].map((input) => [input.dataset.taskId, input.closest('label')?.textContent.trim() || input.dataset.taskId]));
   const endpoint = window.ArduinoWorkshopConfig?.completionApiUrl || '';
-  const clientId = window.ArduinoWorkshopConfig?.googleClientId || '';
-  let credential = '';
-  let email = '';
   let students = [];
   let selectedStudent = null;
+  let teacherCode = '';
 
   function setStatus(id, message, isError = false) {
     const target = document.querySelector(`#${id}`);
     if (!target) return;
     target.textContent = message;
     target.classList.toggle('is-error', isError);
-  }
-
-  function decodeCredentialEmail(token) {
-    try {
-      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(decodeURIComponent(atob(payload).split('').map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, '0')}`).join(''))).email || '';
-    } catch { return ''; }
-  }
-
-  function persistAuth(nextCredential, nextEmail) {
-    credential = nextCredential;
-    email = nextEmail;
-    try { sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ credential, email })); } catch { /* 部分瀏覽器可能停用工作階段儲存。 */ }
-  }
-
-  function restoreAuth() {
-    try {
-      const stored = JSON.parse(sessionStorage.getItem(AUTH_SESSION_KEY) || 'null');
-      if (!stored?.credential || !stored?.email || !stored.email.endsWith('@ms.gmjh.tyc.edu.tw')) return false;
-      credential = stored.credential;
-      email = stored.email;
-      return true;
-    } catch { return false; }
   }
 
   function renderNewbie(tasks) {
@@ -85,36 +58,24 @@
     } catch (error) { setStatus('teacher-save-status', error.message || '目前無法讀取學生名單。', true); }
   }
 
-  function handleCredential(response) {
-    const nextEmail = decodeCredentialEmail(response.credential).toLowerCase();
-    if (!nextEmail.endsWith('@ms.gmjh.tyc.edu.tw')) { setStatus('teacher-login-status', '請使用學校 @ms.gmjh.tyc.edu.tw 帳號登入。', true); return; }
-    persistAuth(response.credential, nextEmail);
-    setStatus('teacher-login-status', `已登入：${nextEmail}。`);
-    loadStudents();
-  }
-
-  function configureLogin() {
-    if (restoreAuth()) { setStatus('teacher-login-status', `已登入：${email}。`); loadStudents(); }
-    if (!clientId) { setStatus('teacher-login-status', '尚未設定 Google 登入用戶端。', true); return; }
-    const waitForGoogle = () => {
-      if (window.google?.accounts?.id) { window.google.accounts.id.initialize({ client_id: clientId, callback: handleCredential }); window.google.accounts.id.renderButton(document.querySelector('#teacher-login'), { theme: 'outline', size: 'large', text: 'signin_with' }); return; }
-      window.setTimeout(waitForGoogle, 300);
-    };
-    waitForGoogle();
-  }
-
   document.querySelector('#teacher-student').addEventListener('change', (event) => { selectedStudent = students.find((student) => student.classSeat === event.target.value) || null; renderSelectedStudent(); });
   document.querySelectorAll('#teacher-stages [data-task-id]').forEach((input) => input.addEventListener('change', () => { if (selectedStudent) selectedStudent.tasks[input.dataset.taskId] = input.checked; }));
   document.querySelector('#teacher-save').addEventListener('click', async () => {
-    if (!selectedStudent || !credential) return;
+    if (!selectedStudent) return;
     const button = document.querySelector('#teacher-save'); button.disabled = true; setStatus('teacher-save-status', '儲存中...');
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, credential, classSeat: selectedStudent.classSeat, tasks: selectedStudent.tasks }) });
+      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, teacherCode, classSeat: selectedStudent.classSeat, tasks: selectedStudent.tasks }) });
       const payload = await response.json(); if (!response.ok || !payload.ok) throw new Error(payload.error || '儲存失敗');
       setStatus('teacher-save-status', '老師確認已儲存，公開總表稍後會更新。');
     } catch (error) { setStatus('teacher-save-status', error.message || '儲存失敗，請稍後再試。', true); }
     finally { button.disabled = false; }
   });
+  document.querySelector('#teacher-access-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    teacherCode = document.querySelector('#teacher-code').value;
+    if (!teacherCode) return;
+    setStatus('teacher-access-status', '正在驗證老師密碼...');
+    loadStudents().then(() => setStatus('teacher-access-status', students.length ? '驗證完成，可以選擇學生。' : '沒有可選擇的學生。', !students.length));
+  });
   renderSelectedStudent();
-  configureLogin();
 })();

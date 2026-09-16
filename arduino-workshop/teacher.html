@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arduino 實作任務地圖 · 老師版</title>
   <link rel="stylesheet" href="styles.css?v=20260916-teacher1">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="teacher-page">
   <header class="site-header">
@@ -16,18 +15,18 @@
     <section class="teacher-hero section-block">
       <p class="step-number">TEACHER CONTROL PANEL</p>
       <h1>老師版｜任務通關確認</h1>
-      <p>登入學校帳號，選擇學生，再勾選老師已確認通過的四階段任務。學生總表會同步顯示綠色進度點。</p>
+      <p>選擇學生即可查看目前進度，再勾選老師已確認通過的四階段任務。學生總表會同步顯示綠色進度點。</p>
     </section>
 
-    <section class="section-block teacher-login-section" aria-labelledby="teacher-login-title">
-      <div class="section-heading"><div><p class="step-number">STEP 01</p><h2 id="teacher-login-title">老師登入</h2></div><span class="status-badge status-warning">學校帳號</span></div>
-      <div id="teacher-login"></div>
-      <p id="teacher-login-status" class="teacher-status" role="status" aria-live="polite">請使用學校 Google 帳號登入老師版。</p>
+    <section class="section-block teacher-access-section" aria-labelledby="teacher-access-title">
+      <div class="section-heading"><div><p class="step-number">STEP 01</p><h2 id="teacher-access-title">老師確認碼</h2></div><span class="status-badge status-warning">老師專用</span></div>
+      <form id="teacher-access-form" class="teacher-access-form"><label for="teacher-code">請輸入老師密碼</label><input id="teacher-code" type="password" autocomplete="current-password" required><button class="button button-primary" type="submit">進入老師版</button></form>
+      <p id="teacher-access-status" class="teacher-status" role="status" aria-live="polite">請先輸入老師密碼。</p>
     </section>
 
     <section class="section-block teacher-control-section" aria-labelledby="teacher-control-title">
-      <div class="section-heading"><div><p class="step-number">STEP 02</p><h2 id="teacher-control-title">選擇學生與確認任務</h2></div><span id="teacher-selection-status" class="status-badge status-locked">尚未選擇</span></div>
-      <label class="teacher-picker" for="teacher-student"><strong>學生班級座號</strong><select id="teacher-student" disabled><option>請先登入老師帳號</option></select></label>
+      <div class="section-heading"><div><p class="step-number">STEP 01</p><h2 id="teacher-control-title">選擇學生與確認任務</h2></div><span id="teacher-selection-status" class="status-badge status-locked">尚未選擇</span></div>
+      <label class="teacher-picker" for="teacher-student"><strong>學生班級座號</strong><select id="teacher-student" disabled><option>請先輸入老師密碼</option></select></label>
       <div id="teacher-newbie-status" class="teacher-newbie-status" aria-live="polite"></div>
       <div id="teacher-stages" class="teacher-stage-grid">
         <fieldset class="teacher-stage" data-stage-index="0" disabled><legend>第一階段｜神火啟程</legend><div class="teacher-task-list">
@@ -43,7 +42,7 @@
           <label><input type="checkbox" data-task-id="myth-dino">荒野遺跡的逃亡試煉</label><label><input type="checkbox" data-task-id="myth-snake">世界樹的能量之蛇</label><label><input type="checkbox" data-task-id="myth-tetris">矮人王國的崩塌礦坑</label>
         </div></fieldset>
       </div>
-      <div class="teacher-actions"><button id="teacher-save" class="button button-primary" type="button" disabled>儲存老師確認</button><p id="teacher-save-status" class="teacher-status" role="status" aria-live="polite"></p></div>
+      <div class="teacher-actions"><button id="teacher-save" class="button button-primary" type="button" disabled>儲存老師確認</button><p id="teacher-save-status" class="teacher-status" role="status" aria-live="polite">請先輸入老師密碼。</p></div>
     </section>
   </main>
   <footer><p>Arduino 實作任務地圖 · 老師確認頁</p></footer>
