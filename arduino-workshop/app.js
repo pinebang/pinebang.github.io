@@ -401,13 +401,21 @@
     seatHeader.scope = 'col';
     seatHeader.textContent = '班級座號';
     fragment.append(seatHeader);
-    taskInputs.forEach((input) => {
+    core.summarizeStageProgress({}).forEach((stage) => {
       const header = document.createElement('th');
       header.scope = 'col';
-      header.textContent = input.closest('label')?.querySelector('strong')?.textContent || input.dataset.taskId;
+      header.textContent = stage.label;
       fragment.append(header);
     });
     headerRow.replaceChildren(fragment);
+  }
+
+  function createCompletionDot(completed, label) {
+    const dot = document.createElement('span');
+    dot.className = `completion-dot ${completed ? 'is-complete' : 'is-incomplete'}`;
+    dot.title = completed ? `${label}：已完成` : `${label}：尚未完成`;
+    dot.setAttribute('aria-label', dot.title);
+    return dot;
   }
 
   function renderCompletionRows(rows) {
@@ -416,31 +424,27 @@
     const list = document.querySelector('#completion-list');
     const empty = document.querySelector('#completion-empty');
     const fragment = document.createDocumentFragment();
-    const taskLabels = taskInputs.map((input) => input.closest('label')?.querySelector('strong')?.textContent || input.dataset.taskId);
     headerRow.replaceChildren();
     const corner = document.createElement('th');
     corner.scope = 'col';
-    corner.textContent = '任務 / 班級座號';
+    corner.textContent = '班級座號';
     headerRow.append(corner);
-    rows.forEach((row) => {
+    const stageDefinitions = core.summarizeStageProgress({});
+    stageDefinitions.forEach((stage) => {
       const header = document.createElement('th');
       header.scope = 'col';
-      header.textContent = row.classSeat;
+      header.textContent = stage.label;
       headerRow.append(header);
     });
-    taskInputs.forEach((input, taskIndex) => {
+    rows.forEach((row) => {
       const tableRow = document.createElement('tr');
       const taskName = document.createElement('th');
       taskName.scope = 'row';
-      taskName.textContent = taskLabels[taskIndex];
+      taskName.textContent = row.classSeat;
       tableRow.append(taskName);
-      rows.forEach((row) => {
+      core.summarizeStageProgress(row.tasks).forEach((stage) => {
         const cell = document.createElement('td');
-        const result = document.createElement('span');
-        const completed = Boolean(row.tasks[input.dataset.taskId]);
-        result.textContent = completed ? '完成' : '未完成';
-        result.className = `completion-result ${completed ? 'is-complete' : 'is-incomplete'}`;
-        cell.append(result);
+        cell.append(createCompletionDot(stage.completed, stage.label));
         tableRow.append(cell);
       });
       fragment.append(tableRow);

@@ -57,6 +57,23 @@
     'myth-1a2b', 'myth-station', 'myth-dino', 'myth-snake', 'myth-tetris',
   ];
 
+  const completionStages = [
+    { id: 'newbie-village', label: '新手村', taskIds: workshopTaskIds.slice(0, 6) },
+    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(6, 10) },
+    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(10, 14) },
+    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(14, 18) },
+    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(18, 21) },
+  ];
+
+  function summarizeStageProgress(tasks) {
+    const taskMap = tasks && typeof tasks === 'object' ? tasks : {};
+    return completionStages.map((stage) => ({
+      id: stage.id,
+      label: stage.label,
+      completed: stage.taskIds.every((taskId) => taskMap[taskId] === true),
+    }));
+  }
+
   function buildCompletionRows(roster, completed) {
     const completedSet = new Set((Array.isArray(completed) ? completed : []).map(normalizeClassSeat).filter(Boolean));
     const uniqueRoster = [...new Set((Array.isArray(roster) ? roster : []).map(normalizeClassSeat).filter(Boolean))];
@@ -105,6 +122,7 @@
     createExportRecord,
     normalizeClassSeat,
     buildCompletionRows,
+    summarizeStageProgress,
     validateCompletionPayload,
     workshopTaskIds,
   };

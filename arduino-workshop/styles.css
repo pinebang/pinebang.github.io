@@ -169,7 +169,7 @@ details { margin-top: 9px; border: 1px solid var(--line); padding: 10px 12px; } 
 .submission-proof { margin: 14px 0 0; padding: 13px 15px; color: var(--ink); background: #eaf4f4; border-left: 5px solid var(--teal); }
 .completion-board { border-top: 6px solid var(--teal); }
 .completion-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--line); }
-.completion-table { width: 100%; min-width: 1900px; border-collapse: collapse; }
+.completion-table { width: 100%; min-width: 720px; border-collapse: collapse; }
 .completion-table th, .completion-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: left; }
 .completion-table th { min-width: 106px; color: #fff; background: #314b60; white-space: normal; }
 .completion-table th:first-child, .completion-table td:first-child { position: sticky; left: 0; z-index: 1; min-width: 220px; background: var(--surface); font-weight: 800; }
@@ -177,9 +177,9 @@ details { margin-top: 9px; border: 1px solid var(--line); padding: 10px 12px; } 
 .completion-table tbody th:first-child { color: var(--ink); background: var(--surface); text-align: left; }
 .completion-table td:not(:first-child) { text-align: center; }
 .completion-table tbody tr:last-child td { border-bottom: 0; }
-.completion-result { display: inline-block; min-width: 84px; padding: 4px 10px; border-radius: 5px; text-align: center; font-weight: 800; }
-.completion-result.is-complete { color: #fff; background: #28bd70; }
-.completion-result.is-incomplete { color: #fff; background: #91a0a1; }
+.completion-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; vertical-align: middle; }
+.completion-dot.is-complete { background: #28bd70; box-shadow: 0 0 0 3px #d9f1e4; }
+.completion-dot.is-incomplete { background: #91a0a1; box-shadow: 0 0 0 3px #e9edec; }
 .completion-empty, .completion-status { margin: 12px 0 0; color: var(--muted); }
 .completion-status.is-error { color: var(--danger); font-weight: 700; }
 .teacher-overview { border-left: 7px solid var(--coral); }
