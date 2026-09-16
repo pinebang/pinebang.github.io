@@ -83,15 +83,6 @@ textarea { resize: vertical; }
 .login-status.is-error { color: var(--danger); font-weight: 700; }
 .school-login-panel .button { justify-self: start; }
 
-.timeline { margin: 26px 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); }
-.timeline ol { min-width: 800px; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); list-style: none; }
-.timeline li { position: relative; min-height: 84px; padding: 15px 14px; border-right: 1px solid var(--line); }
-.timeline li:last-child { border-right: 0; }
-.timeline li::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 10px; height: 4px; background: #d5dddb; }
-.timeline .is-current::after { background: var(--yellow); }
-.timeline time { display: block; color: var(--teal-dark); font-weight: 900; font-family: ui-monospace, monospace; }
-.timeline span { color: var(--muted); font-size: 0.82rem; }
-
 .section-block { margin-top: 26px; padding: clamp(22px, 4vw, 38px); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .section-heading h2 { margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.2; }
