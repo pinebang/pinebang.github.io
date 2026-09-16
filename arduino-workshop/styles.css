@@ -136,6 +136,9 @@ textarea { resize: vertical; }
   border: 1px solid var(--line);
   background: #fbfcfc;
 }
+.task-stage.is-locked { opacity: .48; }
+.task-stage:disabled { cursor: not-allowed; }
+.task-stage legend { display: none; }
 .task-stage > h3 { grid-column: 1 / -1; }
 .task-stage h3 { margin: 0 -12px 0; padding: 12px; color: var(--ink); background: #edf4f3; border-bottom: 3px solid var(--teal); font-size: 1.05rem; }
 .task-stage h3 small { margin-left: 6px; color: var(--muted); font-size: .78rem; font-weight: 600; }

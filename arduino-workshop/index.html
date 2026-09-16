@@ -111,36 +111,39 @@
       <p class="section-intro">完成共同健檢後，依興趣與難度挑選任一任務。每個任務都可以獨立完成，不需要先選主線。</p>
 
       <div class="routes-grid independent-tasks">
-        <fieldset class="route-tasks" disabled>
-          <legend class="sr-only">四階段 15 個獨立任務</legend>
-          <div class="task-stage">
+        <div class="route-tasks">
+          <fieldset class="task-stage" data-stage-index="0" disabled>
+            <legend class="sr-only">第一階段：神火啟程</legend>
             <h3>第一階段｜神火啟程 <small>Arduino 基礎</small></h3>
             <label><input type="checkbox" data-task-id="myth-light"><span><strong>1. 月神遺跡的守夜燈</strong><small>★</small><button class="guide-button" type="button" data-guide-id="myth-light">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-piano"><span><strong>2. 精靈森林的失落旋律</strong><small>★★</small><button class="guide-button" type="button" data-guide-id="myth-piano">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-reaction"><span><strong>3. 雷神的閃電試煉</strong><small>★★</small><button class="guide-button" type="button" data-guide-id="myth-reaction">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-whack"><span><strong>4. 地精礦坑的晶石獵人</strong><small>★★☆</small><button class="guide-button" type="button" data-guide-id="myth-whack">閱讀詳細教學</button></span></label>
-          </div>
-          <div class="task-stage">
+          </fieldset>
+          <fieldset class="task-stage" data-stage-index="1" disabled>
+            <legend class="sr-only">第二階段：元素感知殿</legend>
             <h3>第二階段｜元素感知殿 <small>感測、自動控制與時間控制</small></h3>
             <label><input type="checkbox" data-task-id="myth-climate"><span><strong>5. 冰火神殿的守護者</strong><small>★★☆</small><button class="guide-button" type="button" data-guide-id="myth-climate">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-radar"><span><strong>6. 巨龍洞穴的探險車</strong><small>★★★</small><button class="guide-button" type="button" data-guide-id="myth-radar">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-timer"><span><strong>7. 魔法核心的倒數封印</strong><small>★★★</small><button class="guide-button" type="button" data-guide-id="myth-timer">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-bin"><span><strong>8. 魔法塔的吞噬寶箱</strong><small>★★★</small><button class="guide-button" type="button" data-guide-id="myth-bin">閱讀詳細教學</button></span></label>
-          </div>
-          <div class="task-stage">
+          </fieldset>
+          <fieldset class="task-stage" data-stage-index="2" disabled>
+            <legend class="sr-only">第三階段：賢者試煉塔</legend>
             <h3>第三階段｜賢者試煉塔 <small>程式邏輯與資料應用</small></h3>
             <label><input type="checkbox" data-task-id="myth-memory"><span><strong>9. 星辰神殿的記憶試煉</strong><small>★★★☆</small><button class="guide-button" type="button" data-guide-id="myth-memory">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-safe"><span><strong>10. 王國寶庫的符文之鎖</strong><small>★★★☆</small><button class="guide-button" type="button" data-guide-id="myth-safe">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-1a2b"><span><strong>11. 賢者之塔的四位數密碼</strong><small>★★★★</small><button class="guide-button" type="button" data-guide-id="myth-1a2b">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-station"><span><strong>12. 天空之城的氣候守望塔</strong><small>★★★★</small><button class="guide-button" type="button" data-guide-id="myth-station">閱讀詳細教學</button></span></label>
-          </div>
-          <div class="task-stage">
+          </fieldset>
+          <fieldset class="task-stage" data-stage-index="3" disabled>
+            <legend class="sr-only">第四階段：創世競技場</legend>
             <h3>第四階段｜創世競技場 <small>Arduino 遊戲程式設計</small></h3>
             <label><input type="checkbox" data-task-id="myth-dino"><span><strong>13. 荒野遺跡的逃亡試煉</strong><small>★★★★☆</small><button class="guide-button" type="button" data-guide-id="myth-dino">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-snake"><span><strong>14. 世界樹的能量之蛇</strong><small>★★★★★</small><button class="guide-button" type="button" data-guide-id="myth-snake">閱讀詳細教學</button></span></label>
             <label><input type="checkbox" data-task-id="myth-tetris"><span><strong>15. 矮人王國的崩塌礦坑</strong><small>★★★★★+</small><button class="guide-button" type="button" data-guide-id="myth-tetris">閱讀詳細教學</button></span></label>
-          </div>
-        </fieldset>
+          </fieldset>
+        </div>
       </div>
     </section>
 
@@ -208,6 +211,6 @@
 
   <script src="app-core.js?v=20260916-names1"></script>
   <script src="config.js"></script>
-  <script src="app.js?v=20260916-scroll1"></script>
+  <script src="app.js?v=20260916-stage1"></script>
 </body>
 </html>

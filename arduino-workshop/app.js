@@ -94,6 +94,7 @@
     'creative-extension': { title: '延伸：改善互動體驗', goal: '讓作品更容易理解、更好操作，也更能表現自己的設計想法。', sections: [{ heading: '改善方向', items: ['加入 LED、聲音或文字，讓使用者知道作品目前狀態。', '避免按鈕重複觸發，必要時加入去彈跳或狀態鎖定。', '整理接線與外觀，讓使用者不容易誤觸或接錯。'] }, { heading: '操作步驟', items: ['先選一個最影響使用者的問題。', '修改後重新測試正常、邊界、錯誤三種情境。', '拍下改善前後的差異，並寫出改善理由。'] }, { heading: '完成判斷', items: ['使用者不看程式也能理解如何操作。', '能說出這次改善解決了什麼問題。'] }], links: [{ label: '瀏覽 Arduino 官方教學與範例', url: 'https://docs.arduino.cc/tutorials/' }] },
   };
   const taskInputs = [...document.querySelectorAll('[data-task-id]')];
+  const stageGroups = [...document.querySelectorAll('[data-stage-index]')];
   const allTaskIds = taskInputs.map((input) => input.dataset.taskId);
   const core = window.ArduinoCore;
   const siteConfig = window.ArduinoWorkshopConfig || {};
@@ -246,6 +247,19 @@
     return core.isGateComplete(sharedTaskIds, state.completedIds);
   }
 
+  function stageHasAny(stageIndex) {
+    const stage = stageGroups[stageIndex];
+    return Boolean(stage && [...stage.querySelectorAll('[data-task-id]')].some((input) => state.completedIds.includes(input.dataset.taskId)));
+  }
+
+  function isStageUnlocked(stageIndex) {
+    if (!gateComplete()) return false;
+    if (stageIndex === 0) return true;
+    if (stageIndex === 1) return stageHasAny(0);
+    if (stageIndex >= 2) return stageHasAny(1);
+    return false;
+  }
+
   function render() {
     state.completedIds = core.normalizeProgressForGate(sharedTaskIds, state.completedIds);
     const unlocked = gateComplete();
@@ -254,7 +268,10 @@
       input.disabled = core.isSharedTaskLocked(sharedTaskIds, state.completedIds, input.dataset.taskId);
     });
 
-    document.querySelectorAll('.route-tasks').forEach((fieldset) => { fieldset.disabled = !unlocked; });
+    stageGroups.forEach((stage, index) => {
+      stage.disabled = !isStageUnlocked(index);
+      stage.classList.toggle('is-locked', !isStageUnlocked(index));
+    });
 
     const gateStatus = document.querySelector('#gate-status');
     gateStatus.textContent = unlocked ? '健檢完成 · 已鎖定' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
@@ -290,9 +307,11 @@
 
   taskInputs.forEach((input) => {
     input.addEventListener('change', () => {
-      if (!sharedTaskIds.includes(input.dataset.taskId) && !gateComplete()) {
+      const stage = input.closest('[data-stage-index]');
+      const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
+      if (!sharedTaskIds.includes(input.dataset.taskId) && !isStageUnlocked(stageIndex)) {
         input.checked = false;
-        setStatus('請先完成開發板共同健檢。', true);
+        setStatus(stageIndex === 1 ? '請先完成第一階段任一任務。' : '請先完成第二階段任一任務。', true);
         return;
       }
       state.completedIds = core.toggleTask(state.completedIds, input.dataset.taskId);
