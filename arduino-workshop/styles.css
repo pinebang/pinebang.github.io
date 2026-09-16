@@ -17,7 +17,16 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; color: var(--ink); background: var(--paper); line-height: 1.6; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background-color: #1b2c31;
+  background-image: url('assets/adventure-map.png');
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: cover;
+  line-height: 1.6;
+}
 button, input, textarea { font: inherit; }
 button, label, summary { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
@@ -127,7 +136,16 @@ textarea { resize: vertical; }
 .materials { display: grid; grid-template-columns: 58px 1fr; gap: 8px; margin: 0 16px 12px; padding: 10px 12px; background: #f2f5f4; font-size: .82rem; }
 .materials span { color: var(--muted); }
 .route-tasks { margin: 0; padding: 0 16px 16px; border: 0; }
-.task-stage { margin-top: 18px; padding: 0 12px 8px; border: 1px solid var(--line); background: #fbfcfc; }
+.task-stage {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 12px;
+  margin-top: 18px;
+  padding: 0 12px 8px;
+  border: 1px solid var(--line);
+  background: #fbfcfc;
+}
+.task-stage > h3 { grid-column: 1 / -1; }
 .task-stage h3 { margin: 0 -12px 0; padding: 12px; color: var(--ink); background: #edf4f3; border-bottom: 3px solid var(--teal); font-size: 1.05rem; }
 .task-stage h3 small { margin-left: 6px; color: var(--muted); font-size: .78rem; font-weight: 600; }
 .route-tasks label { display: grid; grid-template-columns: 22px 1fr; gap: 9px; padding: 11px 0; border-top: 1px solid #e2e8e6; cursor: pointer; }
@@ -206,6 +224,7 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
   .dashboard-band { grid-template-columns: 1fr; }.board-visual { width: 240px; margin: 8px auto; }
   .identity-progress, .support-grid { grid-template-columns: 1fr; }
   .check-grid, .routes-grid { grid-template-columns: 1fr; }
+  .task-stage { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .teacher-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -216,6 +235,8 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
   h1 { font-size: 2rem; }.identity-progress { padding: 18px; }.profile-fields { grid-template-columns: 1fr; }
   .section-block { padding: 20px 16px; }.section-heading { align-items: flex-start; }.section-heading h2 { font-size: 1.45rem; }
   .task-card { min-height: 0; padding: 15px; }
+  .task-stage { grid-template-columns: 1fr; }
+  .task-stage h3 small { display: block; margin: 2px 0 0; }
   .guide-figure img { max-height: 190px; }
   .route-card header { grid-template-columns: 38px 1fr; }.difficulty { grid-column: 2; justify-self: start; }
   .teacher-grid { grid-template-columns: 1fr; }.teacher-alert { grid-template-columns: 1fr; gap: 4px; }
