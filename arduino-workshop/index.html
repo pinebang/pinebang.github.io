@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="四小時 Arduino 實作講座學習路徑、任務檢核與作品紀錄工具。">
+  <meta name="description" content="四小時 Arduino 實作講座學習路徑與任務檢核工具。">
   <meta name="theme-color" content="#087f8c">
   <title>Arduino 實作任務地圖</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23087f8c'/%3E%3Ccircle cx='19' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='45' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M27 32h10M15 32h8M19 28v8M41 32h8' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
@@ -53,6 +53,7 @@
           <span id="progress-bar"></span>
         </div>
         <p id="next-action">先完成共同健檢，才能開啟 15 個獨立任務。</p>
+        <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
         <div class="school-login-panel" aria-label="學校帳號登入與進度同步">
           <div id="google-login"></div>
           <p id="login-status" class="login-status" role="status" aria-live="polite">尚未登入學校帳號。</p>
@@ -155,24 +156,6 @@
       </div>
     </section>
 
-    <section class="support-grid" aria-label="作品紀錄">
-      <article class="submission section-block">
-        <div class="section-heading compact"><div><p class="step-number">STEP 03 · 留下證據</p><h2>作品紀錄與本機預覽</h2></div></div>
-        <label>作品名稱<input data-profile="projectTitle" type="text" maxlength="60" placeholder="例如：怕黑的小夜燈"></label>
-        <label>我今天學會了<textarea data-reflection="learning" rows="3" maxlength="300" placeholder="寫下一個你真的會做的動作或理解的概念"></textarea></label>
-        <label>我遇到的困難與解法<textarea data-reflection="challenge" rows="3" maxlength="300" placeholder="哪裡卡住？你怎麼排查或向誰求助？"></textarea></label>
-
-        <div class="upload-zone">
-          <input id="artifact-input" type="file" accept="image/*,video/*">
-          <label for="artifact-input"><strong>選擇作品照片或短影片</strong><span>先在這裡確認檔案內容，支援圖片與影片，單檔上限 30 MB</span></label>
-        </div>
-        <div id="artifact-preview" class="artifact-preview" hidden></div>
-        <button id="remove-artifact" class="button button-secondary" type="button" hidden>移除作品檔案</button>
-        <p class="storage-note"><strong>本機預覽不代表已繳交。</strong>資料只保存在這台裝置的瀏覽器中；確認檔案正確後，還要到下方 Google 表單正式送出。</p>
-        <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
-      </article>
-    </section>
-
     <section class="formal-submission section-block" aria-labelledby="form-title">
       <div class="section-heading">
         <div><p class="step-number">STEP 04 · 老師正式收件</p><h2 id="form-title">正式繳交到 Google 表單</h2></div>
@@ -220,12 +203,12 @@
     </section>
   </main>
 
-  <footer><p>Arduino 實作任務地圖 · 本機預覽留在此裝置，正式作品由學校 Google 表單收件</p></footer>
+  <footer><p>Arduino 實作任務地圖 · 正式作品由學校 Google 表單收件</p></footer>
 
   <dialog id="reset-dialog">
     <form method="dialog">
       <h2>確定清除本機紀錄？</h2>
-      <p>勾選、文字與作品檔案都會從這台裝置移除，無法復原。</p>
+      <p>勾選與班級座號紀錄會從這台裝置移除，無法復原。</p>
       <div class="dialog-actions"><button class="button button-secondary" value="cancel">取消</button><button id="confirm-reset" class="button button-danger" value="confirm">清除全部</button></div>
     </form>
   </dialog>
