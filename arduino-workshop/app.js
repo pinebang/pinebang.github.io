@@ -246,6 +246,22 @@
     return core.isGateComplete(sharedTaskIds, state.completedIds);
   }
 
+  let syncTimer = 0;
+  function syncSharedProgress() {
+    const endpoint = siteConfig.completionApiUrl || '';
+    const classSeat = core.normalizeClassSeat(state.profile.group);
+    if (!classSeat || !/^https:\/\/script\.google\.com\/macros\/s\//.test(endpoint)) return;
+    window.clearTimeout(syncTimer);
+    syncTimer = window.setTimeout(async () => {
+      const tasks = Object.fromEntries(allTaskIds.map((taskId) => [taskId, sharedTaskIds.includes(taskId) && state.completedIds.includes(taskId)]));
+      try {
+        await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ student: true, classSeat, tasks }) });
+      } catch {
+        // 自我檢查仍保留在本機，網路恢復後下一次勾選會再次同步。
+      }
+    }, 350);
+  }
+
   function stageHasAny(stageIndex) {
     const stage = stageGroups[stageIndex];
     return Boolean(stage && [...stage.querySelectorAll('[data-task-id]')].some((input) => state.completedIds.includes(input.dataset.taskId)));
@@ -318,6 +334,7 @@
       state.completedIds = core.toggleTask(state.completedIds, input.dataset.taskId);
       saveState();
       render();
+      if (sharedTaskIds.includes(input.dataset.taskId)) syncSharedProgress();
     });
   });
 
