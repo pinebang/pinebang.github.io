@@ -7,7 +7,6 @@
   <meta name="theme-color" content="#087f8c">
   <title>Arduino 實作任務地圖</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23087f8c'/%3E%3Ccircle cx='19' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='45' cy='32' r='12' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M27 32h10M15 32h8M19 28v8M41 32h8' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="stylesheet" href="styles.css?v=20260916-layout1">
 </head>
 <body>
@@ -17,10 +16,7 @@
       <span><strong>Arduino 實作任務地圖</strong><small>4 小時科技講座</small></span>
     </a>
     <div class="topbar-actions">
-      <label class="switch-control">
-        <input id="teacher-toggle" type="checkbox">
-        <span>老師確認模式</span>
-      </label>
+      <a class="button button-secondary" href="teacher.html">老師版</a>
       <button id="export-button" class="button button-secondary" type="button">匯出紀錄</button>
       <button id="reset-button" class="button button-danger" type="button">清除本機紀錄</button>
     </div>
@@ -29,7 +25,7 @@
   <main id="workspace">
     <section class="dashboard-band" aria-labelledby="page-title">
       <div class="dashboard-copy">
-        <p class="eyebrow">WORKSHOP CONTROL PANEL</p>
+            <p class="eyebrow">學生版 · WORKSHOP CONTROL PANEL</p>
         <h1 id="page-title">從板子健檢出發，完成你的 Arduino 作品</h1>
         <p>先把連線與上傳測試做好，再選一條最想玩的路線。每完成一項就勾選，卡關時照著排查。</p>
       </div>
@@ -45,7 +41,7 @@
     <section class="identity-progress" aria-label="班級座號與學習進度">
       <div class="profile-fields">
         <label>班級座號<input id="student-group" data-profile="group" type="text" maxlength="20" placeholder="例如：701 班 08 號"></label>
-        <p class="profile-hint">學生不需登入；由老師開啟「老師確認模式」後，勾選認定已完成的任務。</p>
+        <p class="profile-hint">學生不需登入；先完成新手村六項自我檢查，再進入四階段任務。</p>
       </div>
       <div class="progress-panel">
         <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 21</strong></div>
@@ -54,11 +50,6 @@
         </div>
         <p id="next-action">先完成共同健檢，才能開啟 15 個獨立任務。</p>
         <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
-        <div class="school-login-panel" aria-label="老師公開同步">
-          <div id="google-login"></div>
-          <p id="login-status" class="login-status" role="status" aria-live="polite">學生不需登入；老師可登入學校帳號同步公開總表。</p>
-          <button id="progress-sync" class="button button-primary" type="button" disabled>老師同步 21 項任務</button>
-        </div>
       </div>
     </section>
 
@@ -182,16 +173,6 @@
       <p id="completion-status" class="completion-status" role="status" aria-live="polite">正在讀取完成狀況...</p>
     </section>
 
-    <section id="teacher-overview" class="teacher-overview section-block" hidden aria-labelledby="teacher-title">
-      <div class="section-heading"><div><p class="step-number">教師總覽</p><h2 id="teacher-title">20 人工作坊巡堂提示</h2></div></div>
-      <div class="teacher-grid">
-        <div><strong>開場 0:00-0:20</strong><p>兩人一組但每人都要完成健檢。先統一 USB 插拔與斷電接線規則。</p></div>
-        <div><strong>健檢 0:20-0:50</strong><p>把「無 COM」、「上傳錯誤」、「亂碼」學生分區處理，避免全班同時等待。</p></div>
-        <div><strong>任務挑戰 0:50-3:20</strong><p>每組可選不同獨立任務。進度快者擔任技術支援，但要用提問協助，不直接代接。</p></div>
-        <div><strong>收束 3:20-4:00</strong><p>先拍攝成功狀態，再拆線。展示時每組說明輸入、處理、輸出與一次失敗經驗。</p></div>
-      </div>
-      <div class="teacher-alert"><strong>現場備品建議</strong><span>多準備 3 塊板、5 條可傳資料的 USB 線、LED 與 220Ω 電阻各 30 顆，以及已確認可用的測試電腦。</span></div>
-    </section>
   </main>
 
   <footer><p>Arduino 實作任務地圖 · 正式作品由學校 Google 表單收件</p></footer>
@@ -211,6 +192,6 @@
 
   <script src="app-core.js?v=20260916-names1"></script>
   <script src="config.js"></script>
-  <script src="app.js?v=20260916-teacher1"></script>
+  <script src="app.js?v=20260916-student1"></script>
 </body>
 </html>

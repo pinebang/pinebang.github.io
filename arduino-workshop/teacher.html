@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arduino 實作任務地圖 · 老師版</title>
+  <link rel="stylesheet" href="styles.css?v=20260916-teacher1">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="teacher-page">
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">+</span><span><strong>Arduino 實作任務地圖</strong><small>老師確認頁</small></span></a>
+    <nav class="header-actions" aria-label="頁面切換"><a class="button button-secondary" href="index.html">學生版</a></nav>
+  </header>
+  <main class="teacher-main">
+    <section class="teacher-hero section-block">
+      <p class="step-number">TEACHER CONTROL PANEL</p>
+      <h1>老師版｜任務通關確認</h1>
+      <p>登入學校帳號，選擇學生，再勾選老師已確認通過的四階段任務。學生總表會同步顯示綠色進度點。</p>
+    </section>
+
+    <section class="section-block teacher-login-section" aria-labelledby="teacher-login-title">
+      <div class="section-heading"><div><p class="step-number">STEP 01</p><h2 id="teacher-login-title">老師登入</h2></div><span class="status-badge status-warning">學校帳號</span></div>
+      <div id="teacher-login"></div>
+      <p id="teacher-login-status" class="teacher-status" role="status" aria-live="polite">請使用學校 Google 帳號登入老師版。</p>
+    </section>
+
+    <section class="section-block teacher-control-section" aria-labelledby="teacher-control-title">
+      <div class="section-heading"><div><p class="step-number">STEP 02</p><h2 id="teacher-control-title">選擇學生與確認任務</h2></div><span id="teacher-selection-status" class="status-badge status-locked">尚未選擇</span></div>
+      <label class="teacher-picker" for="teacher-student"><strong>學生班級座號</strong><select id="teacher-student" disabled><option>請先登入老師帳號</option></select></label>
+      <div id="teacher-newbie-status" class="teacher-newbie-status" aria-live="polite"></div>
+      <div id="teacher-stages" class="teacher-stage-grid">
+        <fieldset class="teacher-stage" data-stage-index="0" disabled><legend>第一階段｜神火啟程</legend><div class="teacher-task-list">
+          <label><input type="checkbox" data-task-id="myth-light">月神遺跡的守夜燈</label><label><input type="checkbox" data-task-id="myth-piano">精靈森林的失落旋律</label><label><input type="checkbox" data-task-id="myth-reaction">雷神的閃電試煉</label><label><input type="checkbox" data-task-id="myth-whack">地精礦坑的晶石獵人</label>
+        </div></fieldset>
+        <fieldset class="teacher-stage" data-stage-index="1" disabled><legend>第二階段｜元素感知殿</legend><div class="teacher-task-list">
+          <label><input type="checkbox" data-task-id="myth-climate">冰火神殿的守護者</label><label><input type="checkbox" data-task-id="myth-radar">巨龍洞穴的探險車</label><label><input type="checkbox" data-task-id="myth-timer">魔法核心的倒數封印</label><label><input type="checkbox" data-task-id="myth-bin">魔法塔的吞噬寶箱</label>
+        </div></fieldset>
+        <fieldset class="teacher-stage" data-stage-index="2" disabled><legend>第三階段｜賢者試煉塔</legend><div class="teacher-task-list">
+          <label><input type="checkbox" data-task-id="myth-memory">星辰神殿的記憶試煉</label><label><input type="checkbox" data-task-id="myth-safe">王國寶庫的符文之鎖</label><label><input type="checkbox" data-task-id="myth-1a2b">賢者之塔的四位數密碼</label><label><input type="checkbox" data-task-id="myth-station">天空之城的氣候守望塔</label>
+        </div></fieldset>
+        <fieldset class="teacher-stage" data-stage-index="3" disabled><legend>第四階段｜創世競技場</legend><div class="teacher-task-list">
+          <label><input type="checkbox" data-task-id="myth-dino">荒野遺跡的逃亡試煉</label><label><input type="checkbox" data-task-id="myth-snake">世界樹的能量之蛇</label><label><input type="checkbox" data-task-id="myth-tetris">矮人王國的崩塌礦坑</label>
+        </div></fieldset>
+      </div>
+      <div class="teacher-actions"><button id="teacher-save" class="button button-primary" type="button" disabled>儲存老師確認</button><p id="teacher-save-status" class="teacher-status" role="status" aria-live="polite"></p></div>
+    </section>
+  </main>
+  <footer><p>Arduino 實作任務地圖 · 老師確認頁</p></footer>
+  <script src="app-core.js?v=20260916-names1"></script>
+  <script src="config.js"></script>
+  <script src="teacher.js?v=20260916-teacher1"></script>
+</body>
+</html>
