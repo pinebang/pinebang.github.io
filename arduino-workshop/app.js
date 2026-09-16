@@ -98,6 +98,7 @@
   const core = window.ArduinoCore;
   const siteConfig = window.ArduinoWorkshopConfig || {};
   let independentGuides = {};
+  let independentGuidesReady = Promise.resolve();
   const taskFlows = {
     'myth-light': ['接光敏電阻分壓電路並用 analogRead() 讀值。', '用 Serial Monitor 觀察亮暗讀值，找出穩定的臨界值。', '讓 LED 在低於臨界值時點亮，測試白天、夜晚與遮光情境。'],
     'myth-piano': ['為五個按鈕設定輸入腳位，接上被動蜂鳴器。', '替每個按鈕指定不同頻率與音名。', '逐一測試音階，再組合成一段精靈旋律。'],
@@ -152,7 +153,7 @@
     '方向按鈕或搖桿': { title: '方向按鈕或搖桿', goal: '方向控制元件讓玩家改變角色、蛇或方塊的移動方向。', sections: [{ heading: '使用重點', items: ['四向按鈕要分別確認上、下、左、右的輸入。', '類比搖桿除了方向，也可能需要讀取 X、Y 軸與按壓開關。'] }, { heading: '測試方式', items: ['先在 Serial Monitor 顯示每個方向的狀態，確認沒有按下時不會漂移或誤觸發。'] }], links: [] },
     'LED點矩陣': { title: 'LED 點矩陣', goal: 'LED 點矩陣用格子顯示角色、方塊、蛇身或其他圖案。', sections: [{ heading: '使用重點', items: ['先確認矩陣的列、行與模組驅動方式，避免直接把過多電流拉過 Arduino。', '顯示座標通常從左上角開始，但不同函式庫方向可能不同。'] }, { heading: '測試方式', items: ['先逐格點亮或顯示棋盤格，確認行列沒有顛倒，再顯示角色圖案。'] }], links: [] },
   };
-    fetch('tasks.json?v=20260916-scroll1').then((response) => response.json()).then((data) => {
+    independentGuidesReady = fetch('tasks.json?v=20260916-scroll1').then((response) => response.json()).then((data) => {
     independentGuides = Object.fromEntries(data.tasks.map((task, index) => [`myth-${['light', 'piano', 'reaction', 'whack', 'climate', 'radar', 'timer', 'bin', 'memory', 'safe', '1a2b', 'station', 'dino', 'snake', 'tetris'][index]}`, {
       title: task.title,
       scenario: task.scenario,
@@ -453,7 +454,8 @@
     empty.hidden = rows.length !== 0;
   }
 
-  function openGuide(taskId) {
+  async function openGuide(taskId) {
+    if (!sharedGuides[taskId] && !routeGuides[taskId] && !independentGuides[taskId]) await independentGuidesReady;
     const guide = sharedGuides[taskId] || routeGuides[taskId] || independentGuides[taskId];
     const image = guideImages[taskId];
     const dialog = document.querySelector('#guide-dialog');
