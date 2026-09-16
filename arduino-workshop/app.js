@@ -155,9 +155,9 @@
     fetch('tasks.json?v=20260916-details1').then((response) => response.json()).then((data) => {
     independentGuides = Object.fromEntries(data.tasks.map((task, index) => [`myth-${['light', 'piano', 'reaction', 'whack', 'climate', 'radar', 'timer', 'bin', 'memory', 'safe', '1a2b', 'station', 'dino', 'snake', 'tetris'][index]}`, {
       title: task.title,
+      scenario: task.scenario,
       goal: `${task.mission} 學習重點：${task.learn.join('、')}。`,
       sections: [
-        { heading: '情境', items: [task.scenario] },
         { heading: '要解決的問題', items: [task.problem] },
         { heading: '可以學到', items: task.learn },
         { heading: '建議材料／元件', items: task.materials },
@@ -459,7 +459,11 @@
     const dialog = document.querySelector('#guide-dialog');
     if (!guide || !dialog) return;
     document.querySelector('#guide-title').textContent = guide.title;
+    const scenario = guide.scenario
+      ? `<section class="guide-scenario"><p class="guide-scroll-label">任務卷軸</p><h3>情境任務</h3><p>${guide.scenario}</p></section>`
+      : '';
     document.querySelector('#guide-content').innerHTML = [
+      scenario,
       `<p class="guide-goal"><strong>學習目標</strong>${guide.goal}</p>`,
       image ? `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" loading="lazy"><figcaption>${image.caption} <a href="${image.href}" target="_blank" rel="noopener">查看來源</a></figcaption></figure>` : '',
           ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.heading === '建議材料／元件' ? section.items.map((item) => `<li><button class="component-link" type="button" data-component-name="${item}">${item}</button></li>`).join('') : section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
