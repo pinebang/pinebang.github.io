@@ -19,7 +19,7 @@
     <div class="topbar-actions">
       <label class="switch-control">
         <input id="teacher-toggle" type="checkbox">
-        <span>教師總覽</span>
+        <span>老師確認模式</span>
       </label>
       <button id="export-button" class="button button-secondary" type="button">匯出紀錄</button>
       <button id="reset-button" class="button button-danger" type="button">清除本機紀錄</button>
@@ -45,7 +45,7 @@
     <section class="identity-progress" aria-label="班級座號與學習進度">
       <div class="profile-fields">
         <label>班級座號<input id="student-group" data-profile="group" type="text" maxlength="20" placeholder="例如：701 班 08 號"></label>
-        <p class="profile-hint">請先登入學校 Google 帳號，再輸入自己的班級座號。</p>
+        <p class="profile-hint">學生不需登入；由老師開啟「老師確認模式」後，勾選認定已完成的任務。</p>
       </div>
       <div class="progress-panel">
         <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 21</strong></div>
@@ -54,10 +54,10 @@
         </div>
         <p id="next-action">先完成共同健檢，才能開啟 15 個獨立任務。</p>
         <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
-        <div class="school-login-panel" aria-label="學校帳號登入與進度同步">
+        <div class="school-login-panel" aria-label="老師公開同步">
           <div id="google-login"></div>
-          <p id="login-status" class="login-status" role="status" aria-live="polite">尚未登入學校帳號。</p>
-          <button id="progress-sync" class="button button-primary" type="button" disabled>同步 21 項任務</button>
+          <p id="login-status" class="login-status" role="status" aria-live="polite">學生不需登入；老師可登入學校帳號同步公開總表。</p>
+          <button id="progress-sync" class="button button-primary" type="button" disabled>老師同步 21 項任務</button>
         </div>
       </div>
     </section>
@@ -211,6 +211,6 @@
 
   <script src="app-core.js?v=20260916-names1"></script>
   <script src="config.js"></script>
-  <script src="app.js?v=20260916-stage1"></script>
+  <script src="app.js?v=20260916-teacher1"></script>
 </body>
 </html>

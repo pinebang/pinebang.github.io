@@ -265,7 +265,11 @@
     const unlocked = gateComplete();
     taskInputs.forEach((input) => {
       input.checked = state.completedIds.includes(input.dataset.taskId);
-      input.disabled = core.isSharedTaskLocked(sharedTaskIds, state.completedIds, input.dataset.taskId);
+      const stage = input.closest('[data-stage-index]');
+      const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
+      input.disabled = !state.teacherMode
+        || core.isSharedTaskLocked(sharedTaskIds, state.completedIds, input.dataset.taskId)
+        || (stageIndex >= 0 && !isStageUnlocked(stageIndex));
     });
 
     stageGroups.forEach((stage, index) => {
@@ -288,7 +292,9 @@
       ? '先完成共同健檢，才能開啟 15 個獨立任務。'
       : progress.percent === 100
         ? '全部任務完成，記得整理作品並與同學分享。'
-        : '健檢完成，現在可以挑選任一個獨立任務。';
+        : state.teacherMode
+          ? '老師確認模式已開啟，請由老師認定任務是否完成。'
+          : '學生閱讀模式：完成作品後請老師確認。';
 
     document.querySelectorAll('[data-profile]').forEach((input) => {
       input.value = state.profile[input.dataset.profile] || '';
@@ -309,6 +315,11 @@
     input.addEventListener('change', () => {
       const stage = input.closest('[data-stage-index]');
       const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
+      if (!state.teacherMode) {
+        input.checked = state.completedIds.includes(input.dataset.taskId);
+        setStatus('目前是學生閱讀模式，請由老師開啟確認模式後判定完成。', true);
+        return;
+      }
       if (!sharedTaskIds.includes(input.dataset.taskId) && !isStageUnlocked(stageIndex)) {
         input.checked = false;
         setStatus(stageIndex === 1 ? '請先完成第一階段任一任務。' : '請先完成第二階段任一任務。', true);
@@ -589,7 +600,7 @@
     } catch (error) {
       setLoginStatus(error.message || '同步失敗，請稍後再試。', true);
     } finally {
-      button.textContent = '同步 21 項任務';
+    button.textContent = '老師同步 21 項任務';
       updateSyncControl();
     }
   }
