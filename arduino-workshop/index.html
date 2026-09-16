@@ -48,15 +48,15 @@
         <p class="profile-hint">請先登入學校 Google 帳號，再輸入自己的班級座號。</p>
       </div>
       <div class="progress-panel">
-        <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 22</strong></div>
+        <div class="progress-label"><span>總進度</span><strong id="progress-text">0 / 21</strong></div>
         <div class="progress-track" role="progressbar" aria-label="總學習進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <span id="progress-bar"></span>
         </div>
-        <p id="next-action">先完成共同健檢，才能開啟興趣路線。</p>
+        <p id="next-action">先完成共同健檢，才能開啟 15 個獨立任務。</p>
         <div class="school-login-panel" aria-label="學校帳號登入與進度同步">
           <div id="google-login"></div>
           <p id="login-status" class="login-status" role="status" aria-live="polite">尚未登入學校帳號。</p>
-          <button id="progress-sync" class="button button-primary" type="button" disabled>同步 22 項任務</button>
+          <button id="progress-sync" class="button button-primary" type="button" disabled>同步 21 項任務</button>
         </div>
       </div>
     </section>
@@ -116,66 +116,30 @@
 
     <section class="section-block routes-section" aria-labelledby="routes-title">
       <div class="section-heading">
-        <div><p class="step-number">STEP 02 · 興趣分流</p><h2 id="routes-title">選一條主線，再自由跨線挑戰</h2></div>
-        <span id="route-lock-label" class="status-badge status-locked">健檢後解鎖</span>
+        <div><p class="step-number">STEP 02 · 任務挑戰</p><h2 id="routes-title">15 個獨立任務</h2></div>
+        <span id="route-lock-label" class="status-badge status-locked">健檢後解鎖任務</span>
       </div>
-      <p class="section-intro">每條路線都有基礎、應用、整合與延伸任務。先完成一條主線，再挑另一條最有興趣的任務。</p>
+      <p class="section-intro">完成共同健檢後，依興趣與難度挑選任一任務。每個任務都可以獨立完成，不需要先選主線。</p>
 
-      <div class="route-picker" role="radiogroup" aria-label="選擇主路線">
-        <label><input type="radio" name="route" value="light-sound"><span>燈光與聲音</span></label>
-        <label><input type="radio" name="route" value="reaction-game"><span>反應遊戲</span></label>
-        <label><input type="radio" name="route" value="sensor-mission"><span>感測任務</span></label>
-        <label><input type="radio" name="route" value="creative-build"><span>自由創作</span></label>
-      </div>
-
-      <div class="routes-grid">
-        <article class="route-card accent-coral" data-route="light-sound">
-          <header><span class="route-code">A</span><div><h3>燈光與聲音</h3><p>最適合第一次接電路的人</p></div><span class="difficulty">入門</span></header>
-          <div class="materials"><strong>材料</strong><span>LED、220Ω 電阻、按鈕、蜂鳴器、麵包板</span></div>
-          <fieldset class="route-tasks" disabled>
-            <legend class="sr-only">燈光與聲音任務</legend>
-            <label><input type="checkbox" data-task-id="light-led"><span><strong>讓外接 LED 閃爍</strong><small>20 分鐘 · 接對極性與限流電阻</small><button class="guide-button" type="button" data-guide-id="light-led">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="light-button"><span><strong>用按鈕控制燈</strong><small>25 分鐘 · 讀懂 HIGH 與 LOW</small><button class="guide-button" type="button" data-guide-id="light-button">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="light-melody"><span><strong>加入提示音</strong><small>25 分鐘 · 用 tone() 播放音階</small><button class="guide-button" type="button" data-guide-id="light-melody">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="light-extension"><span><strong>延伸：做一組交通號誌</strong><small>30 分鐘 · 設計自己的時序</small><button class="guide-button" type="button" data-guide-id="light-extension">閱讀詳細教學</button></span></label>
-          </fieldset>
-        </article>
-
-        <article class="route-card accent-yellow" data-route="reaction-game">
-          <header><span class="route-code">B</span><div><h3>反應遊戲</h3><p>喜歡競賽、按鈕與計分</p></div><span class="difficulty">入門＋</span></header>
-          <div class="materials"><strong>材料</strong><span>LED、按鈕、蜂鳴器、麵包板</span></div>
-          <fieldset class="route-tasks" disabled>
-            <legend class="sr-only">反應遊戲任務</legend>
-            <label><input type="checkbox" data-task-id="game-random"><span><strong>隨機等待後亮燈</strong><small>20 分鐘 · random() 與 delay()</small><button class="guide-button" type="button" data-guide-id="game-random">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="game-button"><span><strong>按鍵偵測反應</strong><small>25 分鐘 · 防止偷按</small><button class="guide-button" type="button" data-guide-id="game-button">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="game-score"><span><strong>序列埠顯示反應時間</strong><small>25 分鐘 · millis() 計時</small><button class="guide-button" type="button" data-guide-id="game-score">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="game-extension"><span><strong>延伸：雙人搶答器</strong><small>35 分鐘 · 判定誰先按</small><button class="guide-button" type="button" data-guide-id="game-extension">閱讀詳細教學</button></span></label>
-          </fieldset>
-        </article>
-
-        <article class="route-card accent-teal" data-route="sensor-mission">
-          <header><span class="route-code">C</span><div><h3>感測任務</h3><p>讓 Arduino 看見環境變化</p></div><span class="difficulty">中階</span></header>
-          <div class="materials"><strong>材料</strong><span>光敏電阻或超音波感測器、LED、電阻</span></div>
-          <fieldset class="route-tasks" disabled>
-            <legend class="sr-only">感測任務路線</legend>
-            <label><input type="checkbox" data-task-id="sensor-read"><span><strong>讀取感測器數值</strong><small>20 分鐘 · Serial Plotter 觀察變化</small><button class="guide-button" type="button" data-guide-id="sensor-read">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="sensor-threshold"><span><strong>找出觸發門檻</strong><small>25 分鐘 · if 判斷與校正</small><button class="guide-button" type="button" data-guide-id="sensor-threshold">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="sensor-output"><span><strong>讓輸出回應環境</strong><small>25 分鐘 · 暗了亮燈或靠近警示</small><button class="guide-button" type="button" data-guide-id="sensor-output">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="sensor-extension"><span><strong>延伸：三段狀態顯示</strong><small>35 分鐘 · 建立低、中、高範圍</small><button class="guide-button" type="button" data-guide-id="sensor-extension">閱讀詳細教學</button></span></label>
-          </fieldset>
-        </article>
-
-        <article class="route-card accent-green" data-route="creative-build">
-          <header><span class="route-code">D</span><div><h3>自由創作</h3><p>適合有經驗、想自己定義作品</p></div><span class="difficulty">挑戰</span></header>
-          <div class="materials"><strong>材料</strong><span>任選現場元件，先向老師確認供電與接腳</span></div>
-          <fieldset class="route-tasks" disabled>
-            <legend class="sr-only">自由創作路線</legend>
-            <label><input type="checkbox" data-task-id="creative-plan"><span><strong>畫出輸入與輸出</strong><small>15 分鐘 · 一句話定義作品功能</small><button class="guide-button" type="button" data-guide-id="creative-plan">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="creative-prototype"><span><strong>先做最小可行原型</strong><small>30 分鐘 · 只接一個輸入、一個輸出</small><button class="guide-button" type="button" data-guide-id="creative-prototype">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="creative-test"><span><strong>測試三種情境</strong><small>25 分鐘 · 正常、邊界、錯誤</small><button class="guide-button" type="button" data-guide-id="creative-test">閱讀詳細教學</button></span></label>
-            <label><input type="checkbox" data-task-id="creative-extension"><span><strong>延伸：改善互動體驗</strong><small>35 分鐘 · 加入回饋、外殼或規則</small><button class="guide-button" type="button" data-guide-id="creative-extension">閱讀詳細教學</button></span></label>
-          </fieldset>
-        </article>
+      <div class="routes-grid independent-tasks">
+        <fieldset class="route-tasks" disabled>
+          <legend class="sr-only">15 個獨立任務</legend>
+          <label><input type="checkbox" data-task-id="myth-light"><span><strong>1. 光控小夜燈：月神遺跡的守夜燈</strong><small>★ · 光敏電阻、類比訊號、自動控制</small><button class="guide-button" type="button" data-guide-id="myth-light">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-piano"><span><strong>2. 電子鋼琴：精靈森林的失落旋律</strong><small>★★ · 按鈕、蜂鳴器與音調</small><button class="guide-button" type="button" data-guide-id="myth-piano">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-reaction"><span><strong>3. 反應力測試器：雷神的閃電試煉</strong><small>★★ · random()、millis() 與反應時間</small><button class="guide-button" type="button" data-guide-id="myth-reaction">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-whack"><span><strong>4. 打地鼠遊戲：地精礦坑的晶石獵人</strong><small>★★☆ · 隨機目標、按鈕與計分</small><button class="guide-button" type="button" data-guide-id="myth-whack">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-climate"><span><strong>5. 電子溫濕度計：冰火神殿的守護者</strong><small>★★☆ · DHT 感測器與 LCD 顯示</small><button class="guide-button" type="button" data-guide-id="myth-climate">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-radar"><span><strong>6. 倒車雷達：巨龍洞穴的探險車</strong><small>★★★ · 超音波測距與蜂鳴器</small><button class="guide-button" type="button" data-guide-id="myth-radar">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-timer"><span><strong>7. 電子倒數計時器：魔法核心的倒數封印</strong><small>★★★ · millis()、LCD 與按鈕</small><button class="guide-button" type="button" data-guide-id="myth-timer">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-bin"><span><strong>8. 自動感應垃圾桶：魔法塔的吞噬寶箱</strong><small>★★★ · 超音波感測器與伺服馬達</small><button class="guide-button" type="button" data-guide-id="myth-bin">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-memory"><span><strong>9. 記憶燈號遊戲：星辰神殿的記憶試煉</strong><small>★★★☆ · 陣列、順序比對與關卡</small><button class="guide-button" type="button" data-guide-id="myth-memory">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-safe"><span><strong>10. 密碼保險箱：王國寶庫的符文之鎖</strong><small>★★★☆ · Keypad、密碼與伺服馬達</small><button class="guide-button" type="button" data-guide-id="myth-safe">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-1a2b"><span><strong>11. 1A2B 猜數字：賢者之塔的四位數密碼</strong><small>★★★★ · 陣列、亂數與邏輯推理</small><button class="guide-button" type="button" data-guide-id="myth-1a2b">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-station"><span><strong>12. 智慧環境監測站：天空之城的氣候守望塔</strong><small>★★★★ · 多感測器、記錄與分析</small><button class="guide-button" type="button" data-guide-id="myth-station">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-dino"><span><strong>13. 小恐龍跳躍：荒野遺跡的逃亡試煉</strong><small>★★★★☆ · OLED、重力與碰撞</small><button class="guide-button" type="button" data-guide-id="myth-dino">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-snake"><span><strong>14. 貪吃蛇：世界樹的能量之蛇</strong><small>★★★★★ · 座標、陣列與碰撞判斷</small><button class="guide-button" type="button" data-guide-id="myth-snake">閱讀詳細教學</button></span></label>
+          <label><input type="checkbox" data-task-id="myth-tetris"><span><strong>15. 俄羅斯方塊：矮人王國的崩塌礦坑</strong><small>★★★★★+ · 二維陣列、旋轉與消行</small><button class="guide-button" type="button" data-guide-id="myth-tetris">閱讀詳細教學</button></span></label>
+        </fieldset>
       </div>
     </section>
 
@@ -237,7 +201,7 @@
       <div class="teacher-grid">
         <div><strong>開場 0:00-0:20</strong><p>兩人一組但每人都要完成健檢。先統一 USB 插拔與斷電接線規則。</p></div>
         <div><strong>健檢 0:20-0:50</strong><p>把「無 COM」、「上傳錯誤」、「亂碼」學生分區處理，避免全班同時等待。</p></div>
-        <div><strong>分流 0:50-3:20</strong><p>每組先選一條主線。進度快者擔任技術支援，但要用提問協助，不直接代接。</p></div>
+        <div><strong>任務挑戰 0:50-3:20</strong><p>每組可選不同獨立任務。進度快者擔任技術支援，但要用提問協助，不直接代接。</p></div>
         <div><strong>收束 3:20-4:00</strong><p>先拍攝成功狀態，再拆線。展示時每組說明輸入、處理、輸出與一次失敗經驗。</p></div>
       </div>
       <div class="teacher-alert"><strong>現場備品建議</strong><span>多準備 3 塊板、5 條可傳資料的 USB 線、LED 與 220Ω 電阻各 30 顆，以及已確認可用的測試電腦。</span></div>

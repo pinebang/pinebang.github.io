@@ -101,6 +101,76 @@
   const allTaskIds = taskInputs.map((input) => input.dataset.taskId);
   const core = window.ArduinoCore;
   const siteConfig = window.ArduinoWorkshopConfig || {};
+  let independentGuides = {};
+  const taskFlows = {
+    'myth-light': ['接光敏電阻分壓電路並用 analogRead() 讀值。', '用 Serial Monitor 觀察亮暗讀值，找出穩定的臨界值。', '讓 LED 在低於臨界值時點亮，測試白天、夜晚與遮光情境。'],
+    'myth-piano': ['為五個按鈕設定輸入腳位，接上被動蜂鳴器。', '替每個按鈕指定不同頻率與音名。', '逐一測試音階，再組合成一段精靈旋律。'],
+    'myth-reaction': ['按下開始後用 random() 產生不可預測的等待時間。', '亮燈當下用 millis() 記錄開始時間。', '按下按鈕後計算反應時間，重複多次比較結果。'],
+    'myth-whack': ['準備多組 LED 與對應按鈕，建立目標編號。', '隨機亮起一顆晶石，等待玩家按下對應按鈕。', '判斷正確、錯誤或超時並更新分數。'],
+    'myth-climate': ['接上 DHT11／DHT22 與 LCD 1602 I2C。', '定時讀取溫度與濕度並處理讀取失敗。', '在螢幕顯示數值，設定安全範圍並觀察環境變化。'],
+    'myth-radar': ['接線並用超音波感測器量測回波時間。', '把時間換算成公分距離，先用 Serial Monitor 校正。', '依距離改變蜂鳴器間隔，測試靠近與遠離障礙物。'],
+    'myth-timer': ['設計開始、暫停與歸零三個按鈕狀態。', '用 millis() 計算經過時間，不讓畫面被 delay() 卡住。', '在倒數結束時顯示提示並播放警示聲。'],
+    'myth-bin': ['固定超音波感測器與 SG90 伺服馬達，先測試角度。', '偵測手靠近時開啟箱蓋並保持一段時間。', '確認沒有人靠近後關蓋，測試反覆開關是否穩定。'],
+    'myth-memory': ['建立燈號與按鈕陣列，先完成單一燈號輸入。', '每回合播放越來越長的隨機序列。', '逐一比對玩家輸入，答對進入下一關，答錯結束。'],
+    'myth-safe': ['接上 4x4 Keypad 與 LCD，先確認每個按鍵讀值。', '建立密碼輸入、清除與確認流程。', '正確時轉動伺服馬達解鎖，錯誤多次時發出警告並暫停輸入。'],
+    'myth-1a2b': ['產生四個不重複的秘密數字並保存。', '讀取玩家輸入，逐位計算 A，再計算數字存在但位置不同的 B。', '顯示提示並持續遊戲，直到猜中或達到嘗試上限。'],
+    'myth-station': ['分別接上溫濕度、光線等感測器並確認讀值。', '用固定時間間隔記錄多組資料與時間。', '整理資料找出異常時段，製作簡單圖表並提出解釋。'],
+    'myth-dino': ['在 OLED 畫出角色、地面與障礙物。', '用 millis() 控制障礙物移動與按鈕跳躍，加入簡單重力。', '做矩形碰撞判斷，通過時間越久就提高速度。'],
+    'myth-snake': ['用座標陣列保存蛇身，讓蛇持續朝目前方向移動。', '隨機產生果實，吃到後增加蛇身長度並更新分數。', '判斷撞牆與撞到自己，完成遊戲結束畫面。'],
+    'myth-tetris': ['用二維陣列建立遊戲場地，畫出一個可移動方塊。', '加入左右移動、下落、旋轉與碰撞檢查。', '方塊固定後檢查滿行、消除、加分，測試堆到頂端的情況。'],
+  };
+  const taskComponentTests = {
+    'myth-light': ['先測試光敏電阻：只接分壓電路，從 Serial Monitor 觀察亮暗數值。', '再測試 LED：不接感測器，讓 LED 單獨亮滅。', '最後合併光敏電阻與 LED，確認門檻控制。'],
+    'myth-piano': ['先測試每個按鈕：按下與放開的狀態要能被讀到。', '再測試蜂鳴器：用固定音調確認能發聲。', '最後逐一配對五個按鈕與五個音階。'],
+    'myth-reaction': ['先測試 LED：確認能由程式控制亮滅。', '再測試按鈕：確認按下狀態穩定且不會重複觸發。', '最後加入 millis() 計時與 random() 等待。'],
+    'myth-whack': ['先測試每顆 LED：確認編號與亮滅位置正確。', '再逐一測試對應按鈕，確認按鈕編號沒有接反。', '最後合併隨機目標、判斷與計分。'],
+    'myth-climate': ['先測試 DHT11／DHT22：在 Serial Monitor 顯示溫度與濕度。', '再測試 LCD 1602 I2C：顯示固定文字確認位址與背光。', '最後把感測數值更新到 LCD，並處理讀取失敗。'],
+    'myth-radar': ['先測試 HC-SR04：在 Serial Monitor 顯示距離公分值。', '再測試蜂鳴器：播放固定音調確認接腳。', '最後讓距離改變蜂鳴器間隔。'],
+    'myth-timer': ['先測試 LCD 或 OLED：顯示固定倒數數字。', '再逐一測試開始、暫停、歸零按鈕。', '最後加入 millis() 計時與倒數結束警示。'],
+    'myth-bin': ['先測試 HC-SR04：確認手靠近時距離讀值變小。', '再測試 SG90：讓伺服馬達轉到開蓋與關蓋角度。', '最後合併距離判斷與自動開關蓋。'],
+    'myth-memory': ['先測試四顆 LED：確認顏色與陣列編號一致。', '再逐一測試四顆按鈕與去彈跳。', '最後測試燈號播放、玩家輸入與逐關增加。'],
+    'myth-safe': ['先測試 Keypad：在 Serial Monitor 顯示每個按鍵。', '再測試 LCD：顯示輸入中的密碼符號。', '再測試伺服馬達的鎖定與解鎖角度，最後加入錯誤次數。'],
+    'myth-1a2b': ['先測試按鈕或 Keypad：確認四位數輸入順序。', '再用固定秘密數字測試 A、B 計算，不先加入亂數。', '最後加入不重複亂數、提示與猜測次數。'],
+    'myth-station': ['先分別測試溫濕度感測器與光敏電阻，確認每個讀值會變化。', '再測試 LCD、OLED 或序列埠的資料顯示。', '最後加入時間記錄、多感測器整合與資料分析。'],
+    'myth-dino': ['先測試 OLED：顯示角色、地面與一個障礙物。', '再測試按鈕：確認按下能讓角色跳躍。', '最後逐步加入重力、障礙物移動與碰撞判斷。'],
+    'myth-snake': ['先測試 OLED 或點矩陣的座標顯示。', '再逐一測試方向按鈕或搖桿，確認方向不會反轉。', '最後加入蛇身陣列、果實、成長與碰撞。'],
+    'myth-tetris': ['先測試 OLED 或點矩陣的格子座標。', '再逐一測試左右、下移與旋轉按鈕。', '最後依序加入方塊碰撞、固定、消行與遊戲結束。'],
+  };
+  const componentGuides = {
+    'Arduino': { title: 'Arduino 開發板', goal: 'Arduino 是作品的控制核心，負責讀取輸入、執行程式並控制輸出。', sections: [{ heading: '使用重點', items: ['先確認板型、USB 資料線與 COM 連接埠。', '所有元件的 GND 要和 Arduino 共地。', '拔插元件前先斷開 USB 或外部電源。'] }, { heading: '基本測試', items: ['上傳內建 Blink 範例，確認板子能正常執行程式。', '開啟 Serial Monitor，確認能看到程式輸出的文字。'] }], links: [] },
+    'Arduino或ESP32': { title: 'Arduino 或 ESP32', goal: '兩者都是微控制器平台；ESP32 額外提供較多效能與 Wi-Fi／藍牙功能。', sections: [{ heading: '選擇建議', items: ['初學者可先使用 Arduino UNO，接線與教學較容易。', '需要 Wi-Fi、較多記憶體或多感測器時，可考慮 ESP32。', 'Arduino UNO 與 ESP32 的腳位編號、電壓與程式設定不完全相同。'] }, { heading: '基本測試', items: ['先確認電源燈亮起，再用最小程式測試一個 LED 或序列埠。'] }], links: [] },
+    '光敏電阻': { title: '光敏電阻', goal: '光敏電阻會隨環境亮度改變阻值，可用來偵測明亮或昏暗。', sections: [{ heading: '接線重點', items: ['要和固定電阻組成分壓電路，再把中間接點接到 A0 等類比輸入。', '光敏電阻本身沒有固定正負極，重點是分壓接法與共地。'] }, { heading: '測試方式', items: ['遮住與照亮感測器，觀察 analogRead() 數值是否明顯變化。', '記錄亮與暗的數值，再設定適合的臨界值。'] }], links: [] },
+    'LED': { title: 'LED 發光二極體', goal: 'LED 是用電流控制的發光元件，可作為狀態或結果提示。', sections: [{ heading: '接線重點', items: ['長腳通常是正極，短腳通常是負極。', 'LED 必須串接限流電阻，負極接 GND。', '不要把 LED 兩腳插在麵包板同一條導電列。'] }, { heading: '測試方式', items: ['先用 Blink 類型程式讓 LED 亮、滅，確認腳位與極性。', '若完全不亮，先反轉 LED 方向並檢查電阻與 GND。'] }], links: [] },
+    '電阻': { title: '電阻', goal: '電阻用來限制電流、分壓或設定感測器的工作範圍。', sections: [{ heading: '使用重點', items: ['LED 常用約 220Ω 限流；光敏電阻常和固定電阻組成分壓。', '電阻沒有正負極，方向通常不影響功能。', '依色環或萬用電表確認阻值，避免拿錯規格。'] }, { heading: '測試方式', items: ['確認電阻兩端接在不同節點，不能被麵包板同一條導電列短路。'] }], links: [] },
+    '麵包板': { title: '麵包板', goal: '麵包板讓元件可以暫時插接，不需要焊接。', sections: [{ heading: '接線重點', items: ['中央區同一排通常是五個孔相通；中間凹槽兩側不相通。', '電源軌可能在中間斷開，使用前要確認是否需要跳線連接。', '元件腳位不要全部插在同一條導電列。'] }, { heading: '測試方式', items: ['用跳線把 5V 和 GND 接到電源軌，再用 LED 與電阻測試供電。'] }], links: [] },
+    '杜邦線': { title: '杜邦線', goal: '杜邦線用來連接 Arduino、麵包板與各種模組。', sections: [{ heading: '使用重點', items: ['公對公、公對母、母對母要依元件接頭選擇。', '線兩端要插到底，但不要用力拉扯腳位。', '接線前先依顏色區分 5V、GND 與訊號線。'] }, { heading: '測試方式', items: ['若數值不穩定或元件沒有反應，先重新插拔並檢查是否使用資料線而非只有充電功能的線材。'] }], links: [] },
+    '按鈕': { title: '按鈕', goal: '按鈕是數位輸入元件，讓使用者把「按下／放開」傳給 Arduino。', sections: [{ heading: '接線重點', items: ['四腳按鈕通常要跨過麵包板中央凹槽。', '可使用 INPUT_PULLUP，按下時通常讀到 LOW。', '按鈕可能有彈跳，快速連續讀取時要加入去彈跳處理。'] }, { heading: '測試方式', items: ['先用 Serial Monitor 印出 HIGH／LOW，確認按下與放開狀態符合預期。'] }], links: [] },
+    '被動蜂鳴器': { title: '被動蜂鳴器', goal: '被動蜂鳴器需要 Arduino 提供頻率，才能播放不同音高。', sections: [{ heading: '接線重點', items: ['正極接數位輸出腳位，負極接 GND。', '使用 tone() 播放頻率，使用 noTone() 停止。'] }, { heading: '測試方式', items: ['先固定播放一個音調，再改變頻率確認音高會改變。', '若沒有聲音，檢查是否誤用主動蜂鳴器或接反腳位。'] }], links: [] },
+    'DHT11或DHT22': { title: 'DHT11／DHT22 溫濕度感測器', goal: 'DHT 感測器可讀取環境溫度與相對濕度。', sections: [{ heading: '使用重點', items: ['依模組標示接 VCC、GND 與 DATA；不同模組腳位排列可能不同。', 'DHT22 通常精度與量測範圍較好，但讀取速度仍有限。', '讀取失敗時不要把錯誤數值當成真實環境資料。'] }, { heading: '測試方式', items: ['先只在 Serial Monitor 顯示溫度與濕度，確認數值穩定後再接 LCD。'] }], links: [] },
+    'DHT11/DHT22': { title: 'DHT11／DHT22 溫濕度感測器', goal: 'DHT 感測器可讀取環境溫度與相對濕度。', sections: [{ heading: '使用重點', items: ['依模組標示接 VCC、GND 與 DATA；不同模組腳位排列可能不同。', 'DHT22 通常精度與量測範圍較好，但讀取速度仍有限。', '讀取失敗時不要把錯誤數值當成真實環境資料。'] }, { heading: '測試方式', items: ['先只在 Serial Monitor 顯示溫度與濕度，確認數值穩定後再接 LCD。'] }], links: [] },
+    'LCD 1602 I2C': { title: 'LCD 1602 I2C', goal: 'LCD 1602 I2C 用兩條訊號線顯示文字與數值，可減少 Arduino 佔用的腳位。', sections: [{ heading: '接線重點', items: ['通常接 VCC、GND、SDA、SCL；Arduino UNO 的 SDA／SCL 在 A4／A5 附近。', 'I2C 位址可能是 0x27 或其他值，模組不同時要重新確認。'] }, { heading: '測試方式', items: ['先顯示固定文字，若只有背光沒有文字，檢查對比旋鈕與 I2C 位址。'] }], links: [] },
+    'HC-SR04': { title: 'HC-SR04 超音波感測器', goal: 'HC-SR04 透過發射與接收超音波估算物體距離。', sections: [{ heading: '接線重點', items: ['VCC 接電源、GND 接地，TRIG 與 ECHO 接兩個數位腳位。', '先確認模組工作電壓與 Arduino 的輸入電壓相容。'] }, { heading: '測試方式', items: ['先在 Serial Monitor 顯示距離，拿物體靠近與移開，確認數值跟著改變。', '避免把手或物體放得太近，超出模組量測範圍時要處理異常值。'] }], links: [] },
+    'SG90伺服馬達': { title: 'SG90 伺服馬達', goal: '伺服馬達可轉到指定角度，適合控制箱蓋、門鎖或指針。', sections: [{ heading: '接線重點', items: ['通常是紅線接電源、棕／黑線接 GND、橙／黃線接訊號。', '馬達啟動電流可能造成 Arduino 重置，必要時使用穩定的外部電源並共地。', '不要強行把馬達轉到機械極限。'] }, { heading: '測試方式', items: ['先讓馬達依序轉到 0、90、180 度，確認角度方向與機構不會卡住。'] }], links: [] },
+    '4x4 Keypad': { title: '4×4 矩陣鍵盤', goal: '4×4 Keypad 用列與行的矩陣方式輸入數字與符號。', sections: [{ heading: '使用重點', items: ['先確認八條接線的列／行順序，順序錯誤會造成按鍵對應錯亂。', '可先用測試程式把每個按鍵印到 Serial Monitor。'] }, { heading: '測試方式', items: ['逐一按下 0–9、A–D、*、#，確認每個按鍵只回報一次且符號正確。'] }], links: [] },
+    'OLED': { title: 'OLED 顯示器', goal: 'OLED 可用像素座標顯示文字、圖形與簡單遊戲畫面。', sections: [{ heading: '接線重點', items: ['I2C OLED 通常接 VCC、GND、SDA、SCL。', '常見尺寸是 0.96 吋，解析度可能為 128×64；程式設定要相符。'] }, { heading: '測試方式', items: ['先顯示固定文字與矩形，再測試清除畫面與重新繪製。'] }], links: [] },
+    '方向按鈕或搖桿': { title: '方向按鈕或搖桿', goal: '方向控制元件讓玩家改變角色、蛇或方塊的移動方向。', sections: [{ heading: '使用重點', items: ['四向按鈕要分別確認上、下、左、右的輸入。', '類比搖桿除了方向，也可能需要讀取 X、Y 軸與按壓開關。'] }, { heading: '測試方式', items: ['先在 Serial Monitor 顯示每個方向的狀態，確認沒有按下時不會漂移或誤觸發。'] }], links: [] },
+    'LED點矩陣': { title: 'LED 點矩陣', goal: 'LED 點矩陣用格子顯示角色、方塊、蛇身或其他圖案。', sections: [{ heading: '使用重點', items: ['先確認矩陣的列、行與模組驅動方式，避免直接把過多電流拉過 Arduino。', '顯示座標通常從左上角開始，但不同函式庫方向可能不同。'] }, { heading: '測試方式', items: ['先逐格點亮或顯示棋盤格，確認行列沒有顛倒，再顯示角色圖案。'] }], links: [] },
+  };
+  fetch('tasks.json').then((response) => response.json()).then((data) => {
+    independentGuides = Object.fromEntries(data.tasks.map((task, index) => [`myth-${['light', 'piano', 'reaction', 'whack', 'climate', 'radar', 'timer', 'bin', 'memory', 'safe', '1a2b', 'station', 'dino', 'snake', 'tetris'][index]}`, {
+      title: task.title,
+      goal: task.mission,
+      sections: [
+        { heading: '情境', items: [task.scenario] },
+        { heading: '要解決的問題', items: [task.problem] },
+        { heading: '可以學到', items: task.learn },
+        { heading: '建議材料／元件', items: task.materials },
+        { heading: '零件逐一測試', items: taskComponentTests[`myth-${['light', 'piano', 'reaction', 'whack', 'climate', 'radar', 'timer', 'bin', 'memory', 'safe', '1a2b', 'station', 'dino', 'snake', 'tetris'][index]}`] },
+        { heading: '任務流程', items: taskFlows[`myth-${['light', 'piano', 'reaction', 'whack', 'climate', 'radar', 'timer', 'bin', 'memory', 'safe', '1a2b', 'station', 'dino', 'snake', 'tetris'][index]}`] },
+      ],
+      links: [],
+    }]));
+  }).catch((error) => console.warn('無法載入獨立任務教材', error));
   let artifactUrl = null;
   let authCredential = '';
   let authEmail = '';
@@ -191,19 +261,12 @@
     });
 
     document.querySelectorAll('.route-tasks').forEach((fieldset) => { fieldset.disabled = !unlocked; });
-    document.querySelectorAll('input[name="route"]').forEach((input) => {
-      input.disabled = !unlocked;
-      input.checked = state.selectedRoute === input.value;
-    });
-    document.querySelectorAll('[data-route]').forEach((route) => {
-      route.classList.toggle('is-selected', state.selectedRoute === route.dataset.route);
-    });
 
     const gateStatus = document.querySelector('#gate-status');
     gateStatus.textContent = unlocked ? '健檢完成 · 已鎖定' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
     gateStatus.className = `status-badge ${unlocked ? 'status-complete' : 'status-warning'}`;
     const lockLabel = document.querySelector('#route-lock-label');
-    lockLabel.textContent = unlocked ? '路線已解鎖' : '健檢後解鎖';
+    lockLabel.textContent = unlocked ? '任務已解鎖' : '健檢後解鎖任務';
     lockLabel.className = `status-badge ${unlocked ? 'status-complete' : 'status-locked'}`;
 
     const progress = core.calculateProgress(allTaskIds, state.completedIds);
@@ -211,12 +274,10 @@
     document.querySelector('#progress-bar').style.width = `${progress.percent}%`;
     document.querySelector('.progress-track').setAttribute('aria-valuenow', String(progress.percent));
     document.querySelector('#next-action').textContent = !unlocked
-      ? '先完成共同健檢，才能開啟興趣路線。'
+      ? '先完成共同健檢，才能開啟 15 個獨立任務。'
       : progress.percent === 100
         ? '全部任務完成，記得整理作品紀錄並與同學分享。'
-        : state.selectedRoute
-          ? '主路線已選定，完成後可自由跨線挑戰。'
-          : '健檢完成，現在選一條最有興趣的主路線。';
+        : '健檢完成，現在可以挑選任一個獨立任務。';
 
     document.querySelectorAll('[data-profile]').forEach((input) => {
       input.value = state.profile[input.dataset.profile] || '';
@@ -261,15 +322,6 @@
     input.addEventListener('input', () => {
       state.reflections[input.dataset.reflection] = input.value;
       saveState();
-    });
-  });
-
-  document.querySelectorAll('input[name="route"]').forEach((input) => {
-    input.addEventListener('change', () => {
-      state.selectedRoute = input.value;
-      saveState();
-      render();
-      document.querySelector(`[data-route="${input.value}"]`).scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });
 
@@ -508,7 +560,7 @@
   }
 
   function openGuide(taskId) {
-    const guide = sharedGuides[taskId] || routeGuides[taskId];
+    const guide = sharedGuides[taskId] || routeGuides[taskId] || independentGuides[taskId];
     const image = guideImages[taskId];
     const dialog = document.querySelector('#guide-dialog');
     if (!guide || !dialog) return;
@@ -516,8 +568,20 @@
     document.querySelector('#guide-content').innerHTML = [
       `<p class="guide-goal"><strong>學習目標</strong>${guide.goal}</p>`,
       image ? `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" loading="lazy"><figcaption>${image.caption} <a href="${image.href}" target="_blank" rel="noopener">查看來源</a></figcaption></figure>` : '',
+          ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.heading === '建議材料／元件' ? section.items.map((item) => `<li><button class="component-link" type="button" data-component-name="${item}">${item}</button></li>`).join('') : section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
+          guide.links?.length ? `<section><h3>官方延伸資料</h3><ul class="guide-links">${guide.links.map((link) => `<li><a href="${link.url}" target="_blank" rel="noopener">${link.label}</a></li>`).join('')}</ul></section>` : '',
+    ].join('');
+    dialog.showModal();
+  }
+
+  function openComponent(componentName) {
+    const guide = componentGuides[componentName] || { title: componentName, goal: '這個元件目前尚未建立詳細說明。', sections: [], links: [] };
+    const dialog = document.querySelector('#guide-dialog');
+    if (!dialog) return;
+    document.querySelector('#guide-title').textContent = guide.title;
+    document.querySelector('#guide-content').innerHTML = [
+      `<p class="guide-goal"><strong>用途</strong>${guide.goal}</p>`,
       ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
-      `<section><h3>官方延伸資料</h3><ul class="guide-links">${guide.links.map((link) => `<li><a href="${link.url}" target="_blank" rel="noopener">${link.label}</a></li>`).join('')}</ul></section>`,
     ].join('');
     dialog.showModal();
   }
@@ -590,7 +654,7 @@
     const button = document.querySelector('#progress-sync');
     button.disabled = true;
     button.textContent = '同步中...';
-    setLoginStatus(`正在同步 ${authEmail} 的 22 項任務...`);
+    setLoginStatus(`正在同步 ${authEmail} 的 21 項任務...`);
     try {
       const tasks = Object.fromEntries(taskInputs.map((input) => [input.dataset.taskId, state.completedIds.includes(input.dataset.taskId)]));
       const response = await fetch(endpoint, {
@@ -606,7 +670,7 @@
     } catch (error) {
       setLoginStatus(error.message || '同步失敗，請稍後再試。', true);
     } finally {
-      button.textContent = '同步 22 項任務';
+      button.textContent = '同步 21 項任務';
       updateSyncControl();
     }
   }
@@ -643,12 +707,16 @@
   configureGoogleLogin();
   document.querySelector('#progress-sync').addEventListener('click', syncProgress);
   document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
-  document.querySelectorAll('[data-guide-id]').forEach((button) => {
+      document.querySelectorAll('[data-guide-id]').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
       openGuide(button.dataset.guideId);
-    });
+      });
+      document.querySelector('#guide-content').addEventListener('click', (event) => {
+        const button = event.target.closest('[data-component-name]');
+        if (button) openComponent(button.dataset.componentName);
+      });
   });
   document.querySelector('#guide-close').addEventListener('click', closeGuide);
   document.querySelector('#guide-dialog').addEventListener('click', (event) => {

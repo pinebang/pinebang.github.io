@@ -52,10 +52,9 @@
 
   const workshopTaskIds = [
     'check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose',
-    'light-led', 'light-button', 'light-melody', 'light-extension',
-    'game-random', 'game-button', 'game-score', 'game-extension',
-    'sensor-read', 'sensor-threshold', 'sensor-output', 'sensor-extension',
-    'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
+    'myth-light', 'myth-piano', 'myth-reaction', 'myth-whack', 'myth-climate',
+    'myth-radar', 'myth-timer', 'myth-bin', 'myth-memory', 'myth-safe',
+    'myth-1a2b', 'myth-station', 'myth-dino', 'myth-snake', 'myth-tetris',
   ];
 
   function buildCompletionRows(roster, completed) {
