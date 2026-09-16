@@ -58,11 +58,11 @@
   ];
 
   const completionStages = [
-    { id: 'newbie-village', label: '新手村', taskIds: workshopTaskIds.slice(0, 6) },
-    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(6, 10) },
-    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(10, 14) },
-    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(14, 18) },
-    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(18, 21) },
+    { id: 'newbie-village', label: '新手村', taskIds: workshopTaskIds.slice(0, 6), requireAll: true },
+    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(6, 10), requireAll: false },
+    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(10, 14), requireAll: false },
+    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(14, 18), requireAll: false },
+    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(18, 21), requireAll: false },
   ];
 
   function summarizeStageProgress(tasks) {
@@ -70,7 +70,9 @@
     return completionStages.map((stage) => ({
       id: stage.id,
       label: stage.label,
-      completed: stage.taskIds.every((taskId) => taskMap[taskId] === true),
+      completed: stage.requireAll
+        ? stage.taskIds.every((taskId) => taskMap[taskId] === true)
+        : stage.taskIds.some((taskId) => taskMap[taskId] === true),
     }));
   }
 
