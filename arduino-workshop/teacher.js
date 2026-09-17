@@ -65,7 +65,17 @@
     const button = document.querySelector('#teacher-save'); button.disabled = true; setStatus('teacher-save-status', '儲存中...');
     try {
       const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, teacherCode, classSeat: selectedStudent.classSeat, tasks: selectedStudent.tasks }) });
-      const payload = await response.json(); if (!response.ok || !payload.ok) throw new Error(payload.error || '儲存失敗');
+      const responseText = await response.text();
+      let payload = null;
+      try { payload = JSON.parse(responseText); } catch (parseError) { /* Google Apps Script 可能回傳轉址頁，改用 GET 確認寫入結果。 */ }
+      if (payload && (!response.ok || !payload.ok)) throw new Error(payload.error || '儲存失敗');
+      if (!payload) {
+        const verifyResponse = await fetch(endpoint, { cache: 'no-store' });
+        const verifyPayload = ArduinoCore.normalizeCompletionPayload(await verifyResponse.json());
+        const verifiedStudent = verifyPayload.students.find((student) => student.classSeat === selectedStudent.classSeat);
+        const saved = verifiedStudent && ArduinoCore.workshopTaskIds.every((taskId) => verifiedStudent.tasks[taskId] === selectedStudent.tasks[taskId]);
+        if (!saved) throw new Error('儲存結果尚未確認，請稍後再試。');
+      }
       setStatus('teacher-save-status', '老師確認已儲存，公開總表稍後會更新。');
     } catch (error) { setStatus('teacher-save-status', error.message || '儲存失敗，請稍後再試。', true); }
     finally { button.disabled = false; }
