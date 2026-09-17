@@ -27,6 +27,9 @@
     <section class="section-block teacher-control-section" aria-labelledby="teacher-control-title">
       <div class="section-heading"><div><p class="step-number">STEP 01</p><h2 id="teacher-control-title">選擇學生與確認任務</h2></div><span id="teacher-selection-status" class="status-badge status-locked">尚未選擇</span></div>
       <label class="teacher-picker" for="teacher-student"><strong>學生班級座號</strong><select id="teacher-student" disabled><option>請先輸入老師密碼</option></select></label>
+      <fieldset id="teacher-newbie" class="teacher-stage teacher-newbie-editor" disabled><legend>新手村｜開發板共同健檢</legend><div class="teacher-task-list">
+        <label><input type="checkbox" data-task-id="check-board">外觀與安全</label><label><input type="checkbox" data-task-id="check-ide">開啟開發環境</label><label><input type="checkbox" data-task-id="check-port">選對板子與連接埠</label><label><input type="checkbox" data-task-id="check-blink">上傳 Blink</label><label><input type="checkbox" data-task-id="check-serial">序列埠通訊</label><label><input type="checkbox" data-task-id="check-diagnose">會做初步判斷</label>
+      </div></fieldset>
       <div id="teacher-newbie-status" class="teacher-newbie-status" aria-live="polite"></div>
       <div id="teacher-stages" class="teacher-stage-grid">
         <fieldset class="teacher-stage" data-stage-index="0" disabled><legend>第一階段｜神火啟程</legend><div class="teacher-task-list">

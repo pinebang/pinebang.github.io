@@ -246,22 +246,6 @@
     return core.isGateComplete(sharedTaskIds, state.completedIds);
   }
 
-  let syncTimer = 0;
-  function syncSharedProgress() {
-    const endpoint = siteConfig.completionApiUrl || '';
-    const classSeat = core.normalizeClassSeat(state.profile.group);
-    if (!classSeat || !/^https:\/\/script\.google\.com\/macros\/s\//.test(endpoint)) return;
-    window.clearTimeout(syncTimer);
-    syncTimer = window.setTimeout(async () => {
-      const tasks = Object.fromEntries(allTaskIds.map((taskId) => [taskId, sharedTaskIds.includes(taskId) && state.completedIds.includes(taskId)]));
-      try {
-        await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ student: true, classSeat, tasks }) });
-      } catch {
-        // 自我檢查仍保留在本機，網路恢復後下一次勾選會再次同步。
-      }
-    }, 350);
-  }
-
   function stageHasAny(stageIndex) {
     const stage = stageGroups[stageIndex];
     return Boolean(stage && [...stage.querySelectorAll('[data-task-id]')].some((input) => state.completedIds.includes(input.dataset.taskId)));
@@ -282,9 +266,7 @@
       input.checked = state.completedIds.includes(input.dataset.taskId);
       const stage = input.closest('[data-stage-index]');
       const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
-      input.disabled = !sharedTaskIds.includes(input.dataset.taskId)
-        || core.isSharedTaskLocked(sharedTaskIds, state.completedIds, input.dataset.taskId)
-        || (stageIndex >= 0 && !isStageUnlocked(stageIndex));
+      input.disabled = true;
     });
 
     stageGroups.forEach((stage, index) => {
@@ -321,22 +303,6 @@
     const classSeat = core.normalizeClassSeat(state.profile.group);
     button.disabled = !authCredential || !classSeat;
   }
-
-  taskInputs.forEach((input) => {
-    input.addEventListener('change', () => {
-      const stage = input.closest('[data-stage-index]');
-      const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
-      if (!sharedTaskIds.includes(input.dataset.taskId) && !isStageUnlocked(stageIndex)) {
-        input.checked = false;
-        setStatus(stageIndex === 1 ? '請先完成第一階段任一任務。' : '請先完成第二階段任一任務。', true);
-        return;
-      }
-      state.completedIds = core.toggleTask(state.completedIds, input.dataset.taskId);
-      saveState();
-      render();
-      if (sharedTaskIds.includes(input.dataset.taskId)) syncSharedProgress();
-    });
-  });
 
   document.querySelectorAll('[data-profile]').forEach((input) => {
     input.addEventListener('input', () => {
@@ -401,12 +367,7 @@
       annotations: { readOnlyHint: false, untrustedContentHint: false },
       execute(input) {
         if (!input || !allTaskIds.includes(input.taskId) || typeof input.completed !== 'boolean') throw new Error('Invalid task update');
-        if (!sharedTaskIds.includes(input.taskId) && !gateComplete()) throw new Error('Shared board check is incomplete');
-        const alreadyCompleted = state.completedIds.includes(input.taskId);
-        if (alreadyCompleted !== input.completed) state.completedIds = core.toggleTask(state.completedIds, input.taskId);
-        saveState();
-        render();
-        return { taskId: input.taskId, completed: input.completed, progress: core.calculateProgress(allTaskIds, state.completedIds) };
+        throw new Error('任務完成狀態只能由老師認證');
       },
     });
   }

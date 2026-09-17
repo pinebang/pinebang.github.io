@@ -29,7 +29,7 @@
   function renderSelectedStudent() {
     const tasks = selectedStudent?.tasks || {};
     document.querySelectorAll('.teacher-stage').forEach((stage) => { stage.disabled = !selectedStudent; });
-    document.querySelectorAll('#teacher-stages [data-task-id]').forEach((input) => { input.checked = tasks[input.dataset.taskId] === true; });
+    document.querySelectorAll('#teacher-newbie [data-task-id], #teacher-stages [data-task-id]').forEach((input) => { input.checked = tasks[input.dataset.taskId] === true; });
     renderNewbie(tasks);
     const hasStudent = Boolean(selectedStudent);
     const selection = document.querySelector('#teacher-selection-status');
@@ -59,7 +59,7 @@
   }
 
   document.querySelector('#teacher-student').addEventListener('change', (event) => { selectedStudent = students.find((student) => student.classSeat === event.target.value) || null; renderSelectedStudent(); });
-  document.querySelectorAll('#teacher-stages [data-task-id]').forEach((input) => input.addEventListener('change', () => { if (selectedStudent) selectedStudent.tasks[input.dataset.taskId] = input.checked; }));
+  document.querySelectorAll('#teacher-newbie [data-task-id], #teacher-stages [data-task-id]').forEach((input) => input.addEventListener('change', () => { if (selectedStudent) selectedStudent.tasks[input.dataset.taskId] = input.checked; }));
   document.querySelector('#teacher-save').addEventListener('click', async () => {
     if (!selectedStudent) return;
     const button = document.querySelector('#teacher-save'); button.disabled = true; setStatus('teacher-save-status', '儲存中...');
