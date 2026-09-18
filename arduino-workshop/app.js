@@ -68,10 +68,7 @@
     },
   };
   const guideImages = {
-    'check-board': [
-      { src: 'assets/arduino-uno-pinout-board.png', alt: 'Arduino Uno Rev3 各部位功能標註圖', caption: '核對 Arduino Uno Rev3 板面上的各部位；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
-      { src: 'assets/arduino-uno-pinout-labels.png', alt: 'Arduino Uno Rev3 A 到 P 功能說明', caption: '對照 A 到 P 標記，了解按鈕、USB、電源、數位腳位與類比腳位的功能；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
-    ],
+    'check-board': { src: 'assets/arduino-uno-pinout-complete.png', alt: 'Arduino Uno Rev3 外觀與 A 到 P 功能完整標註圖', caption: '核對 Arduino Uno Rev3 外觀，以及 A 到 P 各部位的功能；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
     'check-ide': { src: 'assets/arduino-ide-software.png', alt: 'Arduino 官方軟體下載頁面與 Arduino IDE 介面', caption: '認識 Arduino IDE 2 的下載頁面與操作介面；圖片來源：Arduino 官方軟體頁面。', href: 'https://www.arduino.cc/en/software/' },
     'check-blink': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對 LED、電阻與數位腳位的基本接線；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-led': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對外接 LED 與限流電阻；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
