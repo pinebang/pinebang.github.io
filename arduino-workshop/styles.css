@@ -87,6 +87,9 @@ textarea { resize: vertical; }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .section-heading h2 { margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.2; }
 .section-heading.compact h2 { font-size: 1.45rem; }
+#shared-check > .section-heading > div, .routes-section > .section-heading > div { margin-inline: auto; text-align: center; }
+#shared-check > .section-intro, .routes-section > .section-intro { margin-inline: auto; text-align: center; }
+.task-stage > h3 { text-align: center; }
 .status-badge { flex: 0 0 auto; padding: 5px 10px; border-radius: 3px; font-size: 0.78rem; font-weight: 900; }
 .status-warning { color: #654607; background: #fff1c7; border: 1px solid #e7c365; }
 .status-complete { color: #0b593a; background: #d9f1e4; border: 1px solid #82bea0; }
