@@ -294,23 +294,6 @@
     });
   });
 
-  document.querySelector('#export-button').addEventListener('click', () => {
-    const record = {
-      ...core.createExportRecord(state.profile, state.completedIds, state.reflections || {}),
-      selectedRoute: state.selectedRoute,
-          progress: core.calculateStageProgress(state.completedIds),
-    };
-    const blob = new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    const safeName = core.normalizeClassSeat(state.profile.group).replace(/[\\/:*?"<>|\s]+/g, '-') || 'student';
-    link.href = url;
-    link.download = `arduino-workshop-${safeName}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-    setStatus('學習紀錄已匯出。');
-  });
-
   const resetDialog = document.querySelector('#reset-dialog');
   document.querySelector('#reset-button').addEventListener('click', () => resetDialog.showModal());
   document.querySelector('#confirm-reset').addEventListener('click', async () => {
