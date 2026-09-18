@@ -12,7 +12,7 @@
     ['myth-memory', 'myth-safe', 'myth-1a2b', 'myth-station'],
     ['myth-dino', 'myth-snake', 'myth-tetris'],
   ];
-  const studentDisplayNames = Object.freeze({ '12345': 'Ya' });
+  const studentDisplayNames = Object.freeze({ '12345': '705' });
   const endpoint = window.ArduinoWorkshopConfig?.completionApiUrl || '';
   let students = [];
   let selectedStudent = null;

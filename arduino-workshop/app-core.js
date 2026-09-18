@@ -119,7 +119,7 @@
       'game-score', 'game-extension', 'sensor-read', 'sensor-threshold', 'sensor-output',
       'sensor-extension', 'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
     ];
-    const studentAliases = Object.freeze({ Ya: '12345' });
+    const studentAliases = Object.freeze({ Ya: '12345', '705': '12345' });
     const normalizedStudents = payload.students.map((student) => {
       const sourceTasks = student && student.tasks;
       const classSeat = studentAliases[student?.classSeat] || student?.classSeat;

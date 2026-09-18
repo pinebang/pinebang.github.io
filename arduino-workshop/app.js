@@ -361,7 +361,7 @@
     const fragment = document.createDocumentFragment();
     rows.forEach((row) => {
       const progress = core.calculateStageProgress(row.tasks);
-      const studentLabel = row.classSeat === '12345' ? 'Ya' : row.classSeat;
+      const studentLabel = row.classSeat === '12345' ? '705' : row.classSeat;
       const bar = document.createElement('div');
       bar.className = 'completion-bar';
       bar.title = `${studentLabel}：完成 ${progress.completed} / ${progress.total} 個階段`;
