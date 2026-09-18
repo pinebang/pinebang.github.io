@@ -216,7 +216,6 @@
   }
 
   let state = readState();
-  const routeTaskInputs = taskInputs.filter((input) => input.closest('[data-stage-index]'));
 
   function saveState() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -247,26 +246,23 @@
   }
 
   function render() {
-    state.completedIds = core.normalizeProgressForGate(sharedTaskIds, state.completedIds);
     const unlocked = gateComplete();
     taskInputs.forEach((input) => {
       input.checked = state.completedIds.includes(input.dataset.taskId);
-      const stage = input.closest('[data-stage-index]');
-      const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
-      input.disabled = stage ? !isStageUnlocked(stageIndex) : true;
+      input.disabled = false;
     });
 
-    stageGroups.forEach((stage, index) => {
-      stage.disabled = !isStageUnlocked(index);
-      stage.classList.toggle('is-locked', !isStageUnlocked(index));
+    stageGroups.forEach((stage) => {
+      stage.disabled = false;
+      stage.classList.remove('is-locked');
     });
 
     const gateStatus = document.querySelector('#gate-status');
     gateStatus.textContent = unlocked ? '健檢完成 · 已鎖定' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
     gateStatus.className = `status-badge ${unlocked ? 'status-complete' : 'status-warning'}`;
     const lockLabel = document.querySelector('#route-lock-label');
-    lockLabel.textContent = unlocked ? '任務已解鎖' : '健檢後解鎖任務';
-    lockLabel.className = `status-badge ${unlocked ? 'status-complete' : 'status-locked'}`;
+    lockLabel.textContent = '所有任務皆可勾選';
+    lockLabel.className = 'status-badge status-complete';
 
     document.querySelectorAll('[data-profile]').forEach((input) => {
       input.value = state.profile[input.dataset.profile] || '';
@@ -281,7 +277,7 @@
     button.disabled = !authCredential || !classSeat;
   }
 
-  routeTaskInputs.forEach((input) => input.addEventListener('change', () => {
+  taskInputs.forEach((input) => input.addEventListener('change', () => {
     state.completedIds = core.toggleTask(state.completedIds, input.dataset.taskId);
     saveState();
     render();
