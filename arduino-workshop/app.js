@@ -372,21 +372,6 @@
     });
   }
 
-  function configureGoogleForm() {
-    const frame = document.querySelector('#google-form-frame');
-    const link = document.querySelector('#google-form-link');
-    const unavailable = document.querySelector('#form-unavailable');
-    const hasUrls = /^https:\/\/docs\.google\.com\/forms\//.test(siteConfig.formViewUrl || '')
-      && /^https:\/\/docs\.google\.com\/forms\//.test(siteConfig.formEmbedUrl || '');
-
-    if (!hasUrls) return;
-    frame.src = siteConfig.formEmbedUrl;
-    frame.hidden = false;
-    link.href = siteConfig.formViewUrl;
-    link.removeAttribute('aria-disabled');
-    unavailable.hidden = true;
-  }
-
   function renderCompletionHeaders() {
     const headerRow = document.querySelector('.completion-table thead tr');
     const fragment = document.createDocumentFragment();
@@ -593,7 +578,6 @@
   }
 
   render();
-  configureGoogleForm();
   renderCompletionHeaders();
   document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
       document.querySelectorAll('[data-guide-id]').forEach((button) => {
