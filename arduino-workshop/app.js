@@ -22,7 +22,7 @@
         { heading: '第一次操作', items: ['開啟 Arduino IDE 2，建立新的空白草稿。', '先按驗證，觀察下方訊息區是否出現完成或錯誤。', '接上 Arduino 後，再選擇正確板型與 Port。', '看到板型與 Port 後，才進行上傳。'] },
         { heading: '自我檢查', items: ['我能說出驗證和上傳的差別。', '我能找到編輯區、板型選擇器和下方訊息區。'] },
       ],
-      links: [{ label: '下載 Arduino IDE 官方軟體', url: 'https://www.arduino.cc/en/software/' }, { label: '查看 Arduino IDE 2 官方文件', url: 'https://docs.arduino.cc/software/ide/' }, { label: '查看官方上傳步驟', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
+      links: [{ label: 'Arduino 硬體資料（AEH004000）', url: 'assets/arduino-ide-hardware-guide.pdf' }, { label: '下載 Arduino IDE 官方軟體', url: 'https://www.arduino.cc/en/software/' }, { label: '查看 Arduino IDE 2 官方文件', url: 'https://docs.arduino.cc/software/ide/' }, { label: '查看官方上傳步驟', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
     },
     'check-port': {
       title: '天命羅盤的校準：Board 和 Port',
