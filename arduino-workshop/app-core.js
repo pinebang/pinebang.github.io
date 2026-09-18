@@ -119,23 +119,37 @@
       'game-score', 'game-extension', 'sensor-read', 'sensor-threshold', 'sensor-output',
       'sensor-extension', 'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
     ];
+    const studentAliases = Object.freeze({ Ya: '12345' });
+    const normalizedStudents = payload.students.map((student) => {
+      const sourceTasks = student && student.tasks;
+      const classSeat = studentAliases[student?.classSeat] || student?.classSeat;
+      if (!sourceTasks || workshopTaskIds.every((taskId) => Object.prototype.hasOwnProperty.call(sourceTasks, taskId))) {
+        return { ...student, classSeat, tasks: sourceTasks };
+      }
+      const tasks = workshopTaskIds.reduce((result, taskId) => {
+        result[taskId] = false;
+        return result;
+      }, {});
+      workshopTaskIds.forEach((taskId, index) => {
+        const legacyTaskId = legacyTaskIds[index];
+        tasks[taskId] = sourceTasks[legacyTaskId] === true;
+      });
+      return { ...student, classSeat, tasks };
+    });
+    const mergedStudents = new Map();
+    normalizedStudents.forEach((student) => {
+      const existing = mergedStudents.get(student.classSeat);
+      if (!existing) {
+        mergedStudents.set(student.classSeat, student);
+        return;
+      }
+      workshopTaskIds.forEach((taskId) => {
+        existing.tasks[taskId] = existing.tasks[taskId] === true || student.tasks?.[taskId] === true;
+      });
+    });
     return {
       ...payload,
-      students: payload.students.map((student) => {
-        const sourceTasks = student && student.tasks;
-        if (!sourceTasks || workshopTaskIds.every((taskId) => Object.prototype.hasOwnProperty.call(sourceTasks, taskId))) {
-          return student;
-        }
-        const tasks = workshopTaskIds.reduce((result, taskId) => {
-          result[taskId] = false;
-          return result;
-        }, {});
-        workshopTaskIds.forEach((taskId, index) => {
-          const legacyTaskId = legacyTaskIds[index];
-          tasks[taskId] = sourceTasks[legacyTaskId] === true;
-        });
-        return { ...student, tasks };
-      }),
+      students: [...mergedStudents.values()],
     };
   }
 

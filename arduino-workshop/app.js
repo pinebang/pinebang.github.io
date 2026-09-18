@@ -370,9 +370,10 @@
     const fragment = document.createDocumentFragment();
     rows.forEach((row) => {
       const progress = core.calculateStageProgress(row.tasks);
+      const studentLabel = row.classSeat === '12345' ? 'Ya' : row.classSeat;
       const bar = document.createElement('div');
       bar.className = 'completion-bar';
-      bar.title = `${row.classSeat}：完成 ${progress.completed} / ${progress.total} 個階段`;
+      bar.title = `${studentLabel}：完成 ${progress.completed} / ${progress.total} 個階段`;
       bar.style.setProperty('--completion-height', `${progress.percent}%`);
       const value = document.createElement('strong');
       value.textContent = `${progress.completed} / ${progress.total}`;
@@ -380,7 +381,7 @@
       fill.className = 'completion-bar-fill';
       fill.append(value);
       const label = document.createElement('small');
-      label.textContent = row.classSeat;
+      label.textContent = studentLabel;
       bar.append(fill, label);
       fragment.append(bar);
     });
