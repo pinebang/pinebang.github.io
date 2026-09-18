@@ -70,7 +70,7 @@
   const guideImages = {
     'check-board': { src: 'assets/arduino-uno-pinout-complete.png', alt: 'Arduino Uno Rev3 外觀與 A 到 P 功能完整標註圖', caption: '核對 Arduino Uno Rev3 外觀，以及 A 到 P 各部位的功能；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
     'check-ide': { src: 'assets/arduino-ide-software.png', alt: 'Arduino 官方軟體下載頁面與 Arduino IDE 介面', caption: '認識 Arduino IDE 2 的下載頁面與操作介面；圖片來源：Arduino 官方軟體頁面。', href: 'https://www.arduino.cc/en/software/' },
-    'check-blink': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對 LED、電阻與數位腳位的基本接線；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
+    'check-blink': { src: 'assets/arduino-blink-menu.png', alt: 'Arduino IDE 從檔案選單開啟 Blink 範例的畫面', caption: '在 Arduino IDE 中依序選擇「檔案 → 範例 → 01.Basics → Blink」；圖片為課程操作示意圖。' },
     'light-led': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對外接 LED 與限流電阻；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-button': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Button_LED_bb.svg', alt: '按鈕與 LED 麵包板接線圖', caption: '核對按鈕、LED 與麵包板的接線方向；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Button_LED_bb.svg' },
     'sensor-read': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino_Uno_with_ADXL335_Accelerometer.jpg', alt: 'Arduino UNO 與感測器接線照片', caption: '感測任務可先核對感測器、電源與訊號線；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-Uno-with-ADXL335-Accelerometer.jpg' },
