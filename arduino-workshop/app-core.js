@@ -51,18 +51,18 @@
   }
 
   const workshopTaskIds = [
-    'check-board', 'check-ide', 'check-port', 'check-blink', 'check-diagnose',
+    'check-board', 'check-ide', 'check-blink', 'check-diagnose',
     'myth-light', 'myth-piano', 'myth-reaction', 'myth-whack', 'myth-climate',
     'myth-radar', 'myth-timer', 'myth-bin', 'myth-memory', 'myth-safe',
     'myth-1a2b', 'myth-station', 'myth-dino', 'myth-snake', 'myth-tetris',
   ];
 
   const completionStages = [
-    { id: 'newbie-village', label: '神諭之門', taskIds: workshopTaskIds.slice(0, 5), requireAll: true },
-    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(5, 9), requireAll: false },
-    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(9, 13), requireAll: false },
-    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(13, 17), requireAll: false },
-    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(17, 20), requireAll: false },
+    { id: 'newbie-village', label: '神諭之門', taskIds: workshopTaskIds.slice(0, 4), requireAll: true },
+    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(4, 8), requireAll: false },
+    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(8, 12), requireAll: false },
+    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(12, 16), requireAll: false },
+    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(16, 19), requireAll: false },
   ];
 
   function summarizeStageProgress(tasks) {
@@ -124,15 +124,20 @@
       const sourceTasks = student && student.tasks;
       const classSeat = studentAliases[student?.classSeat] || student?.classSeat;
       if (!sourceTasks || workshopTaskIds.every((taskId) => Object.prototype.hasOwnProperty.call(sourceTasks, taskId))) {
-        return { ...student, classSeat, tasks: sourceTasks };
+        const tasks = workshopTaskIds.reduce((result, taskId) => { result[taskId] = sourceTasks?.[taskId] === true; return result; }, {});
+        tasks['check-ide'] = tasks['check-ide'] || sourceTasks?.['check-port'] === true;
+        return { ...student, classSeat, tasks };
       }
       const tasks = workshopTaskIds.reduce((result, taskId) => {
         result[taskId] = false;
         return result;
       }, {});
-      workshopTaskIds.forEach((taskId, index) => {
-        const legacyTaskId = legacyTaskIds[index];
-        tasks[taskId] = sourceTasks[legacyTaskId] === true;
+      tasks['check-board'] = sourceTasks['check-board'] === true;
+      tasks['check-ide'] = sourceTasks['check-ide'] === true || sourceTasks['check-port'] === true;
+      tasks['check-blink'] = sourceTasks['check-blink'] === true;
+      tasks['check-diagnose'] = sourceTasks['check-diagnose'] === true;
+      workshopTaskIds.filter((taskId) => taskId.startsWith('myth-')).forEach((taskId, index) => {
+        tasks[taskId] = sourceTasks[legacyTaskIds[index + 5]] === true;
       });
       return { ...student, classSeat, tasks };
     });
