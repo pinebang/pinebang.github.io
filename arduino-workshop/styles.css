@@ -185,7 +185,7 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
 #guide-dialog::after { bottom: -25px; }
 .guide-dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 24px 26px 16px; background: #fffaf0; border-bottom: 1px solid #d6c39e; }
 .guide-dialog-header h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.9rem); }
-.guide-content { padding: 18px 26px 26px; overflow-y: auto; background: #f7f0df; }
+.guide-content { max-height: calc(100vh - 150px); padding: 18px 26px 26px; overflow-y: auto; background: #f7f0df; }
 .guide-figure { margin: 16px 0 4px; padding: 10px; background: #f5f8f7; border: 1px solid var(--line); }
 .guide-figure img { display: block; width: 100%; max-height: 250px; object-fit: contain; background: #fff; }
 .guide-figure figcaption { margin-top: 8px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
