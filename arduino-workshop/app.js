@@ -68,7 +68,10 @@
     },
   };
   const guideImages = {
-    'check-board': { src: 'assets/arduino-uno-pinout-labeled.png', alt: 'Arduino Uno Rev3 各部位功能標註圖', caption: '核對 Arduino Uno Rev3 的按鈕、USB、電源、數位腳位與類比腳位；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
+    'check-board': [
+      { src: 'assets/arduino-uno-pinout-board.png', alt: 'Arduino Uno Rev3 各部位功能標註圖', caption: '核對 Arduino Uno Rev3 板面上的各部位；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
+      { src: 'assets/arduino-uno-pinout-labels.png', alt: 'Arduino Uno Rev3 A 到 P 功能說明', caption: '對照 A 到 P 標記，了解按鈕、USB、電源、數位腳位與類比腳位的功能；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
+    ],
     'check-blink': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對 LED、電阻與數位腳位的基本接線；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-led': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對外接 LED 與限流電阻；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-button': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Button_LED_bb.svg', alt: '按鈕與 LED 麵包板接線圖', caption: '核對按鈕、LED 與麵包板的接線方向；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Button_LED_bb.svg' },
@@ -392,7 +395,7 @@
   async function openGuide(taskId) {
     if (!sharedGuides[taskId] && !routeGuides[taskId] && !independentGuides[taskId]) await independentGuidesReady;
     const guide = sharedGuides[taskId] || routeGuides[taskId] || independentGuides[taskId];
-    const image = guideImages[taskId];
+    const images = guideImages[taskId] ? (Array.isArray(guideImages[taskId]) ? guideImages[taskId] : [guideImages[taskId]]) : [];
     const dialog = document.querySelector('#guide-dialog');
     if (!guide || !dialog) return;
     document.querySelector('#guide-title').textContent = guide.title;
@@ -402,7 +405,7 @@
     document.querySelector('#guide-content').innerHTML = [
       scenario,
       `<p class="guide-goal"><strong>學習目標</strong>${guide.goal}</p>`,
-      image ? `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" loading="lazy"><figcaption>${image.caption} <a href="${image.href}" target="_blank" rel="noopener">查看來源</a></figcaption></figure>` : '',
+      images.map((image) => `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" loading="lazy"><figcaption>${image.caption} <a href="${image.href}" target="_blank" rel="noopener">查看來源</a></figcaption></figure>`).join(''),
           ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.heading === '建議材料／元件' ? section.items.map((item) => `<li><button class="component-link" type="button" data-component-name="${item}">${item}</button></li>`).join('') : section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
           guide.links?.length ? `<section><h3>官方延伸資料</h3><ul class="guide-links">${guide.links.map((link) => `<li><a href="${link.url}" target="_blank" rel="noopener">${link.label}</a></li>`).join('')}</ul></section>` : '',
     ].join('');
