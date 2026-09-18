@@ -238,6 +238,7 @@
 
   function setStatus(message, isError = false) {
     const target = document.querySelector('#status-message');
+    if (!target) return;
     target.textContent = message;
     target.classList.toggle('is-error', isError);
   }
@@ -281,16 +282,6 @@
     lockLabel.textContent = unlocked ? '任務已解鎖' : '健檢後解鎖任務';
     lockLabel.className = `status-badge ${unlocked ? 'status-complete' : 'status-locked'}`;
 
-    const progress = core.calculateStageProgress(state.completedIds);
-    document.querySelector('#progress-text').textContent = `${progress.completed} / ${progress.total}`;
-    document.querySelector('#progress-bar').style.width = `${progress.percent}%`;
-    document.querySelector('.progress-track').setAttribute('aria-valuenow', String(progress.percent));
-    document.querySelector('#next-action').textContent = !unlocked
-      ? '先完成共同健檢，才能開啟 15 個獨立任務。'
-      : progress.percent === 100
-        ? '全部任務完成，記得整理作品並與同學分享。'
-        : '新手村完成後，請閱讀四階段任務並請老師確認。';
-
     document.querySelectorAll('[data-profile]').forEach((input) => {
       input.value = state.profile[input.dataset.profile] || '';
     });
@@ -316,7 +307,7 @@
     const record = {
       ...core.createExportRecord(state.profile, state.completedIds, state.reflections || {}),
       selectedRoute: state.selectedRoute,
-      progress: core.calculateProgress(allTaskIds, state.completedIds),
+          progress: core.calculateStageProgress(state.completedIds),
     };
     const blob = new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -351,7 +342,7 @@
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       annotations: { readOnlyHint: true, untrustedContentHint: false },
       execute() {
-        return { progress: core.calculateProgress(allTaskIds, state.completedIds), gateComplete: gateComplete(), selectedRoute: state.selectedRoute };
+            return { progress: core.calculateStageProgress(state.completedIds), gateComplete: gateComplete(), selectedRoute: state.selectedRoute };
       },
     });
     register({
