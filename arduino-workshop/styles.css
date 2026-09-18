@@ -191,6 +191,8 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
 .guide-figure figcaption { margin-top: 8px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
 .guide-figure a { color: var(--teal-dark); font-weight: 700; }
 .guide-content section { margin-top: 20px; }
+.component-back { margin: 0 0 14px; padding: 6px 10px; color: var(--teal-dark); background: #eaf4f4; border: 1px solid #9cc8c9; border-radius: 4px; cursor: pointer; font-size: .82rem; font-weight: 800; }
+.component-back:hover { background: #d8eeee; }
 .guide-content h3 { margin: 0 0 7px; color: var(--teal-dark); font-size: 1rem; }
 .guide-content ul { margin: 0; padding-left: 1.3rem; color: var(--muted); }
 .guide-content li + li { margin-top: 6px; }
