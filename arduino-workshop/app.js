@@ -2,7 +2,7 @@
   'use strict';
 
   const STORAGE_KEY = 'arduino-workshop-state-v1';
-  const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose'];
+  const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-diagnose'];
   const sharedGuides = {
     'check-board': {
       title: '鋼鐵神殿的守護檢視：認識 Arduino UNO',
@@ -44,16 +44,6 @@
         { heading: '自我檢查', items: ['我看到 L 燈穩定閃爍。', '我能指出 setup()、loop() 和 digitalWrite() 各自的用途。'] },
       ],
       links: [{ label: '開啟 Arduino 官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }, { label: '查看官方上傳教學', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
-    },
-    'check-serial': {
-      title: '回音神諭的傳訊：讓板子回傳文字',
-      goal: '能使用 Serial Monitor 觀察 Arduino 傳回的文字，並知道鮑率不一致會造成亂碼。',
-      sections: [
-        { heading: '基本概念', items: ['Serial 是 Arduino 和電腦交換文字或數值的通道。', 'Serial.begin(9600) 會在 setup() 啟動通訊；9600 是鮑率。', 'Serial.println() 會送出一行文字，方便觀察程式執行狀況。', 'Serial Monitor 的鮑率必須和程式設定相同，否則常會看到亂碼。'] },
-        { heading: '操作步驟', items: ['開啟 File > Examples > 01.Basics > AnalogReadSerial，或使用會定時 println 的範例。', '上傳程式後開啟 Serial Monitor。', '將右下角鮑率設成和 Serial.begin(...) 相同的數值。', '觀察文字或數值是否持續出現；若要測感測器，可轉動旋鈕或遮住光敏電阻。'] },
-        { heading: '自我檢查', items: ['我能找到 Serial Monitor。', '我能說明鮑率是什麼，並能處理亂碼問題。'] },
-      ],
-      links: [{ label: '查看 Arduino IDE 2 Serial Monitor 官方說明', url: 'https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor' }, { label: '瀏覽官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }],
     },
     'check-diagnose': {
       title: '賢者之眼的排錯試煉：60 秒依序找出問題',

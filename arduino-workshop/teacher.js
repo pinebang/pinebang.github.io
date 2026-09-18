@@ -1,10 +1,10 @@
 (function initTeacherPage() {
   'use strict';
 
-  const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose'];
+  const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-diagnose'];
   const sharedTaskLabels = {
     'check-board': '鋼鐵神殿的守護檢視', 'check-ide': '智慧火種的喚醒', 'check-port': '天命羅盤的校準',
-    'check-blink': '神火初燃：Blink', 'check-serial': '回音神諭的傳訊', 'check-diagnose': '賢者之眼的排錯試煉',
+    'check-blink': '神火初燃：Blink', 'check-diagnose': '賢者之眼的排錯試煉',
   };
   const stageTaskIds = [
     ['myth-light', 'myth-piano', 'myth-reaction', 'myth-whack'],

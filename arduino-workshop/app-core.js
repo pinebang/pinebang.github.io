@@ -51,18 +51,18 @@
   }
 
   const workshopTaskIds = [
-    'check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose',
+    'check-board', 'check-ide', 'check-port', 'check-blink', 'check-diagnose',
     'myth-light', 'myth-piano', 'myth-reaction', 'myth-whack', 'myth-climate',
     'myth-radar', 'myth-timer', 'myth-bin', 'myth-memory', 'myth-safe',
     'myth-1a2b', 'myth-station', 'myth-dino', 'myth-snake', 'myth-tetris',
   ];
 
   const completionStages = [
-    { id: 'newbie-village', label: '神諭之門', taskIds: workshopTaskIds.slice(0, 6), requireAll: true },
-    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(6, 10), requireAll: false },
-    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(10, 14), requireAll: false },
-    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(14, 18), requireAll: false },
-    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(18, 21), requireAll: false },
+    { id: 'newbie-village', label: '神諭之門', taskIds: workshopTaskIds.slice(0, 5), requireAll: true },
+    { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(5, 9), requireAll: false },
+    { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(9, 13), requireAll: false },
+    { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(13, 17), requireAll: false },
+    { id: 'stage-four', label: '創世競技場', taskIds: workshopTaskIds.slice(17, 20), requireAll: false },
   ];
 
   function summarizeStageProgress(tasks) {
@@ -114,7 +114,7 @@
   function normalizeCompletionPayload(payload) {
     if (!payload || !Array.isArray(payload.students)) return payload;
     const legacyTaskIds = [
-      'check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose',
+      'check-board', 'check-ide', 'check-port', 'check-blink', 'check-diagnose',
       'light-led', 'light-button', 'light-melody', 'light-extension', 'game-random', 'game-button',
       'game-score', 'game-extension', 'sensor-read', 'sensor-threshold', 'sensor-output',
       'sensor-extension', 'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
