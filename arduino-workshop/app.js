@@ -22,7 +22,7 @@
         { heading: '第一次操作', items: ['開啟 Arduino IDE 2，建立新的空白草稿。', '先按驗證，觀察下方訊息區是否出現完成或錯誤。', '接上 Arduino 後，再選擇正確板型與 Port。', '看到板型與 Port 後，才進行上傳。'] },
         { heading: '自我檢查', items: ['我能說出驗證和上傳的差別。', '我能找到編輯區、板型選擇器和下方訊息區。'] },
       ],
-      links: [{ label: '查看 Arduino IDE 2 官方文件', url: 'https://docs.arduino.cc/software/ide/' }, { label: '查看官方上傳步驟', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
+      links: [{ label: '下載 Arduino IDE 官方軟體', url: 'https://www.arduino.cc/en/software/' }, { label: '查看 Arduino IDE 2 官方文件', url: 'https://docs.arduino.cc/software/ide/' }, { label: '查看官方上傳步驟', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
     },
     'check-port': {
       title: '天命羅盤的校準：Board 和 Port',
@@ -72,6 +72,7 @@
       { src: 'assets/arduino-uno-pinout-board.png', alt: 'Arduino Uno Rev3 各部位功能標註圖', caption: '核對 Arduino Uno Rev3 板面上的各部位；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
       { src: 'assets/arduino-uno-pinout-labels.png', alt: 'Arduino Uno Rev3 A 到 P 功能說明', caption: '對照 A 到 P 標記，了解按鈕、USB、電源、數位腳位與類比腳位的功能；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
     ],
+    'check-ide': { src: 'assets/arduino-ide-software.png', alt: 'Arduino 官方軟體下載頁面與 Arduino IDE 介面', caption: '認識 Arduino IDE 2 的下載頁面與操作介面；圖片來源：Arduino 官方軟體頁面。', href: 'https://www.arduino.cc/en/software/' },
     'check-blink': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對 LED、電阻與數位腳位的基本接線；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-led': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對外接 LED 與限流電阻；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-button': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Button_LED_bb.svg', alt: '按鈕與 LED 麵包板接線圖', caption: '核對按鈕、LED 與麵包板的接線方向；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Button_LED_bb.svg' },
