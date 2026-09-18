@@ -66,6 +66,14 @@
     };
   }
 
+  function buildSyncTaskVariants(tasks) {
+    const legacyTasks = buildSyncTasks(tasks);
+    const currentTasks = Object.fromEntries(ArduinoCore.workshopTaskIds.map((taskId) => [taskId, tasks[taskId] === true]));
+    const legacyWithoutRemovedTask = { ...legacyTasks };
+    delete legacyWithoutRemovedTask['check-serial'];
+    return [legacyTasks, currentTasks, legacyWithoutRemovedTask];
+  }
+
   async function loadStudents() {
     if (!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpoint)) { setStatus('teacher-save-status', '尚未設定完成狀況資料來源。', true); return; }
     try {
@@ -85,11 +93,17 @@
     if (!selectedStudent) return;
     const button = document.querySelector('#teacher-save'); button.disabled = true; setStatus('teacher-save-status', '儲存中...');
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, teacherCode, classSeat: selectedStudent.classSeat, tasks: buildSyncTasks(selectedStudent.tasks) }) });
-      const responseText = await response.text();
       let payload = null;
-      try { payload = JSON.parse(responseText); } catch (parseError) { /* Google Apps Script 可能回傳轉址頁，改用 GET 確認寫入結果。 */ }
-      if (payload && (!response.ok || !payload.ok)) throw new Error(payload.error || '儲存失敗');
+      let lastError = '儲存失敗';
+      for (const syncTasks of buildSyncTaskVariants(selectedStudent.tasks)) {
+        const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, teacherCode, classSeat: selectedStudent.classSeat, tasks: syncTasks }) });
+        const responseText = await response.text();
+        try { payload = JSON.parse(responseText); } catch (parseError) { payload = null; }
+        if (!payload || (response.ok && payload.ok)) break;
+        lastError = payload.error || lastError;
+        payload = null;
+      }
+      if (lastError !== '儲存失敗' && !payload) throw new Error(lastError);
       if (!payload) {
         const verifyResponse = await fetch(endpoint, { cache: 'no-store' });
         const verifyPayload = ArduinoCore.normalizeCompletionPayload(await verifyResponse.json());
