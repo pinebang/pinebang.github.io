@@ -8,10 +8,15 @@
     ['myth-memory', 'myth-safe', 'myth-1a2b', 'myth-station'],
     ['myth-dino', 'myth-snake', 'myth-tetris'],
   ];
+  const studentDisplayNames = Object.freeze({ '12345': 'Ya' });
   const endpoint = window.ArduinoWorkshopConfig?.completionApiUrl || '';
   let students = [];
   let selectedStudent = null;
   let teacherCode = '';
+
+  function getStudentDisplayName(student) {
+    return studentDisplayNames[student.classSeat] || student.classSeat;
+  }
 
   function setStatus(id, message, isError = false) {
     const target = document.querySelector(`#${id}`);
@@ -33,7 +38,7 @@
     renderNewbie(tasks);
     const hasStudent = Boolean(selectedStudent);
     const selection = document.querySelector('#teacher-selection-status');
-    selection.textContent = hasStudent ? selectedStudent.classSeat : '尚未選擇';
+    selection.textContent = hasStudent ? getStudentDisplayName(selectedStudent) : '尚未選擇';
     selection.className = `status-badge ${hasStudent ? 'status-complete' : 'status-locked'}`;
     document.querySelector('#teacher-save').disabled = !hasStudent;
   }
@@ -41,7 +46,7 @@
   function renderStudents() {
     const select = document.querySelector('#teacher-student');
     select.innerHTML = '<option value="">請選擇學生班級座號</option>';
-    students.forEach((student) => { const option = document.createElement('option'); option.value = student.classSeat; option.textContent = student.classSeat; select.append(option); });
+    students.forEach((student) => { const option = document.createElement('option'); option.value = student.classSeat; option.textContent = getStudentDisplayName(student); select.append(option); });
     select.disabled = false;
   }
 
