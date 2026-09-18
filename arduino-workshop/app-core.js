@@ -58,7 +58,7 @@
   ];
 
   const completionStages = [
-    { id: 'newbie-village', label: '新手村', taskIds: workshopTaskIds.slice(0, 6), requireAll: true },
+    { id: 'newbie-village', label: '神諭之門', taskIds: workshopTaskIds.slice(0, 6), requireAll: true },
     { id: 'stage-one', label: '神火啟程', taskIds: workshopTaskIds.slice(6, 10), requireAll: false },
     { id: 'stage-two', label: '元素感知殿', taskIds: workshopTaskIds.slice(10, 14), requireAll: false },
     { id: 'stage-three', label: '賢者試煉塔', taskIds: workshopTaskIds.slice(14, 18), requireAll: false },

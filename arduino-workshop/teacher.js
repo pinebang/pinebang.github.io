@@ -28,7 +28,7 @@
   function renderNewbie(tasks) {
     const target = document.querySelector('#teacher-newbie-status');
     const complete = sharedTaskIds.every((id) => tasks[id] === true);
-    target.innerHTML = `<strong>新手村：${complete ? '已全部完成' : '尚未全部完成'}</strong><span>${sharedTaskIds.map((id) => `<span class="teacher-check ${tasks[id] ? 'is-complete' : ''}">${tasks[id] ? '●' : '○'} ${id.replace('check-', '')}</span>`).join('')}</span>`;
+    target.innerHTML = `<strong>神諭之門：${complete ? '已全部完成' : '尚未全部完成'}</strong><span>${sharedTaskIds.map((id) => `<span class="teacher-check ${tasks[id] ? 'is-complete' : ''}">${tasks[id] ? '●' : '○'} ${id.replace('check-', '')}</span>`).join('')}</span>`;
   }
 
   function renderSelectedStudent() {
