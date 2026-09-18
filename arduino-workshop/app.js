@@ -406,7 +406,7 @@
     document.querySelector('#guide-content').innerHTML = [
       scenario,
       `<p class="guide-goal"><strong>學習目標</strong>${guide.goal}</p>`,
-      images.map((image) => `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" loading="lazy"><figcaption>${image.caption} <a href="${image.href}" target="_blank" rel="noopener">查看來源</a></figcaption></figure>`).join(''),
+      images.map((image) => `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" data-full-src="${image.src}" loading="lazy"><figcaption>${image.caption}</figcaption></figure>`).join(''),
           ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.heading === '建議材料／元件' ? section.items.map((item) => `<li><button class="component-link" type="button" data-component-name="${item}">${item}</button></li>`).join('') : section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
           guide.links?.length ? `<section><h3>官方延伸資料</h3><ul class="guide-links">${guide.links.map((link) => `<li><a href="${link.url}" target="_blank" rel="noopener">${link.label}</a></li>`).join('')}</ul></section>` : '',
     ].join('');
@@ -549,11 +549,20 @@
       openGuide(button.dataset.guideId);
       });
       document.querySelector('#guide-content').addEventListener('click', (event) => {
+        const image = event.target.closest('[data-full-src]');
+        if (image) {
+          const preview = document.querySelector('#image-dialog-preview');
+          preview.src = image.dataset.fullSrc;
+          preview.alt = image.alt;
+          document.querySelector('#image-dialog').showModal();
+          return;
+        }
         const button = event.target.closest('[data-component-name]');
         if (button) openComponent(button.dataset.componentName);
       });
   });
   document.querySelector('#guide-close').addEventListener('click', closeGuide);
+  document.querySelector('#image-dialog-close').addEventListener('click', () => document.querySelector('#image-dialog').close());
   document.querySelector('#guide-dialog').addEventListener('click', (event) => {
     if (event.target === event.currentTarget) closeGuide();
   });
