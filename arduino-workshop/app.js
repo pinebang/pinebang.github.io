@@ -264,7 +264,14 @@
     gateStatus.textContent = unlocked ? '健檢完成 · 已鎖定' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
     gateStatus.className = `status-badge ${unlocked ? 'status-complete' : 'status-warning'}`;
     const lockLabel = document.querySelector('#route-lock-label');
-    lockLabel.textContent = unlocked ? '第一階段已解鎖' : '健檢後解鎖任務';
+    const highestStageLabel = !unlocked
+      ? '健檢後解鎖任務'
+      : !stageHasAny(0)
+        ? '第一階段任務已解鎖'
+        : !stageHasAny(1)
+          ? '第二階段任務已解鎖'
+          : '第三、四階段任務已解鎖';
+    lockLabel.textContent = highestStageLabel;
     lockLabel.className = `status-badge ${unlocked ? 'status-complete' : 'status-locked'}`;
 
     document.querySelectorAll('[data-profile]').forEach((input) => {
