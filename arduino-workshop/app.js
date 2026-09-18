@@ -538,6 +538,7 @@
   render();
   document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
       document.querySelectorAll('[data-guide-id]').forEach((button) => {
+    button.textContent = '開啟冒險卷軸';
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
