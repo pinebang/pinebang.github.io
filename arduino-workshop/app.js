@@ -216,6 +216,7 @@
   }
 
   let state = readState();
+  const routeTaskInputs = taskInputs.filter((input) => input.closest('[data-stage-index]'));
 
   function saveState() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -252,7 +253,7 @@
       input.checked = state.completedIds.includes(input.dataset.taskId);
       const stage = input.closest('[data-stage-index]');
       const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
-      input.disabled = true;
+      input.disabled = stage ? !isStageUnlocked(stageIndex) : true;
     });
 
     stageGroups.forEach((stage, index) => {
@@ -279,6 +280,12 @@
     const classSeat = core.normalizeClassSeat(state.profile.group);
     button.disabled = !authCredential || !classSeat;
   }
+
+  routeTaskInputs.forEach((input) => input.addEventListener('change', () => {
+    state.completedIds = core.toggleTask(state.completedIds, input.dataset.taskId);
+    saveState();
+    render();
+  }));
 
   document.querySelectorAll('[data-profile]').forEach((input) => {
     input.addEventListener('input', () => {
