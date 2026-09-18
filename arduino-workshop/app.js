@@ -68,7 +68,7 @@
     },
   };
   const guideImages = {
-    'check-board': { src: 'https://docs.arduino.cc/static/bcc9ff87c195de70ed7e0731050bd9ca/image.svg', alt: 'Arduino UNO R3 官方產品圖', caption: '核對板子外觀與接頭；圖片來源：Arduino UNO R3 官方頁面。', href: 'https://docs.arduino.cc/hardware/uno-rev3' },
+    'check-board': { src: 'assets/arduino-uno-pinout-labeled.png', alt: 'Arduino Uno Rev3 各部位功能標註圖', caption: '核對 Arduino Uno Rev3 的按鈕、USB、電源、數位腳位與類比腳位；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
     'check-blink': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對 LED、電阻與數位腳位的基本接線；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-led': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對外接 LED 與限流電阻；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-button': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Button_LED_bb.svg', alt: '按鈕與 LED 麵包板接線圖', caption: '核對按鈕、LED 與麵包板的接線方向；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Button_LED_bb.svg' },
