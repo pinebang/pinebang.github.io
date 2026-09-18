@@ -255,6 +255,7 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
 .teacher-stage:disabled { opacity: .55; }
 .teacher-stage legend { padding: 0 5px; color: var(--ink); font-weight: 800; }
 .teacher-task-list { display: grid; gap: 10px; margin-top: 8px; }
+.teacher-newbie-editor .teacher-task-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .teacher-task-list label { display: flex; align-items: flex-start; gap: 9px; line-height: 1.45; color: var(--ink); cursor: pointer; }
 .teacher-task-list input { width: 18px; height: 18px; flex: 0 0 auto; margin-top: 2px; accent-color: var(--teal); }
 .teacher-actions { display: flex; align-items: center; gap: 16px; margin-top: 22px; }
@@ -267,5 +268,6 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
   .teacher-access-form label { white-space: normal; }
   .teacher-access-form input { width: auto; }
   .teacher-stage-grid { grid-template-columns: 1fr; }
+  .teacher-newbie-editor .teacher-task-list { grid-template-columns: 1fr; }
   .teacher-actions { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
