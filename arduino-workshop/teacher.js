@@ -2,6 +2,10 @@
   'use strict';
 
   const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose'];
+  const sharedTaskLabels = {
+    'check-board': '鋼鐵神殿的守護檢視', 'check-ide': '智慧火種的喚醒', 'check-port': '天命羅盤的校準',
+    'check-blink': '神火初燃：Blink', 'check-serial': '回音神諭的傳訊', 'check-diagnose': '賢者之眼的排錯試煉',
+  };
   const stageTaskIds = [
     ['myth-light', 'myth-piano', 'myth-reaction', 'myth-whack'],
     ['myth-climate', 'myth-radar', 'myth-timer', 'myth-bin'],
@@ -28,7 +32,7 @@
   function renderNewbie(tasks) {
     const target = document.querySelector('#teacher-newbie-status');
     const complete = sharedTaskIds.every((id) => tasks[id] === true);
-    target.innerHTML = `<strong>神諭之門：${complete ? '已全部完成' : '尚未全部完成'}</strong><span>${sharedTaskIds.map((id) => `<span class="teacher-check ${tasks[id] ? 'is-complete' : ''}">${tasks[id] ? '●' : '○'} ${id.replace('check-', '')}</span>`).join('')}</span>`;
+    target.innerHTML = `<strong>神諭之門：${complete ? '已全部完成' : '尚未全部完成'}</strong><span>${sharedTaskIds.map((id) => `<span class="teacher-check ${tasks[id] ? 'is-complete' : ''}">${tasks[id] ? '●' : '○'} ${sharedTaskLabels[id]}</span>`).join('')}</span>`;
   }
 
   function renderSelectedStudent() {

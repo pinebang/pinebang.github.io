@@ -5,7 +5,7 @@
   const sharedTaskIds = ['check-board', 'check-ide', 'check-port', 'check-blink', 'check-serial', 'check-diagnose'];
   const sharedGuides = {
     'check-board': {
-      title: '外觀與安全：認識 Arduino UNO',
+      title: '鋼鐵神殿的守護檢視：認識 Arduino UNO',
       goal: '能指出板子上的主要區域，知道哪些地方可以接線，以及什麼時候必須先斷電。',
       sections: [
         { heading: '先找找看', items: ['USB 連接埠：連接電腦、供電與上傳程式。', 'DC 電源插座與 VIN：外部供電入口；初學時優先使用 USB。', 'RESET 按鈕：讓板子重新開始執行程式。', 'L、TX、RX LED：顯示內建 LED 與序列傳輸活動。', '數位腳位 0–13：可讀取 HIGH/LOW，也可輸出 HIGH/LOW；0、1 是序列通訊腳位。', '類比輸入 A0–A5：讀取感測器的類比電壓變化。', '5V、3.3V、GND：供電與共同參考點，GND 必須和電路共地。'] },
@@ -15,7 +15,7 @@
       links: [{ label: '開啟 Arduino UNO Rev3 官方腳位圖', url: 'https://docs.arduino.cc/resources/pinouts/A000073-full-pinout.pdf' }],
     },
     'check-ide': {
-      title: '開啟開發環境：熟悉 Arduino IDE 2',
+      title: '智慧火種的喚醒：熟悉 Arduino IDE 2',
       goal: '能開啟 Arduino IDE 2、建立草稿，找到驗證與上傳功能。',
       sections: [
         { heading: '畫面上要認識的區域', items: ['編輯區：撰寫 Arduino 程式，檔案通常稱為 sketch。', '驗證按鈕：只編譯程式，先檢查語法與函式是否正確。', '上傳按鈕：把編譯後的程式寫入開發板。', '序列監控工具：讀取板子傳回電腦的文字。', '板型與連接埠選擇器：告訴 IDE 要用哪一種板子、哪一個 USB 連接埠。'] },
@@ -25,7 +25,7 @@
       links: [{ label: '查看 Arduino IDE 2 官方文件', url: 'https://docs.arduino.cc/software/ide/' }, { label: '查看官方上傳步驟', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
     },
     'check-port': {
-      title: '選對板子與連接埠：Board 和 Port',
+      title: '天命羅盤的校準：Board 和 Port',
       goal: '能分辨 Board 與 Port，找到自己的 Arduino 出現在哪一個 COM 連接埠。',
       sections: [
         { heading: '兩個名詞的差別', items: ['Board 是板子的型號，例如 Arduino Uno；它決定程式如何編譯與上傳。', 'Port 是電腦分配給實際 USB 裝置的連接埠，例如 COM3。', '同一塊板子換一個 USB 孔，Port 編號可能改變；Board 通常不會跟著改變。'] },
@@ -35,7 +35,7 @@
       links: [{ label: '查看官方 Board 與 Port 說明', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
     },
     'check-blink': {
-      title: '上傳 Blink：讓內建 LED 閃爍',
+      title: '神火初燃：Blink 讓內建 LED 閃爍',
       goal: '能從官方內建範例開啟 Blink，完成驗證、上傳，並觀察板上的 L 燈。',
       sections: [
         { heading: '操作步驟', items: ['開啟 Arduino IDE，選擇 File > Examples > 01.Basics > Blink。', '確認板型與 Port 已選好。', '按驗證，確認程式可以編譯。', '按上傳，等待下方訊息顯示上傳完成。', '觀察板上標示 L 的內建 LED，應該大約亮 1 秒、暗 1 秒反覆循環。'] },
@@ -45,7 +45,7 @@
       links: [{ label: '開啟 Arduino 官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }, { label: '查看官方上傳教學', url: 'https://support.arduino.cc/hc/en-us/articles/4733418441116-Upload-a-sketch-in-Arduino-IDE' }],
     },
     'check-serial': {
-      title: '序列埠通訊：讓板子回傳文字',
+      title: '回音神諭的傳訊：讓板子回傳文字',
       goal: '能使用 Serial Monitor 觀察 Arduino 傳回的文字，並知道鮑率不一致會造成亂碼。',
       sections: [
         { heading: '基本概念', items: ['Serial 是 Arduino 和電腦交換文字或數值的通道。', 'Serial.begin(9600) 會在 setup() 啟動通訊；9600 是鮑率。', 'Serial.println() 會送出一行文字，方便觀察程式執行狀況。', 'Serial Monitor 的鮑率必須和程式設定相同，否則常會看到亂碼。'] },
@@ -55,7 +55,7 @@
       links: [{ label: '查看 Arduino IDE 2 Serial Monitor 官方說明', url: 'https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor' }, { label: '瀏覽官方內建範例', url: 'https://docs.arduino.cc/built-in-examples' }],
     },
     'check-diagnose': {
-      title: '60 秒卡關排查：依順序找出問題',
+      title: '賢者之眼的排錯試煉：60 秒依序找出問題',
       goal: '遇到無法上傳或沒有輸出時，能按照固定順序檢查，不靠猜測反覆重試。',
       sections: [
         { heading: '60 秒排錯順序', items: ['1. 電源：板上的 ON 或電源指示燈是否亮起？', '2. COM 連接埠：拔插一次，比較清單前後差異；有些 USB 線只能充電。', '3. 板型與連接埠：IDE 是否選到正確 Board 和 COM？', '4. 序列監控：先關閉 Serial Monitor、另一個 IDE 視窗或可能占用 Port 的程式。'] },
