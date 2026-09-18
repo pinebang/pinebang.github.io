@@ -120,26 +120,27 @@
       'sensor-extension', 'creative-plan', 'creative-prototype', 'creative-test', 'creative-extension',
     ];
     const studentAliases = Object.freeze({ Ya: '12345', '705': '12345' });
+    const isCompleted = (value) => value === true || ['true', '1', 'yes', '完成', '已完成'].includes(String(value).trim().toLowerCase());
     const normalizedStudents = payload.students.map((student) => {
       const sourceTasks = student && student.tasks;
       const classSeat = studentAliases[student?.classSeat] || student?.classSeat;
       if (!sourceTasks || workshopTaskIds.every((taskId) => Object.prototype.hasOwnProperty.call(sourceTasks, taskId))) {
-        const tasks = workshopTaskIds.reduce((result, taskId) => { result[taskId] = sourceTasks?.[taskId] === true; return result; }, {});
-        tasks['check-ide'] = tasks['check-ide'] || sourceTasks?.['check-port'] === true;
-        return { ...student, classSeat, tasks };
+        const tasks = workshopTaskIds.reduce((result, taskId) => { result[taskId] = isCompleted(sourceTasks?.[taskId]); return result; }, {});
+        tasks['check-ide'] = tasks['check-ide'] || isCompleted(sourceTasks?.['check-port']);
+        return { classSeat, tasks };
       }
       const tasks = workshopTaskIds.reduce((result, taskId) => {
         result[taskId] = false;
         return result;
       }, {});
-      tasks['check-board'] = sourceTasks['check-board'] === true;
-      tasks['check-ide'] = sourceTasks['check-ide'] === true || sourceTasks['check-port'] === true;
-      tasks['check-blink'] = sourceTasks['check-blink'] === true;
-      tasks['check-diagnose'] = sourceTasks['check-diagnose'] === true;
+      tasks['check-board'] = isCompleted(sourceTasks['check-board']);
+      tasks['check-ide'] = isCompleted(sourceTasks['check-ide']) || isCompleted(sourceTasks['check-port']);
+      tasks['check-blink'] = isCompleted(sourceTasks['check-blink']);
+      tasks['check-diagnose'] = isCompleted(sourceTasks['check-diagnose']);
       workshopTaskIds.filter((taskId) => taskId.startsWith('myth-')).forEach((taskId, index) => {
-        tasks[taskId] = sourceTasks[legacyTaskIds[index + 5]] === true;
+        tasks[taskId] = isCompleted(sourceTasks[legacyTaskIds[index + 5]]);
       });
-      return { ...student, classSeat, tasks };
+      return { classSeat, tasks };
     });
     const mergedStudents = new Map();
     normalizedStudents.forEach((student) => {
