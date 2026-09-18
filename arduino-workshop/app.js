@@ -61,6 +61,7 @@
         { heading: '60 秒排錯順序', items: ['1. 電源：板上的 ON 或電源指示燈是否亮起？', '2. COM 連接埠：拔插一次，比較清單前後差異；有些 USB 線只能充電。', '3. 板型與連接埠：IDE 是否選到正確 Board 和 COM？', '4. 序列監控：先關閉 Serial Monitor、另一個 IDE 視窗或可能占用 Port 的程式。'] },
         { heading: '仍然無法上傳時', items: ['移除不必要的跳線，尤其不要把元件接在 0(RX)、1(TX)。', '重新插拔或按 RESET；記下完整錯誤訊息再請老師協助。'] },
         { heading: '留下證據', items: ['記錄你看到的錯誤訊息，而不是只說「不能上傳」。', '寫下板型、Port、USB 線是否更換，以及你已經嘗試過的步驟。', '一次只改一個條件，才知道哪個方法有效。'] },
+        { heading: '請 GPT 協助排錯', items: ['可以截取整個 Arduino IDE 畫面；如果畫面太大，也可以只截取程式碼與下方狀態或錯誤訊息區。', '把截圖貼到 GPT，並一起說明板型、Port、想達成的結果與實際看到的現象。', '可以這樣問：「請根據這張截圖，找出最可能的問題，指出要修改哪裡，並告訴我下一步怎麼檢查。」', '送出前先遮住姓名、帳號、Email、序號等個人資料。'] },
         { heading: '自我檢查', items: ['我能說出至少兩個無法上傳時的檢查方法。', '我能把錯誤訊息和已嘗試的步驟清楚告訴同學或老師。'] },
       ],
       links: [{ label: '查看 Arduino 官方 avrdude 排錯清單', url: 'https://support.arduino.cc/hc/en-us/articles/4401874331410--Error-avrdude' }, { label: '查看官方無法上傳排錯流程', url: 'https://support.arduino.cc/hc/en-us/articles/4403365313810-If-your-sketch-doesn-t-upload' }],
