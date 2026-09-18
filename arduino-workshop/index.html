@@ -144,11 +144,11 @@
         <button id="completion-refresh" class="button button-secondary" type="button" title="重新讀取完成狀況">重新整理</button>
       </div>
       <p class="section-intro">只顯示班級座號，不公開姓名、Email 或作品內容。</p>
-      <div class="completion-table-wrap">
-            <table class="completion-table" data-task-progress>
-              <thead><tr><th scope="col">班級座號</th><th scope="col">新手村</th><th scope="col">神火啟程</th><th scope="col">元素感知殿</th><th scope="col">賢者試煉塔</th><th scope="col">創世競技場</th></tr></thead>
-          <tbody id="completion-list"></tbody>
-        </table>
+      <div class="completion-chart-wrap">
+        <div class="completion-chart" data-task-progress role="img" aria-label="學生完成任務直條圖">
+          <div class="completion-y-axis" aria-hidden="true"><span>21</span><span>15</span><span>10</span><span>5</span><span>0</span></div>
+          <div id="completion-list" class="completion-bars"></div>
+        </div>
       </div>
       <p id="completion-empty" class="completion-empty" hidden>目前尚未建立學生名單。</p>
       <p id="completion-status" class="completion-status" role="status" aria-live="polite">正在讀取完成狀況...</p>

@@ -372,60 +372,25 @@
     });
   }
 
-  function renderCompletionHeaders() {
-    const headerRow = document.querySelector('.completion-table thead tr');
-    const fragment = document.createDocumentFragment();
-    const seatHeader = document.createElement('th');
-    seatHeader.scope = 'col';
-    seatHeader.textContent = '班級座號';
-    fragment.append(seatHeader);
-    core.summarizeStageProgress({}).forEach((stage) => {
-      const header = document.createElement('th');
-      header.scope = 'col';
-      header.textContent = stage.label;
-      fragment.append(header);
-    });
-    headerRow.replaceChildren(fragment);
-  }
-
-  function createCompletionDot(completed, label) {
-    const dot = document.createElement('span');
-    dot.className = `completion-dot ${completed ? 'is-complete' : 'is-incomplete'}`;
-    dot.title = completed ? `${label}：已完成` : `${label}：尚未完成`;
-    dot.setAttribute('aria-label', dot.title);
-    return dot;
-  }
-
   function renderCompletionRows(rows) {
-    const table = document.querySelector('[data-task-progress]');
-    const headerRow = table.querySelector('thead tr');
     const list = document.querySelector('#completion-list');
     const empty = document.querySelector('#completion-empty');
     const fragment = document.createDocumentFragment();
-    headerRow.replaceChildren();
-    const corner = document.createElement('th');
-    corner.scope = 'col';
-    corner.textContent = '班級座號';
-    headerRow.append(corner);
-    const stageDefinitions = core.summarizeStageProgress({});
-    stageDefinitions.forEach((stage) => {
-      const header = document.createElement('th');
-      header.scope = 'col';
-      header.textContent = stage.label;
-      headerRow.append(header);
-    });
     rows.forEach((row) => {
-      const tableRow = document.createElement('tr');
-      const taskName = document.createElement('th');
-      taskName.scope = 'row';
-      taskName.textContent = row.classSeat;
-      tableRow.append(taskName);
-      core.summarizeStageProgress(row.tasks).forEach((stage) => {
-        const cell = document.createElement('td');
-        cell.append(createCompletionDot(stage.completed, stage.label));
-        tableRow.append(cell);
-      });
-      fragment.append(tableRow);
+      const completed = core.workshopTaskIds.filter((taskId) => row.tasks[taskId] === true).length;
+      const bar = document.createElement('div');
+      bar.className = 'completion-bar';
+      bar.title = `${row.classSeat}：完成 ${completed} / ${core.workshopTaskIds.length} 項任務`;
+      bar.style.setProperty('--completion-height', `${(completed / core.workshopTaskIds.length) * 100}%`);
+      const value = document.createElement('strong');
+      value.textContent = `${completed} / ${core.workshopTaskIds.length}`;
+      const fill = document.createElement('span');
+      fill.className = 'completion-bar-fill';
+      fill.append(value);
+      const label = document.createElement('small');
+      label.textContent = row.classSeat;
+      bar.append(fill, label);
+      fragment.append(bar);
     });
     list.replaceChildren(fragment);
     empty.hidden = rows.length !== 0;
@@ -578,7 +543,6 @@
   }
 
   render();
-  renderCompletionHeaders();
   document.querySelector('#completion-refresh').addEventListener('click', refreshCompletionBoard);
       document.querySelectorAll('[data-guide-id]').forEach((button) => {
     button.addEventListener('click', (event) => {
