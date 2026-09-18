@@ -16,7 +16,7 @@
     },
     'check-ide': {
       title: '智慧火種的喚醒：熟悉 Arduino IDE 2',
-      goal: '能開啟 Arduino IDE 2、建立草稿，找到驗證與上傳功能。',
+      goal: '能開啟 Arduino IDE 2、把 IDE 介面改為中文版、建立草稿，找到驗證與上傳功能。',
       sections: [
         { heading: '先確認電腦環境', items: ['先觀察你的電腦是否已經安裝 Arduino IDE。', '如果沒有 Arduino IDE，請先下載並安裝新版 Arduino IDE 2，再開始後面的操作。'] },
         { heading: '畫面上要認識的區域', items: ['編輯區：撰寫 Arduino 程式，檔案通常稱為 sketch。', '驗證按鈕：只編譯程式，先檢查語法與函式是否正確。', '上傳按鈕：把編譯後的程式寫入開發板。', '序列監控工具：讀取板子傳回電腦的文字。', '板型與連接埠選擇器：告訴 IDE 要用哪一種板子、哪一個 USB 連接埠。'] },
@@ -60,7 +60,7 @@
   };
   const guideImages = {
     'check-board': { src: 'assets/arduino-uno-pinout-complete.png', alt: 'Arduino Uno Rev3 外觀與 A 到 P 功能完整標註圖', caption: '核對 Arduino Uno Rev3 外觀，以及 A 到 P 各部位的功能；圖片來源：Arduino.cc。', href: 'https://www.arduino.cc/en/Guide/ArduinoUno' },
-    'check-ide': { src: 'assets/arduino-ide-software.png', alt: 'Arduino 官方軟體下載頁面與 Arduino IDE 介面', caption: '認識 Arduino IDE 2 的下載頁面與操作介面；圖片來源：Arduino 官方軟體頁面。', href: 'https://www.arduino.cc/en/software/' },
+    'check-ide': [{ src: 'assets/arduino-ide-software.png', alt: 'Arduino 官方軟體下載頁面與 Arduino IDE 介面', caption: '認識 Arduino IDE 2 的下載頁面與操作介面；圖片來源：Arduino 官方軟體頁面。', href: 'https://www.arduino.cc/en/software/' }, { src: 'assets/arduino-ide-language.png', alt: 'Arduino IDE 偏好設定中的中文語言選單', caption: '在 Preferences 的 Language 選單選擇「中文（繁體）」後，按下 OK 並重新載入 Arduino IDE。' }],
     'check-blink': { src: 'assets/arduino-blink-menu.png', alt: 'Arduino IDE 從檔案選單開啟 Blink 範例的畫面', caption: '在 Arduino IDE 中依序選擇「檔案 → 範例 → 01.Basics → Blink」；圖片為課程操作示意圖。' },
     'light-led': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Arduino-LED-Pin13.jpg', alt: 'Arduino UNO 與 LED 接線照片', caption: '核對外接 LED 與限流電阻；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Arduino-LED-Pin13.jpg' },
     'light-button': { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Button_LED_bb.svg', alt: '按鈕與 LED 麵包板接線圖', caption: '核對按鈕、LED 與麵包板的接線方向；圖片來源：Wikimedia Commons。', href: 'https://commons.wikimedia.org/wiki/File:Button_LED_bb.svg' },
