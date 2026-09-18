@@ -281,7 +281,7 @@
     lockLabel.textContent = unlocked ? '任務已解鎖' : '健檢後解鎖任務';
     lockLabel.className = `status-badge ${unlocked ? 'status-complete' : 'status-locked'}`;
 
-    const progress = core.calculateProgress(allTaskIds, state.completedIds);
+    const progress = core.calculateStageProgress(state.completedIds);
     document.querySelector('#progress-text').textContent = `${progress.completed} / ${progress.total}`;
     document.querySelector('#progress-bar').style.width = `${progress.percent}%`;
     document.querySelector('.progress-track').setAttribute('aria-valuenow', String(progress.percent));
@@ -377,13 +377,13 @@
     const empty = document.querySelector('#completion-empty');
     const fragment = document.createDocumentFragment();
     rows.forEach((row) => {
-      const completed = core.workshopTaskIds.filter((taskId) => row.tasks[taskId] === true).length;
+      const progress = core.calculateStageProgress(row.tasks);
       const bar = document.createElement('div');
       bar.className = 'completion-bar';
-      bar.title = `${row.classSeat}：完成 ${completed} / ${core.workshopTaskIds.length} 項任務`;
-      bar.style.setProperty('--completion-height', `${(completed / core.workshopTaskIds.length) * 100}%`);
+      bar.title = `${row.classSeat}：完成 ${progress.completed} / ${progress.total} 個階段`;
+      bar.style.setProperty('--completion-height', `${progress.percent}%`);
       const value = document.createElement('strong');
-      value.textContent = `${completed} / ${core.workshopTaskIds.length}`;
+      value.textContent = `${progress.completed} / ${progress.total}`;
       const fill = document.createElement('span');
       fill.className = 'completion-bar-fill';
       fill.append(value);

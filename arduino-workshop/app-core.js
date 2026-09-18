@@ -66,7 +66,9 @@
   ];
 
   function summarizeStageProgress(tasks) {
-    const taskMap = tasks && typeof tasks === 'object' ? tasks : {};
+    const taskMap = Array.isArray(tasks)
+      ? Object.fromEntries(tasks.map((taskId) => [taskId, true]))
+      : tasks && typeof tasks === 'object' ? tasks : {};
     return completionStages.map((stage) => ({
       id: stage.id,
       label: stage.label,
@@ -74,6 +76,16 @@
         ? stage.taskIds.every((taskId) => taskMap[taskId] === true)
         : stage.taskIds.some((taskId) => taskMap[taskId] === true),
     }));
+  }
+
+  function calculateStageProgress(tasks) {
+    const stages = summarizeStageProgress(tasks);
+    const completed = stages.filter((stage) => stage.completed).length;
+    return {
+      completed,
+      total: stages.length,
+      percent: stages.length === 0 ? 0 : Math.round((completed / stages.length) * 100),
+    };
   }
 
   function buildCompletionRows(roster, completed) {
@@ -145,6 +157,7 @@
 
   const api = {
     calculateProgress,
+    calculateStageProgress,
     isGateComplete,
     isSharedTaskLocked,
     normalizeProgressForGate,
