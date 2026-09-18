@@ -516,7 +516,11 @@
     try {
       const response = await fetch(endpoint, { cache: 'no-store' });
       if (!response.ok) throw new Error('Request failed');
-      const payload = core.normalizeCompletionPayload(await response.json());
+      const rawPayload = await response.json();
+      const visibleStudents = Array.isArray(rawPayload?.students)
+        ? rawPayload.students.filter((student) => String(student?.classSeat || '').trim() !== 'Ya')
+        : rawPayload?.students;
+      const payload = core.normalizeCompletionPayload({ ...rawPayload, students: visibleStudents });
       if (!core.validateCompletionPayload(payload)) throw new Error('Invalid payload');
       renderCompletionRows(payload.students);
       const updatedAt = new Date(payload.updatedAt);
