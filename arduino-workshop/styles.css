@@ -182,7 +182,7 @@ details { margin-top: 9px; border: 1px solid var(--line); padding: 10px 12px; } 
 footer { padding: 22px; text-align: center; color: var(--muted); font-size: .82rem; border-top: 1px solid var(--line); }
 dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); border-radius: 5px; box-shadow: 0 20px 70px rgba(0,0,0,.25); } dialog::backdrop { background: rgba(10,20,24,.55); } dialog h2 { margin-top: 0; }.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; }
 .icon-button { width: 38px; height: 38px; padding: 0; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; cursor: pointer; font-size: 1.5rem; line-height: 1; }
-#guide-dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; display: flex; flex-direction: column; width: min(760px, calc(100% - 32px)); height: min(760px, calc(100vh - 32px)); max-height: calc(100vh - 32px); padding: 0; overflow: hidden; border: 14px solid #805a36; border-radius: 24px / 14px; background: #f7f0df; box-shadow: 0 20px 70px rgba(0,0,0,.3), inset 0 0 0 2px #d4b06a; }
+#guide-dialog[open] { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; display: flex; flex-direction: column; width: min(760px, calc(100% - 32px)); height: min(760px, calc(100vh - 32px)); max-height: calc(100vh - 32px); padding: 0; overflow: hidden; border: 14px solid #805a36; border-radius: 24px / 14px; background: #f7f0df; box-shadow: 0 20px 70px rgba(0,0,0,.3), inset 0 0 0 2px #d4b06a; }
 #guide-dialog::before, #guide-dialog::after { content: ""; position: absolute; left: -22px; right: -22px; height: 24px; background: #8b633d; border: 2px solid #d4b06a; border-radius: 50%; box-shadow: 0 3px 0 #5f4127; pointer-events: none; }
 #guide-dialog::before { top: -25px; }
 #guide-dialog::after { bottom: -25px; }
@@ -231,7 +231,7 @@ dialog { width: min(440px, calc(100% - 32px)); border: 1px solid var(--line); bo
   .task-stage { grid-template-columns: 1fr; }
   .task-stage h3 small { display: block; margin: 2px 0 0; }
   .guide-figure img { max-height: 190px; }
-  #guide-dialog { border-width: 10px; max-height: calc(100vh - 18px); }
+  #guide-dialog[open] { border-width: 10px; max-height: calc(100vh - 18px); }
   .guide-dialog-header { padding: 18px 18px 12px; }
   .guide-content { padding: 16px 18px 22px; }
   .route-card header { grid-template-columns: 38px 1fr; }.difficulty { grid-column: 2; justify-self: start; }
