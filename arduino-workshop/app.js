@@ -246,23 +246,26 @@
   }
 
   function render() {
+    state.completedIds = core.normalizeProgressForGate(sharedTaskIds, state.completedIds);
     const unlocked = gateComplete();
     taskInputs.forEach((input) => {
       input.checked = state.completedIds.includes(input.dataset.taskId);
-      input.disabled = false;
+      const stage = input.closest('[data-stage-index]');
+      const stageIndex = stage ? Number(stage.dataset.stageIndex) : -1;
+      input.disabled = stage ? !isStageUnlocked(stageIndex) : false;
     });
 
-    stageGroups.forEach((stage) => {
-      stage.disabled = false;
-      stage.classList.remove('is-locked');
+    stageGroups.forEach((stage, index) => {
+      stage.disabled = !isStageUnlocked(index);
+      stage.classList.toggle('is-locked', !isStageUnlocked(index));
     });
 
     const gateStatus = document.querySelector('#gate-status');
     gateStatus.textContent = unlocked ? '健檢完成 · 已鎖定' : `尚缺 ${sharedTaskIds.filter((id) => !state.completedIds.includes(id)).length} 項`;
     gateStatus.className = `status-badge ${unlocked ? 'status-complete' : 'status-warning'}`;
     const lockLabel = document.querySelector('#route-lock-label');
-    lockLabel.textContent = '所有任務皆可勾選';
-    lockLabel.className = 'status-badge status-complete';
+    lockLabel.textContent = unlocked ? '第一階段已解鎖' : '健檢後解鎖任務';
+    lockLabel.className = `status-badge ${unlocked ? 'status-complete' : 'status-locked'}`;
 
     document.querySelectorAll('[data-profile]').forEach((input) => {
       input.value = state.profile[input.dataset.profile] || '';
