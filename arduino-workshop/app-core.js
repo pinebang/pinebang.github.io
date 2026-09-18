@@ -154,8 +154,8 @@
       });
     });
     return {
-      ...payload,
       students: [...mergedStudents.values()],
+      updatedAt: payload.updatedAt,
     };
   }
 
