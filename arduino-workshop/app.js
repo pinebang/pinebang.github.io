@@ -380,24 +380,39 @@
   }
 
   async function openGuide(taskId) {
-    if (!sharedGuides[taskId] && !routeGuides[taskId] && !independentGuides[taskId]) await independentGuidesReady;
+    const dialog = document.querySelector('#guide-dialog');
+    const title = document.querySelector('#guide-title');
+    const content = document.querySelector('#guide-content');
+    if (!dialog || !title || !content) return;
+    activeGuideTaskId = taskId;
+    title.textContent = '正在載入教學';
+    content.innerHTML = '<p class="guide-goal">請稍候，正在準備冒險卷軸內容。</p>';
+    if (!dialog.open) dialog.showModal();
+    try {
+      if (!sharedGuides[taskId] && !routeGuides[taskId] && !independentGuides[taskId]) await independentGuidesReady;
+    } catch {
+      title.textContent = '教學內容暫時無法載入';
+      content.innerHTML = '<p class="guide-goal">請重新整理頁面後再試一次。</p>';
+      return;
+    }
     const guide = sharedGuides[taskId] || routeGuides[taskId] || independentGuides[taskId];
     const images = guideImages[taskId] ? (Array.isArray(guideImages[taskId]) ? guideImages[taskId] : [guideImages[taskId]]) : [];
-    const dialog = document.querySelector('#guide-dialog');
-    if (!guide || !dialog) return;
-    activeGuideTaskId = taskId;
-    document.querySelector('#guide-title').textContent = guide.title;
+    if (!guide) {
+      title.textContent = '教學內容暫時無法載入';
+      content.innerHTML = '<p class="guide-goal">找不到這個任務的教學資料。</p>';
+      return;
+    }
+    title.textContent = guide.title;
     const scenario = guide.scenario
       ? `<section class="guide-scenario"><p class="guide-scroll-label">任務卷軸</p><h3>情境任務</h3><p>${guide.scenario}</p></section>`
       : '';
-    document.querySelector('#guide-content').innerHTML = [
+    content.innerHTML = [
       scenario,
       `<p class="guide-goal"><strong>冒險目標</strong>${guide.goal}</p>`,
       images.map((image) => `<figure class="guide-figure"><img src="${image.src}" alt="${image.alt}" data-full-src="${image.src}" loading="lazy"><figcaption>${image.caption}</figcaption></figure>`).join(''),
           ...guide.sections.map((section) => `<section><h3>${section.heading}</h3><ul>${section.heading === '建議材料／元件' ? section.items.map((item) => `<li><button class="component-link" type="button" data-component-name="${item}">${item}</button></li>`).join('') : section.items.map((item) => `<li>${item}</li>`).join('')}</ul></section>`),
           guide.links?.length ? `<section><h3>官方延伸資料</h3><ul class="guide-links">${guide.links.map((link) => `<li><a href="${link.url}" target="_blank" rel="noopener">${link.label}</a></li>`).join('')}</ul></section>` : '',
     ].join('');
-    dialog.showModal();
   }
 
   function openComponent(componentName) {
