@@ -54,6 +54,18 @@
     select.disabled = false;
   }
 
+  function buildSyncTasks(tasks) {
+    return {
+      'check-board': tasks['check-board'] === true,
+      'check-ide': tasks['check-ide'] === true,
+      'check-port': tasks['check-ide'] === true,
+      'check-blink': tasks['check-blink'] === true,
+      'check-serial': false,
+      'check-diagnose': tasks['check-diagnose'] === true,
+      ...Object.fromEntries(ArduinoCore.workshopTaskIds.filter((taskId) => taskId.startsWith('myth-')).map((taskId) => [taskId, tasks[taskId] === true])),
+    };
+  }
+
   async function loadStudents() {
     if (!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpoint)) { setStatus('teacher-save-status', '尚未設定完成狀況資料來源。', true); return; }
     try {
@@ -73,7 +85,7 @@
     if (!selectedStudent) return;
     const button = document.querySelector('#teacher-save'); button.disabled = true; setStatus('teacher-save-status', '儲存中...');
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, teacherCode, classSeat: selectedStudent.classSeat, tasks: selectedStudent.tasks }) });
+      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ teacher: true, teacherCode, classSeat: selectedStudent.classSeat, tasks: buildSyncTasks(selectedStudent.tasks) }) });
       const responseText = await response.text();
       let payload = null;
       try { payload = JSON.parse(responseText); } catch (parseError) { /* Google Apps Script 可能回傳轉址頁，改用 GET 確認寫入結果。 */ }
